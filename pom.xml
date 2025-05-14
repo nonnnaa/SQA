@@ -206,6 +206,7 @@
 						<exclude>com/example/hieuthuoc/dto/**</exclude>
 						<exclude>com/example/hieuthuoc/entity/**</exclude>
 						<exclude>com/example/hieuthuoc/jwt/**</exclude>
+						<exclude>com/example/hieuthuoc/HieuthuocApplication.java</exclude>
 						<exclude>com/example/hieuthuoc/security/**</exclude>
 						<exclude>com/example/hieuthuoc/configuration/CloudinaryConfig.java</exclude>
 						<exclude>com/example/hieuthuoc/controller/NhomQuyenController.java</exclude>

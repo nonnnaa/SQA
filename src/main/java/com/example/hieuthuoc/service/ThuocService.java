@@ -254,7 +254,7 @@ class ThuocServiceImpl implements ThuocService {
 			if (thuocDTO.getFile() != null && !thuocDTO.getFile().isEmpty()) {
 				// Xoá đi ảnh trước đó trong cloudinary
 				if (thuoc.getAvatar() != null) {
-					uploadImageService.deleteImage(thuoc.getAvatar());
+					uploadImageService.deleteImage(curentThuoc.getAvatar());
 				}
 
 				String name = "Thuoc_" + thuocDTO.getId();
