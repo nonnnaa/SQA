@@ -206,16 +206,26 @@
 						<exclude>com/example/hieuthuoc/dto/**</exclude>
 						<exclude>com/example/hieuthuoc/entity/**</exclude>
 						<exclude>com/example/hieuthuoc/jwt/**</exclude>
-						<exclude>com/example/hieuthuoc/HieuthuocApplication.java</exclude>
+						<exclude>com/example/hieuthuoc/HieuthuocApplication*</exclude>
 						<exclude>com/example/hieuthuoc/security/**</exclude>
-						<exclude>com/example/hieuthuoc/configuration/CloudinaryConfig.java</exclude>
-						<exclude>com/example/hieuthuoc/controller/NhomQuyenController.java</exclude>
-						<exclude>com/example/hieuthuoc/controller/LichSuHoatDongController.java</exclude>
-						<exclude>com/example/hieuthuoc/controller/ChucNangController.java</exclude>
-						<exclude>com/example/hieuthuoc/service/LichSuHoatDongService.java</exclude>
-						<exclude>com/example/hieuthuoc/service/NhomQuyenService.java</exclude>
-						<exclude>com/example/hieuthuoc/service/ChucNangService.java</exclude>
-						<exclude>com/example/hieuthuoc/service/UploadImageService.java</exclude>
+						<exclude>com/example/hieuthuoc/configuration/CloudinaryConfig*</exclude>
+						<exclude>com/example/hieuthuoc/controller/NhomQuyenController*</exclude>
+						<exclude>com/example/hieuthuoc/controller/LichSuHoatDongController*</exclude>
+						<exclude>com/example/hieuthuoc/controller/ChucNangController*</exclude>
+						<exclude>com/example/hieuthuoc/controller/DoiTuongController*</exclude>
+						<exclude>com/example/hieuthuoc/controller/DanhGiaController*</exclude>
+
+						<exclude>com/example/hieuthuoc/service/LichSuHoatDongService*</exclude>
+						<exclude>com/example/hieuthuoc/service/NhomQuyenService*</exclude>
+						<exclude>com/example/hieuthuoc/service/ChucNangService*</exclude>
+						<exclude>com/example/hieuthuoc/service/UploadImageService*</exclude>
+						<exclude>com/example/hieuthuoc/service/NhomQuyenService*</exclude>
+						<exclude>com/example/hieuthuoc/service/DanhGiaService*</exclude>
+						<exclude>com/example/hieuthuoc/service/LichSuHoatDongService*</exclude>
+						<exclude>com/example/hieuthuoc/service/KhuyenMaiService*</exclude>
+						<exclude>com/example/hieuthuoc/service/DoiTuongService*</exclude>
+						<exclude>com/example/hieuthuoc/service/ChiTietKhuyenMaiService*</exclude>
+						<exclude>com/example/hieuthuoc/service/EmailService*</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
