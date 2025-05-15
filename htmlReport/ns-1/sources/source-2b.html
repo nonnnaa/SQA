@@ -1,0 +1,130 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ChucNangService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.service</a>
+</div>
+
+<h1>Coverage Summary for Class: ChucNangService (com.example.hieuthuoc.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">ChucNangService</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.service;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.dto.ChucNangDTO;
+&nbsp;import com.example.hieuthuoc.dto.ResponseDTO;
+&nbsp;import com.example.hieuthuoc.entity.ChucNang;
+&nbsp;import com.example.hieuthuoc.repository.ChucNangRepo;
+&nbsp;
+&nbsp;public interface ChucNangService {
+&nbsp;	ResponseDTO&lt;List&lt;ChucNang&gt;&gt; getAllChucNangs();
+&nbsp;
+&nbsp;	ResponseDTO&lt;ChucNang&gt; create(ChucNangDTO chucNangDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;ChucNang&gt; update(ChucNangDTO chucNangDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;Void&gt; delete(Integer id);
+&nbsp;}
+&nbsp;
+&nbsp;@Service
+&nbsp;class ChucNangServiceImpl implements ChucNangService {
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private ChucNangRepo chucNangRepo;
+&nbsp;
+&nbsp;	ModelMapper modelMapper = new ModelMapper();
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;List&lt;ChucNang&gt;&gt; getAllChucNangs() {
+&nbsp;		return ResponseDTO.&lt;List&lt;ChucNang&gt;&gt;builder().status(200).msg(&quot;Thành công&quot;).data(chucNangRepo.findAll()).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;ChucNang&gt; create(ChucNangDTO chucNangDTO) {
+&nbsp;		ChucNang chucNang = modelMapper.map(chucNangDTO, ChucNang.class);
+&nbsp;		return ResponseDTO.&lt;ChucNang&gt;builder().status(200).msg(&quot;Thành công&quot;).data(chucNangRepo.save(chucNang)).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;ChucNang&gt; update(ChucNangDTO chucNangDTO) {
+&nbsp;		ChucNang chucNang = modelMapper.map(chucNangDTO, ChucNang.class);
+&nbsp;		ChucNang currentChucNang = chucNangRepo.findById(chucNang.getId()).orElse(null);
+&nbsp;		if (currentChucNang != null) {
+&nbsp;			return ResponseDTO.&lt;ChucNang&gt;builder().status(200).msg(&quot;Thành công&quot;).data(chucNangRepo.save(chucNang)).build();
+&nbsp;		}
+&nbsp;		return ResponseDTO.&lt;ChucNang&gt;builder().status(409).msg(&quot;Không tìm thấy chức năng&quot;).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;Void&gt; delete(Integer id) {
+&nbsp;		chucNangRepo.deleteById(id);
+&nbsp;		return ResponseDTO.&lt;Void&gt;builder().status(200).msg(&quot;Thành công&quot;).build();
+&nbsp;	}
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:13</div>
+</div>
+</body>
+</html>

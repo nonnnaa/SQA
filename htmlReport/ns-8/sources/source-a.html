@@ -1,0 +1,191 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > LichSuHoatDongServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.service</a>
+</div>
+
+<h1>Coverage Summary for Class: LichSuHoatDongServiceImpl (com.example.hieuthuoc.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LichSuHoatDongServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    4.2%
+  </span>
+  <span class="absValue">
+    (1/24)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.service;
+&nbsp;
+&nbsp;import java.time.LocalDate;
+&nbsp;import java.time.ZoneId;
+&nbsp;import java.util.Date;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.data.domain.Page;
+&nbsp;import org.springframework.data.domain.PageRequest;
+&nbsp;import org.springframework.data.domain.Sort;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.util.StringUtils;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.dto.PageDTO;
+&nbsp;import com.example.hieuthuoc.dto.ResponseDTO;
+&nbsp;import com.example.hieuthuoc.dto.SearchLichSuHoatDongDTO;
+&nbsp;import com.example.hieuthuoc.entity.LichSuHoatDong;
+&nbsp;import com.example.hieuthuoc.repository.LichSuHoatDongRepo;
+&nbsp;
+&nbsp;public interface LichSuHoatDongService {
+&nbsp;	ResponseDTO&lt;PageDTO&lt;List&lt;LichSuHoatDong&gt;&gt;&gt; search(SearchLichSuHoatDongDTO searchLichSuHoatDongDTO);
+&nbsp;}
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;class LichSuHoatDongServiceImpl implements LichSuHoatDongService {</b>
+&nbsp;	
+&nbsp;	@Autowired
+&nbsp;	LichSuHoatDongRepo lichSuHoatDongRepo;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;PageDTO&lt;List&lt;LichSuHoatDong&gt;&gt;&gt; search(SearchLichSuHoatDongDTO searchLichSuHoatDongDTO) {
+<b class="nc">&nbsp;		Sort sortBy = Sort.by(&quot;createdAt&quot;).descending();</b>
+&nbsp;
+<b class="nc">&nbsp;		if (StringUtils.hasText(searchLichSuHoatDongDTO.getSortedField())) {</b>
+<b class="nc">&nbsp;			sortBy = Sort.by(searchLichSuHoatDongDTO.getSortedField()).ascending();</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		if (searchLichSuHoatDongDTO.getCurrentPage() == null) {</b>
+<b class="nc">&nbsp;			searchLichSuHoatDongDTO.setCurrentPage(0);</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		if (searchLichSuHoatDongDTO.getSize() == null) {</b>
+<b class="nc">&nbsp;			searchLichSuHoatDongDTO.setSize(20);</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		if (searchLichSuHoatDongDTO.getNgayBatDau() == null) {</b>
+<b class="nc">&nbsp;			Date ngayBatDau = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());</b>
+<b class="nc">&nbsp;			System.out.println(ngayBatDau);</b>
+<b class="nc">&nbsp;			searchLichSuHoatDongDTO.setNgayBatDau(ngayBatDau);</b>
+&nbsp;		}
+&nbsp;		
+<b class="nc">&nbsp;		if (searchLichSuHoatDongDTO.getNgayKetThuc() == null) {</b>
+<b class="nc">&nbsp;			Date ngayKetThuc = Date.from(LocalDate.now().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());</b>
+<b class="nc">&nbsp;			System.out.println(ngayKetThuc);</b>
+<b class="nc">&nbsp;			searchLichSuHoatDongDTO.setNgayKetThuc(ngayKetThuc);</b>
+&nbsp;		}
+&nbsp;		
+<b class="nc">&nbsp;		PageRequest pageRequest = PageRequest.of(searchLichSuHoatDongDTO.getCurrentPage(), searchLichSuHoatDongDTO.getSize(), sortBy);</b>
+<b class="nc">&nbsp;		Page&lt;LichSuHoatDong&gt; page = lichSuHoatDongRepo.search(searchLichSuHoatDongDTO.getNgayBatDau(), searchLichSuHoatDongDTO.getNgayKetThuc(), pageRequest);</b>
+&nbsp;
+<b class="nc">&nbsp;		PageDTO&lt;List&lt;LichSuHoatDong&gt;&gt; pageDTO = new PageDTO&lt;&gt;();</b>
+<b class="nc">&nbsp;		pageDTO.setTotalElements(page.getTotalElements());</b>
+<b class="nc">&nbsp;		pageDTO.setTotalPages(page.getTotalPages());</b>
+&nbsp;
+<b class="nc">&nbsp;		List&lt;LichSuHoatDong&gt; lichSuHoatDongs = page.getContent();</b>
+&nbsp;
+<b class="nc">&nbsp;		pageDTO.setData(lichSuHoatDongs);</b>
+&nbsp;
+<b class="nc">&nbsp;		return ResponseDTO.&lt;PageDTO&lt;List&lt;LichSuHoatDong&gt;&gt;&gt;builder().status(200).msg(&quot;Thanh công&quot;).data(pageDTO).build();</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;
+&nbsp;	
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:14</div>
+</div>
+</body>
+</html>

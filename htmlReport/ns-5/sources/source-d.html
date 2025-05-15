@@ -1,0 +1,120 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > DanhMucThuoc</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.entity</a>
+</div>
+
+<h1>Coverage Summary for Class: DanhMucThuoc (com.example.hieuthuoc.entity)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">DanhMucThuoc$HibernateInstantiator$5pjuUbeY</td>
+  </tr>
+  <tr>
+    <td class="name">DanhMucThuoc$HibernateInstantiator$E6UcgQCT</td>
+  </tr>
+  <tr>
+    <td class="name">DanhMucThuoc$HibernateInstantiator$g3ZTZugo</td>
+  </tr>
+  <tr>
+    <td class="name">DanhMucThuoc$HibernateInstantiator$p7vmqI1v</td>
+  </tr>
+  <tr>
+    <td class="name">DanhMucThuoc$HibernateProxy$62YYTcbL</td>
+  </tr>
+  <tr>
+    <td class="name">DanhMucThuoc$HibernateProxy$iIXjojQ9</td>
+  </tr>
+  <tr>
+    <td class="name">DanhMucThuoc$HibernateProxy$OnFrP5wf</td>
+  </tr>
+  <tr>
+    <td class="name">DanhMucThuoc$HibernateProxy$WmDF2Kdf</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.entity;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;import jakarta.persistence.Entity;
+&nbsp;import jakarta.persistence.FetchType;
+&nbsp;import jakarta.persistence.GeneratedValue;
+&nbsp;import jakarta.persistence.GenerationType;
+&nbsp;import jakarta.persistence.Id;
+&nbsp;import jakarta.persistence.OneToMany;
+&nbsp;import jakarta.persistence.Table;
+&nbsp;import lombok.Data;
+&nbsp;
+&nbsp;@Data
+&nbsp;@Entity
+&nbsp;@Table(name = &quot;danh_muc_thuoc&quot;)
+&nbsp;public class DanhMucThuoc {
+&nbsp;    @Id
+&nbsp;    @GeneratedValue(strategy = GenerationType.IDENTITY)
+&nbsp;    private Integer id;
+&nbsp;
+&nbsp;    private String tenDanhMuc;
+&nbsp;    private String moTa;
+&nbsp;    
+&nbsp;    @OneToMany(mappedBy = &quot;danhMucThuoc&quot;, fetch = FetchType.LAZY)
+&nbsp;    private List&lt;LoaiThuoc&gt; loaiThuocs;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:14</div>
+</div>
+</body>
+</html>

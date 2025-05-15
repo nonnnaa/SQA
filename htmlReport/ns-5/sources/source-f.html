@@ -1,0 +1,171 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Thuoc</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.entity</a>
+</div>
+
+<h1>Coverage Summary for Class: Thuoc (com.example.hieuthuoc.entity)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">Thuoc$HibernateInstantiator$0HyKIDo2</td>
+  </tr>
+  <tr>
+    <td class="name">Thuoc$HibernateInstantiator$DsQTNoBo</td>
+  </tr>
+  <tr>
+    <td class="name">Thuoc$HibernateInstantiator$F9nugK1Y</td>
+  </tr>
+  <tr>
+    <td class="name">Thuoc$HibernateInstantiator$RfxRVVYM</td>
+  </tr>
+  <tr>
+    <td class="name">Thuoc$HibernateProxy$6yf8qD0V</td>
+  </tr>
+  <tr>
+    <td class="name">Thuoc$HibernateProxy$Asl0UNcJ</td>
+  </tr>
+  <tr>
+    <td class="name">Thuoc$HibernateProxy$atqWYiPw</td>
+  </tr>
+  <tr>
+    <td class="name">Thuoc$HibernateProxy$gHwMiRgl</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.entity;
+&nbsp;
+&nbsp;import java.util.Date;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;import jakarta.persistence.CascadeType;
+&nbsp;import jakarta.persistence.Column;
+&nbsp;import jakarta.persistence.Entity;
+&nbsp;import jakarta.persistence.FetchType;
+&nbsp;import jakarta.persistence.GeneratedValue;
+&nbsp;import jakarta.persistence.GenerationType;
+&nbsp;import jakarta.persistence.Id;
+&nbsp;import jakarta.persistence.JoinColumn;
+&nbsp;import jakarta.persistence.JoinTable;
+&nbsp;import jakarta.persistence.ManyToMany;
+&nbsp;import jakarta.persistence.ManyToOne;
+&nbsp;import jakarta.persistence.OneToMany;
+&nbsp;import jakarta.persistence.Table;
+&nbsp;import lombok.Data;
+&nbsp;
+&nbsp;@Data
+&nbsp;@Entity
+&nbsp;@Table(name = &quot;thuoc&quot;)
+&nbsp;public class Thuoc {
+&nbsp;	@Id
+&nbsp;	@GeneratedValue(strategy = GenerationType.IDENTITY)
+&nbsp;	private Integer id;
+&nbsp;
+&nbsp;	private String tenThuoc;
+&nbsp;	private String maThuoc;
+&nbsp;	private String maVach;
+&nbsp;
+&nbsp;	@ManyToOne
+&nbsp;	@JoinColumn(name = &quot;loai_thuoc_id&quot;)
+&nbsp;	private LoaiThuoc loaiThuoc;
+&nbsp;
+&nbsp;	@ManyToOne
+&nbsp;	@JoinColumn(name = &quot;nha_san_xuat_id&quot;)
+&nbsp;	private NhaSanXuat nhaSanXuat;
+&nbsp;
+&nbsp;	private String donVi;
+&nbsp;	private String cheBao;
+&nbsp;	private String quyCach;
+&nbsp;	private String soDangKy;
+&nbsp;	private Date hanSuDung;
+&nbsp;	private Double giaNhap;
+&nbsp;	private Double giaBan;
+&nbsp;	private Integer soLuongTon;
+&nbsp;	private Integer nguongCanhBao;
+&nbsp;
+&nbsp;	@Column(columnDefinition = &quot;TEXT&quot;)
+&nbsp;	private String congDung;
+&nbsp;
+&nbsp;	@Column(columnDefinition = &quot;TEXT&quot;)
+&nbsp;	private String chiDinh;
+&nbsp;
+&nbsp;	@Column(columnDefinition = &quot;TEXT&quot;)
+&nbsp;	private String chongChiDinh;
+&nbsp;
+&nbsp;	@Column(columnDefinition = &quot;TEXT&quot;)
+&nbsp;	private String huongDanSuDung;
+&nbsp;
+&nbsp;	@Column(columnDefinition = &quot;TEXT&quot;)
+&nbsp;	private String moTaNgan;
+&nbsp;
+&nbsp;	private String avatar;
+&nbsp;	private Boolean trangThai = true;
+&nbsp;
+&nbsp;	@Column(columnDefinition = &quot;TEXT&quot;)
+&nbsp;	private String ghiChu;
+&nbsp;
+&nbsp;	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
+&nbsp;			CascadeType.REFRESH })
+&nbsp;	@JoinTable(name = &quot;doi_tuong_sd_thuoc&quot;, joinColumns = @JoinColumn(name = &quot;thuoc_id&quot;), inverseJoinColumns = @JoinColumn(name = &quot;doi_tuong_id&quot;))
+&nbsp;	private List&lt;DoiTuong&gt; doiTuongs;
+&nbsp;
+&nbsp;	@OneToMany(mappedBy = &quot;thuoc&quot;, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+&nbsp;	private List&lt;ThanhPhanThuoc&gt; thanhPhanThuocs;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:14</div>
+</div>
+</body>
+</html>

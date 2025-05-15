@@ -1,0 +1,272 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > NhomQuyenServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.service</a>
+</div>
+
+<h1>Coverage Summary for Class: NhomQuyenServiceImpl (com.example.hieuthuoc.service)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NhomQuyenServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    12.5%
+  </span>
+  <span class="absValue">
+    (1/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    4%
+  </span>
+  <span class="absValue">
+    (2/50)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">NhomQuyenServiceImpl$$SpringCGLIB$$0</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    12.5%
+  </span>
+  <span class="absValue">
+    (1/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    4%
+  </span>
+  <span class="absValue">
+    (2/50)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.service;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.data.domain.Page;
+&nbsp;import org.springframework.data.domain.PageRequest;
+&nbsp;import org.springframework.data.domain.Sort;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;import org.springframework.util.StringUtils;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.dto.NhomQuyenDTO;
+&nbsp;import com.example.hieuthuoc.dto.PageDTO;
+&nbsp;import com.example.hieuthuoc.dto.ResponseDTO;
+&nbsp;import com.example.hieuthuoc.dto.SearchDTO;
+&nbsp;import com.example.hieuthuoc.entity.ChucNang;
+&nbsp;import com.example.hieuthuoc.entity.NhomQuyen;
+&nbsp;import com.example.hieuthuoc.repository.ChucNangRepo;
+&nbsp;import com.example.hieuthuoc.repository.NhomQuyenRepo;
+&nbsp;
+&nbsp;public interface NhomQuyenService {
+&nbsp;
+&nbsp;	ResponseDTO&lt;NhomQuyen&gt; create(NhomQuyenDTO nhomQuyenDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;NhomQuyen&gt; update(NhomQuyenDTO nhomQuyenDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;Void&gt; delete(Integer id);
+&nbsp;
+&nbsp;	ResponseDTO&lt;NhomQuyen&gt; getById(Integer id);
+&nbsp;
+&nbsp;	ResponseDTO&lt;PageDTO&lt;List&lt;NhomQuyen&gt;&gt;&gt; getByTenNhomQuyen(SearchDTO searchDTO);
+&nbsp;}
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;class NhomQuyenServiceImpl implements NhomQuyenService {</b>
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private NhomQuyenRepo nhomQuyenRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private ChucNangRepo chucNangRepo;
+&nbsp;
+<b class="fc">&nbsp;	private final ModelMapper modelMapper = new ModelMapper();</b>
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;NhomQuyen&gt; create(NhomQuyenDTO nhomQuyenDTO) {
+<b class="nc">&nbsp;		if (nhomQuyenRepo.existsByTenNhomQuyen(nhomQuyenDTO.getTenNhomQuyen())) {</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;NhomQuyen&gt;builder().status(409).msg(&quot;Nhóm quyền đã tồn tại&quot;).build();</b>
+&nbsp;		}
+<b class="nc">&nbsp;		NhomQuyen nhomQuyen = modelMapper.map(nhomQuyenDTO, NhomQuyen.class);</b>
+&nbsp;
+<b class="nc">&nbsp;		if (nhomQuyenDTO.getChucNangs() != null &amp;&amp; !nhomQuyenDTO.getChucNangs().isEmpty()) {</b>
+<b class="nc">&nbsp;			List&lt;ChucNang&gt; chucNangs = nhomQuyenDTO.getChucNangs().stream()</b>
+<b class="nc">&nbsp;					.map(c -&gt; chucNangRepo.findById(c.getId())</b>
+<b class="nc">&nbsp;							.orElseThrow(() -&gt; new RuntimeException(&quot;Chức Năng không tồn tại: ID &quot; + c.getId())))</b>
+<b class="nc">&nbsp;					.collect(Collectors.toList());</b>
+<b class="nc">&nbsp;			nhomQuyen.setChucNangs(chucNangs);</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		NhomQuyen savedNhomQuyen = nhomQuyenRepo.save(nhomQuyen);</b>
+<b class="nc">&nbsp;		return ResponseDTO.&lt;NhomQuyen&gt;builder().status(201).msg(&quot;Tạo nhóm quyền thành công&quot;).data(savedNhomQuyen)</b>
+<b class="nc">&nbsp;				.build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;NhomQuyen&gt; update(NhomQuyenDTO nhomQuyenDTO) {
+<b class="nc">&nbsp;		Optional&lt;NhomQuyen&gt; existingNhomQuyen = nhomQuyenRepo.findById(nhomQuyenDTO.getId());</b>
+<b class="nc">&nbsp;		if (existingNhomQuyen.isPresent()) {</b>
+<b class="nc">&nbsp;			NhomQuyen nhomQuyen = modelMapper.map(nhomQuyenDTO, NhomQuyen.class);</b>
+<b class="nc">&nbsp;			if (!nhomQuyenDTO.getChucNangs().isEmpty()) {</b>
+<b class="nc">&nbsp;				List&lt;ChucNang&gt; chucNangs = nhomQuyenDTO.getChucNangs().stream()</b>
+<b class="nc">&nbsp;						.map(c -&gt; chucNangRepo.findById(c.getId())</b>
+<b class="nc">&nbsp;								.orElseThrow(() -&gt; new RuntimeException(&quot;Chức Năng không tồn tại: ID &quot; + c.getId())))</b>
+<b class="nc">&nbsp;						.collect(Collectors.toList());</b>
+<b class="nc">&nbsp;				nhomQuyen.setChucNangs(chucNangs);</b>
+&nbsp;			}
+<b class="nc">&nbsp;			NhomQuyen updateNhomQuyen = nhomQuyenRepo.save(nhomQuyen);</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;NhomQuyen&gt;builder().status(200).msg(&quot;Cập nhật nhóm quyền thành công&quot;).data(updateNhomQuyen)</b>
+<b class="nc">&nbsp;					.build();</b>
+&nbsp;		}
+<b class="nc">&nbsp;		return ResponseDTO.&lt;NhomQuyen&gt;builder().status(409).msg(&quot;Không tìm thấy nhóm quyền&quot;).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;Void&gt; delete(Integer id) {
+<b class="nc">&nbsp;		nhomQuyenRepo.deleteById(id);</b>
+<b class="nc">&nbsp;		return ResponseDTO.&lt;Void&gt;builder().status(200).msg(&quot;Xóa nhóm quyền thành công&quot;).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;NhomQuyen&gt; getById(Integer id) {
+<b class="nc">&nbsp;		Optional&lt;NhomQuyen&gt; nhomQuyen = nhomQuyenRepo.findById(id);</b>
+<b class="nc">&nbsp;		if (nhomQuyen.isPresent()) {</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;NhomQuyen&gt;builder().status(200).msg(&quot;Thành công&quot;).data(nhomQuyen.get()).build();</b>
+&nbsp;		}
+<b class="nc">&nbsp;		return ResponseDTO.&lt;NhomQuyen&gt;builder().status(404).msg(&quot;Không tìm thấy nhóm quyền&quot;).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;PageDTO&lt;List&lt;NhomQuyen&gt;&gt;&gt; getByTenNhomQuyen(SearchDTO searchDTO) {
+<b class="nc">&nbsp;		Sort sortBy = Sort.by(&quot;tenNhomQuyen&quot;).ascending();</b>
+&nbsp;
+<b class="nc">&nbsp;		if (StringUtils.hasText(searchDTO.getSortedField())) {</b>
+<b class="nc">&nbsp;			sortBy = Sort.by(searchDTO.getSortedField()).ascending();</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		if (searchDTO.getCurrentPage() == null) {</b>
+<b class="nc">&nbsp;			searchDTO.setCurrentPage(0);</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		if (searchDTO.getSize() == null) {</b>
+<b class="nc">&nbsp;			searchDTO.setSize(20);</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		if (searchDTO.getKeyWord() == null) {</b>
+<b class="nc">&nbsp;			searchDTO.setKeyWord(&quot;&quot;);</b>
+&nbsp;		}
+<b class="nc">&nbsp;		PageRequest pageRequest = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getSize(), sortBy);</b>
+<b class="nc">&nbsp;		Page&lt;NhomQuyen&gt; page = nhomQuyenRepo.getByTenNhomQuyen(&quot;%&quot; + searchDTO.getKeyWord() + &quot;%&quot;, pageRequest);</b>
+&nbsp;
+<b class="nc">&nbsp;		PageDTO&lt;List&lt;NhomQuyen&gt;&gt; pageDTO = new PageDTO&lt;&gt;();</b>
+<b class="nc">&nbsp;		pageDTO.setTotalElements(page.getTotalElements());</b>
+<b class="nc">&nbsp;		pageDTO.setTotalPages(page.getTotalPages());</b>
+&nbsp;
+<b class="nc">&nbsp;		List&lt;NhomQuyen&gt; nhomQuyens = page.getContent();</b>
+&nbsp;
+<b class="nc">&nbsp;		pageDTO.setData(nhomQuyens);</b>
+&nbsp;
+<b class="nc">&nbsp;		return ResponseDTO.&lt;PageDTO&lt;List&lt;NhomQuyen&gt;&gt;&gt;builder().status(200).msg(&quot;Thanh công&quot;).data(pageDTO).build();</b>
+&nbsp;	}
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:14</div>
+</div>
+</body>
+</html>

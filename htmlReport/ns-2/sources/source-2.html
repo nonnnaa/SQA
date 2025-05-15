@@ -1,0 +1,251 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > VNPayConfig</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.configuration</a>
+</div>
+
+<h1>Coverage Summary for Class: VNPayConfig (com.example.hieuthuoc.configuration)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">VNPayConfig</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/56)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.configuration;
+&nbsp;
+&nbsp;import java.io.UnsupportedEncodingException;
+&nbsp;import java.nio.charset.StandardCharsets;
+&nbsp;import java.security.MessageDigest;
+&nbsp;import java.security.NoSuchAlgorithmException;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.Iterator;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Random;
+&nbsp;
+&nbsp;import javax.crypto.Mac;
+&nbsp;import javax.crypto.spec.SecretKeySpec;
+&nbsp;
+&nbsp;import jakarta.servlet.http.HttpServletRequest;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;public class VNPayConfig {</b>
+&nbsp;
+<b class="nc">&nbsp;    public static String vnp_PayUrl = &quot;https://sandbox.vnpayment.vn/paymentv2/vpcpay.html&quot;;</b>
+<b class="nc">&nbsp;    public static String vnp_ReturnUrl = &quot;http://localhost:4200/user/donmua?paymentStatus=success&quot;;</b>
+<b class="nc">&nbsp;    public static String vnp_TmnCode = &quot;Q451AKLJ&quot;;</b>
+<b class="nc">&nbsp;    public static String secretKey = &quot;70ZASA380O894HYA750DA5YLTS65CMF1&quot;;</b>
+<b class="nc">&nbsp;    public static String vnp_ApiUrl = &quot;https://sandbox.vnpayment.vn/merchant_webapi/api/transaction&quot;;</b>
+<b class="nc">&nbsp;    public static String vnp_Version = &quot;2.1.0&quot;;</b>
+<b class="nc">&nbsp;    public static String vnp_Command = &quot;pay&quot;;</b>
+&nbsp;
+&nbsp;//    public static String md5(String message) {
+&nbsp;//        String digest = null;
+&nbsp;//        try {
+&nbsp;//            MessageDigest md = MessageDigest.getInstance(&quot;MD5&quot;);
+&nbsp;//            byte[] hash = md.digest(message.getBytes(&quot;UTF-8&quot;));
+&nbsp;//            StringBuilder sb = new StringBuilder(2 * hash.length);
+&nbsp;//            for (byte b : hash) {
+&nbsp;//                sb.append(String.format(&quot;%02x&quot;, b &amp; 0xff));
+&nbsp;//            }
+&nbsp;//            digest = sb.toString();
+&nbsp;//        } catch (UnsupportedEncodingException ex) {
+&nbsp;//            digest = &quot;&quot;;
+&nbsp;//        } catch (NoSuchAlgorithmException ex) {
+&nbsp;//            digest = &quot;&quot;;
+&nbsp;//        }
+&nbsp;//        return digest;
+&nbsp;//    }
+&nbsp;
+&nbsp;    public static String Sha256(String message) {
+<b class="nc">&nbsp;        String digest = null;</b>
+&nbsp;        try {
+<b class="nc">&nbsp;            MessageDigest md = MessageDigest.getInstance(&quot;SHA-256&quot;);</b>
+<b class="nc">&nbsp;            byte[] hash = md.digest(message.getBytes(&quot;UTF-8&quot;));</b>
+<b class="nc">&nbsp;            StringBuilder sb = new StringBuilder(2 * hash.length);</b>
+<b class="nc">&nbsp;            for (byte b : hash) {</b>
+<b class="nc">&nbsp;                sb.append(String.format(&quot;%02x&quot;, b &amp; 0xff));</b>
+&nbsp;            }
+<b class="nc">&nbsp;            digest = sb.toString();</b>
+&nbsp;        } catch (UnsupportedEncodingException ex) {
+<b class="nc">&nbsp;            digest = &quot;&quot;;</b>
+&nbsp;        } catch (NoSuchAlgorithmException ex) {
+<b class="nc">&nbsp;            digest = &quot;&quot;;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return digest;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //Util for VNPAY
+&nbsp;    public static String hashAllFields(Map fields) {
+<b class="nc">&nbsp;        List fieldNames = new ArrayList(fields.keySet());</b>
+<b class="nc">&nbsp;        Collections.sort(fieldNames);</b>
+<b class="nc">&nbsp;        StringBuilder sb = new StringBuilder();</b>
+<b class="nc">&nbsp;        Iterator itr = fieldNames.iterator();</b>
+<b class="nc">&nbsp;        while (itr.hasNext()) {</b>
+<b class="nc">&nbsp;            String fieldName = (String) itr.next();</b>
+<b class="nc">&nbsp;            String fieldValue = (String) fields.get(fieldName);</b>
+<b class="nc">&nbsp;            if ((fieldValue != null) &amp;&amp; (fieldValue.length() &gt; 0)) {</b>
+<b class="nc">&nbsp;                sb.append(fieldName);</b>
+<b class="nc">&nbsp;                sb.append(&quot;=&quot;);</b>
+<b class="nc">&nbsp;                sb.append(fieldValue);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            if (itr.hasNext()) {</b>
+<b class="nc">&nbsp;                sb.append(&quot;&amp;&quot;);</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        return hmacSHA512(secretKey,sb.toString());</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    public static String hmacSHA512(final String key, final String data) {
+&nbsp;        try {
+&nbsp;
+<b class="nc">&nbsp;            if (key == null || data == null) {</b>
+<b class="nc">&nbsp;                throw new NullPointerException();</b>
+&nbsp;            }
+<b class="nc">&nbsp;            final Mac hmac512 = Mac.getInstance(&quot;HmacSHA512&quot;);</b>
+<b class="nc">&nbsp;            byte[] hmacKeyBytes = key.getBytes();</b>
+<b class="nc">&nbsp;            final SecretKeySpec secretKey = new SecretKeySpec(hmacKeyBytes, &quot;HmacSHA512&quot;);</b>
+<b class="nc">&nbsp;            hmac512.init(secretKey);</b>
+<b class="nc">&nbsp;            byte[] dataBytes = data.getBytes(StandardCharsets.UTF_8);</b>
+<b class="nc">&nbsp;            byte[] result = hmac512.doFinal(dataBytes);</b>
+<b class="nc">&nbsp;            StringBuilder sb = new StringBuilder(2 * result.length);</b>
+<b class="nc">&nbsp;            for (byte b : result) {</b>
+<b class="nc">&nbsp;                sb.append(String.format(&quot;%02x&quot;, b &amp; 0xff));</b>
+&nbsp;            }
+<b class="nc">&nbsp;            return sb.toString();</b>
+&nbsp;
+&nbsp;        } catch (Exception ex) {
+<b class="nc">&nbsp;            return &quot;&quot;;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;    
+&nbsp;    public static String getIpAddress(HttpServletRequest request) {
+&nbsp;        String ipAdress;
+&nbsp;        try {
+<b class="nc">&nbsp;            ipAdress = request.getHeader(&quot;X-FORWARDED-FOR&quot;);</b>
+<b class="nc">&nbsp;            if (ipAdress == null) {</b>
+<b class="nc">&nbsp;                ipAdress = request.getRemoteAddr();</b>
+&nbsp;            }
+&nbsp;        } catch (Exception e) {
+<b class="nc">&nbsp;            ipAdress = &quot;Invalid IP:&quot; + e.getMessage();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return ipAdress;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static String getRandomNumber(int len) {
+<b class="nc">&nbsp;        Random rnd = new Random();</b>
+<b class="nc">&nbsp;        String chars = &quot;0123456789&quot;;</b>
+<b class="nc">&nbsp;        StringBuilder sb = new StringBuilder(len);</b>
+<b class="nc">&nbsp;        for (int i = 0; i &lt; len; i++) {</b>
+<b class="nc">&nbsp;            sb.append(chars.charAt(rnd.nextInt(chars.length())));</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return sb.toString();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:14</div>
+</div>
+</body>
+</html>

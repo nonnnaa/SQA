@@ -1,0 +1,152 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > PhieuNhapController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: PhieuNhapController (com.example.hieuthuoc.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PhieuNhapController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    16.7%
+  </span>
+  <span class="absValue">
+    (1/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    16.7%
+  </span>
+  <span class="absValue">
+    (1/6)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.controller;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.dto.*;
+&nbsp;import com.example.hieuthuoc.entity.PhieuNhap;
+&nbsp;import com.example.hieuthuoc.service.PhieuNhapService;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@RestController
+&nbsp;@RequestMapping(&quot;/phieunhap&quot;)
+<b class="fc">&nbsp;public class PhieuNhapController {</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private PhieuNhapService phieuNhapService;
+&nbsp;
+&nbsp;    // Lấy danh sách phiếu nhập với tìm kiếm theo tên nhà cung cấp và phân trang
+&nbsp;    @PostMapping(&quot;/search&quot;)
+&nbsp;    public ResponseEntity&lt;ResponseDTO&lt;PageDTO&lt;List&lt;PhieuNhap&gt;&gt;&gt;&gt; search(@RequestBody SearchDTO searchDTO) {
+<b class="nc">&nbsp;        return ResponseEntity.ok(phieuNhapService.search(searchDTO));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // Lấy thông tin phiếu nhập theo ID
+&nbsp;    @GetMapping(&quot;/get&quot;)
+&nbsp;    public ResponseEntity&lt;ResponseDTO&lt;PhieuNhap&gt;&gt; getById(@RequestParam Integer id) {
+<b class="nc">&nbsp;        return ResponseEntity.ok(phieuNhapService.getById(id));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // Tạo phiếu nhập mới
+&nbsp;    @PostMapping(&quot;/create&quot;)
+&nbsp;    public ResponseEntity&lt;ResponseDTO&lt;PhieuNhap&gt;&gt; create(@RequestBody PhieuNhapDTO phieuNhapDTO) {
+<b class="nc">&nbsp;        return ResponseEntity.ok(phieuNhapService.create(phieuNhapDTO));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // Cập nhật thông tin phiếu nhập
+&nbsp;    @PutMapping(&quot;/update&quot;)
+&nbsp;    public ResponseEntity&lt;ResponseDTO&lt;PhieuNhap&gt;&gt; update(@RequestBody PhieuNhapDTO phieuNhapDTO) {
+<b class="nc">&nbsp;        return ResponseEntity.ok(phieuNhapService.update(phieuNhapDTO));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // Xóa phiếu nhập theo ID
+&nbsp;    @DeleteMapping(&quot;/delete&quot;)
+&nbsp;    public ResponseEntity&lt;ResponseDTO&lt;Void&gt;&gt; delete(@RequestParam Integer id) {
+<b class="nc">&nbsp;        return ResponseEntity.ok(phieuNhapService.delete(id));</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:14</div>
+</div>
+</body>
+</html>

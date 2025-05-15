@@ -1,0 +1,115 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ThuocRepo</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.repository</a>
+</div>
+
+<h1>Coverage Summary for Class: ThuocRepo (com.example.hieuthuoc.repository)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">ThuocRepo$MockitoMock$HKfwhHyA</td>
+  </tr>
+  <tr>
+    <td class="name">ThuocRepo$MockitoMock$HKfwhHyA$auxiliary$gx4Fxyiz</td>
+  </tr>
+  <tr>
+    <td class="name">ThuocRepo$MockitoMock$HKfwhHyA$auxiliary$GzihUx6C</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.repository;
+&nbsp;
+&nbsp;import org.springframework.data.domain.Page;
+&nbsp;import org.springframework.data.domain.Pageable;
+&nbsp;import org.springframework.data.jpa.repository.JpaRepository;
+&nbsp;import org.springframework.data.jpa.repository.Query;
+&nbsp;import org.springframework.data.repository.query.Param;
+&nbsp;import org.springframework.stereotype.Repository;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.entity.Thuoc;
+&nbsp;
+&nbsp;@Repository
+&nbsp;public interface ThuocRepo extends JpaRepository&lt;Thuoc, Integer&gt; {
+&nbsp;
+&nbsp;	// Tìm thuốc theo tên
+&nbsp;	Page&lt;Thuoc&gt; findByTenThuoc(String tenThuoc, Pageable pageable);
+&nbsp;
+&nbsp;	Boolean existsByMaThuoc(String maThuoc);
+&nbsp;
+&nbsp;	Boolean existsByTenThuoc(String tenThuoc);
+&nbsp;
+&nbsp;//    Search thuoc
+&nbsp;	@Query(&quot;SELECT t FROM Thuoc t &quot; + &quot;LEFT JOIN t.loaiThuoc lt &quot; + &quot;LEFT JOIN t.nhaSanXuat nsx &quot;
+&nbsp;			+ &quot;LEFT JOIN lt.danhMucThuoc dmt &quot; + &quot;LEFT JOIN t.doiTuongs dt &quot;
+&nbsp;			+ &quot;WHERE (:keyWord IS NULL OR (LOWER(t.tenThuoc) LIKE LOWER(CONCAT(&#39;%&#39;, :keyWord, &#39;%&#39;)) &quot;
+&nbsp;			+ &quot;OR LOWER(t.maThuoc) LIKE LOWER(CONCAT(&#39;%&#39;, :keyWord, &#39;%&#39;)))) &quot;
+&nbsp;			+ &quot;AND (:loaiThuoc IS NULL OR LOWER(lt.tenLoai) LIKE LOWER(CONCAT(&#39;%&#39;, :loaiThuoc, &#39;%&#39;))) &quot;
+&nbsp;			+ &quot;AND (:nhaSanXuat IS NULL OR LOWER(nsx.tenNhaSanXuat) LIKE LOWER(CONCAT(&#39;%&#39;, :nhaSanXuat, &#39;%&#39;))) &quot;
+&nbsp;			+ &quot;AND (:danhMucThuoc IS NULL OR LOWER(dmt.tenDanhMuc) LIKE LOWER(CONCAT(&#39;%&#39;, :danhMucThuoc, &#39;%&#39;))) &quot;
+&nbsp;			+ &quot;AND ((:minGiaBan IS NULL AND :maxGiaBan IS NULL) OR (t.giaBan &gt;= COALESCE(:minGiaBan, 0) AND t.giaBan &lt;= COALESCE(:maxGiaBan, 9999999))) &quot;
+&nbsp;			+ &quot;AND (:tenDoiTuong IS NULL OR (dt IS NOT NULL AND LOWER(dt.tenDoiTuong) LIKE LOWER(CONCAT(&#39;%&#39;, :tenDoiTuong, &#39;%&#39;)))) &quot;
+&nbsp;			+ &quot;AND (:trangThai IS NULL OR t.trangThai = :trangThai)&quot;)
+&nbsp;	Page&lt;Thuoc&gt; search(@Param(&quot;keyWord&quot;) String keyWord, @Param(&quot;loaiThuoc&quot;) String loaiThuoc,
+&nbsp;			@Param(&quot;nhaSanXuat&quot;) String nhaSanXuat, @Param(&quot;danhMucThuoc&quot;) String danhMucThuoc,
+&nbsp;			@Param(&quot;minGiaBan&quot;) Double minGiaBan, @Param(&quot;maxGiaBan&quot;) Double maxGiaBan,
+&nbsp;			@Param(&quot;tenDoiTuong&quot;) String tenDoiTuong, @Param(&quot;trangThai&quot;) Boolean trangThai, Pageable pageable);
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:14</div>
+</div>
+</body>
+</html>

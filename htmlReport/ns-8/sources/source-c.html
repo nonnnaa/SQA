@@ -1,0 +1,453 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > NguoiDungServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.service</a>
+</div>
+
+<h1>Coverage Summary for Class: NguoiDungServiceImpl (com.example.hieuthuoc.service)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NguoiDungServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    15.4%
+  </span>
+  <span class="absValue">
+    (2/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    10%
+  </span>
+  <span class="absValue">
+    (4/40)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    10%
+  </span>
+  <span class="absValue">
+    (11/110)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">NguoiDungServiceImpl$$SpringCGLIB$$0</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    15.4%
+  </span>
+  <span class="absValue">
+    (2/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    10%
+  </span>
+  <span class="absValue">
+    (4/40)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    10%
+  </span>
+  <span class="absValue">
+    (11/110)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.service;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Set;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;import org.apache.commons.lang3.RandomStringUtils;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.data.domain.Page;
+&nbsp;import org.springframework.data.domain.PageRequest;
+&nbsp;import org.springframework.data.domain.Sort;
+&nbsp;import org.springframework.security.core.GrantedAuthority;
+&nbsp;import org.springframework.security.core.authority.SimpleGrantedAuthority;
+&nbsp;import org.springframework.security.core.userdetails.UserDetails;
+&nbsp;import org.springframework.security.core.userdetails.UserDetailsService;
+&nbsp;import org.springframework.security.core.userdetails.UsernameNotFoundException;
+&nbsp;import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;import org.springframework.util.StringUtils;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.dto.NguoiDungDTO;
+&nbsp;import com.example.hieuthuoc.dto.PageDTO;
+&nbsp;import com.example.hieuthuoc.dto.ResponseDTO;
+&nbsp;import com.example.hieuthuoc.dto.SearchDTO;
+&nbsp;import com.example.hieuthuoc.entity.ChucNang;
+&nbsp;import com.example.hieuthuoc.entity.GioHang;
+&nbsp;import com.example.hieuthuoc.entity.NguoiDung;
+&nbsp;import com.example.hieuthuoc.entity.NhomQuyen;
+&nbsp;import com.example.hieuthuoc.repository.GioHangRepo;
+&nbsp;import com.example.hieuthuoc.repository.NguoiDungRepo;
+&nbsp;import com.example.hieuthuoc.repository.NhomQuyenRepo;
+&nbsp;
+&nbsp;public interface NguoiDungService {
+&nbsp;
+&nbsp;	ResponseDTO&lt;NguoiDung&gt; create(NguoiDungDTO nguoiDungDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;NguoiDung&gt; update(NguoiDungDTO nguoiDungDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;Void&gt; delete(Integer id);
+&nbsp;
+&nbsp;	ResponseDTO&lt;NguoiDung&gt; register(NguoiDungDTO nguoiDungDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;NguoiDung&gt; getById(Integer id);
+&nbsp;
+&nbsp;	NguoiDungDTO getByTenDangNhap(String tenDangNhap);
+&nbsp;
+&nbsp;	ResponseDTO&lt;PageDTO&lt;List&lt;NguoiDungDTO&gt;&gt;&gt; getByHoTen(SearchDTO searchDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;NguoiDung&gt; changeMatKhau(NguoiDungDTO nguoiDungDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;NguoiDung&gt; forgotMatKhau(String email);
+&nbsp;
+&nbsp;	ResponseDTO&lt;NguoiDung&gt; changeAvatar(NguoiDungDTO nguoiDungDTO);
+&nbsp;
+&nbsp;	void sendEmailForgotMatKhau(String email, String password);
+&nbsp;}
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;class NguoiDungServiceImpl implements NguoiDungService, UserDetailsService {</b>
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	NguoiDungRepo nguoiDungRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	NhomQuyenRepo nhomQuyenRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	GioHangRepo gioHangRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	EmailService emailService;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	UploadImageService uploadImageService;
+&nbsp;
+<b class="fc">&nbsp;	ModelMapper modelMapper = new ModelMapper();</b>
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public UserDetails loadUserByUsername(String tenDangNhap) throws UsernameNotFoundException {
+<b class="nc">&nbsp;		NguoiDung nguoiDung = nguoiDungRepo.findByTenDangNhap(tenDangNhap);</b>
+&nbsp;
+<b class="nc">&nbsp;		if (nguoiDung == null) {</b>
+<b class="nc">&nbsp;			throw new UsernameNotFoundException(&quot;Not Found User&quot;);</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		Set&lt;GrantedAuthority&gt; authorities = new HashSet&lt;&gt;();</b>
+<b class="nc">&nbsp;		for (NhomQuyen nhomQuyen : nguoiDung.getNhomQuyens()) {</b>
+<b class="nc">&nbsp;			authorities.add(new SimpleGrantedAuthority(nhomQuyen.getTenNhomQuyen()));</b>
+<b class="nc">&nbsp;			for (ChucNang chucNang : nhomQuyen.getChucNangs()) {</b>
+<b class="nc">&nbsp;				authorities.add(new SimpleGrantedAuthority(chucNang.getTenChucNang()));</b>
+&nbsp;			}
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		return new org.springframework.security.core.userdetails.User(nguoiDung.getTenDangNhap(),</b>
+<b class="nc">&nbsp;				nguoiDung.getMatKhau(), authorities);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;NguoiDung&gt; create(NguoiDungDTO nguoiDungDTO) {
+<b class="nc">&nbsp;		NguoiDung nguoiDung = modelMapper.map(nguoiDungDTO, NguoiDung.class);</b>
+&nbsp;
+<b class="nc">&nbsp;		if (nguoiDungRepo.findByTenDangNhap(nguoiDung.getTenDangNhap()) != null) {</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;NguoiDung&gt;builder().status(400).msg(&quot;Tên đăng nhập đã tồn tại.&quot;).build();</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		if (nguoiDungRepo.findByEmail(nguoiDung.getEmail()) != null) {</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;NguoiDung&gt;builder().status(400).msg(&quot;Email đã tồn tại.&quot;).build();</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		nguoiDung.setMatKhau(new BCryptPasswordEncoder().encode(nguoiDung.getMatKhau()));</b>
+&nbsp;
+<b class="nc">&nbsp;		List&lt;NhomQuyen&gt; nhomQuyens = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;		for (NhomQuyen nhomQuyen : nguoiDung.getNhomQuyens()) {</b>
+<b class="nc">&nbsp;			nhomQuyens.add(nhomQuyenRepo.findById(nhomQuyen.getId()).get());</b>
+&nbsp;		}
+<b class="nc">&nbsp;		nguoiDung.setNhomQuyens(nhomQuyens);</b>
+&nbsp;
+<b class="nc">&nbsp;		nguoiDungRepo.save(nguoiDung);</b>
+&nbsp;
+&nbsp;		// tạo giỏ hàng
+<b class="nc">&nbsp;		GioHang gioHang = new GioHang();</b>
+<b class="nc">&nbsp;		gioHang.setKhachHang(nguoiDung);</b>
+<b class="nc">&nbsp;		gioHangRepo.save(gioHang);</b>
+&nbsp;
+<b class="nc">&nbsp;		return ResponseDTO.&lt;NguoiDung&gt;builder().status(200).msg(&quot;Thành công&quot;).data(nguoiDung).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;NguoiDung&gt; update(NguoiDungDTO nguoiDungDTO) {
+<b class="nc">&nbsp;		NguoiDung nguoiDung = modelMapper.map(nguoiDungDTO, NguoiDung.class);</b>
+<b class="nc">&nbsp;		NguoiDung currentNguoiDung = nguoiDungRepo.findById(nguoiDung.getId()).orElse(null);</b>
+<b class="nc">&nbsp;		if (currentNguoiDung != null) {</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;NguoiDung&gt;builder().status(200).msg(&quot;Thành công&quot;).data(nguoiDungRepo.save(nguoiDung))</b>
+<b class="nc">&nbsp;					.build();</b>
+&nbsp;		}
+<b class="nc">&nbsp;		return ResponseDTO.&lt;NguoiDung&gt;builder().status(400).msg(&quot;Tài khoản không tồn tại.&quot;).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;Void&gt; delete(Integer id) {
+<b class="nc">&nbsp;		nguoiDungRepo.deleteById(id);</b>
+<b class="nc">&nbsp;		return ResponseDTO.&lt;Void&gt;builder().status(200).msg(&quot;Thành công.&quot;).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;NguoiDung&gt; register(NguoiDungDTO nguoiDungDTO) {
+<b class="nc">&nbsp;		NguoiDung nguoiDung = modelMapper.map(nguoiDungDTO, NguoiDung.class);</b>
+&nbsp;
+<b class="nc">&nbsp;		if (nguoiDungRepo.findByTenDangNhap(nguoiDung.getTenDangNhap()) != null) {</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;NguoiDung&gt;builder().status(400).msg(&quot;Tên đăng nhập đã tồn tại.&quot;).build();</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		if (nguoiDungRepo.findByEmail(nguoiDung.getEmail()) != null) {</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;NguoiDung&gt;builder().status(400).msg(&quot;Email đã tồn tại.&quot;).build();</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		nguoiDung.setMatKhau(new BCryptPasswordEncoder().encode(nguoiDung.getMatKhau()));</b>
+&nbsp;
+<b class="nc">&nbsp;		List&lt;NhomQuyen&gt; nhomQuyens = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;		nhomQuyens.add(nhomQuyenRepo.findByTenNhomQuyen(&quot;KHACH_HANG&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;		nguoiDung.setNhomQuyens(nhomQuyens);</b>
+<b class="nc">&nbsp;		nguoiDungRepo.save(nguoiDung);</b>
+&nbsp;
+&nbsp;		// tạo giỏ hàng
+<b class="nc">&nbsp;		GioHang gioHang = new GioHang();</b>
+<b class="nc">&nbsp;		gioHang.setKhachHang(nguoiDung);</b>
+<b class="nc">&nbsp;		gioHangRepo.save(gioHang);</b>
+&nbsp;
+<b class="nc">&nbsp;		return ResponseDTO.&lt;NguoiDung&gt;builder().status(200).msg(&quot;Đăng ký thành công.&quot;).data(nguoiDung).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;NguoiDung&gt; getById(Integer id) {
+<b class="nc">&nbsp;		NguoiDung nguoiDung = nguoiDungRepo.findById(id).orElse(null);</b>
+<b class="nc">&nbsp;		if (nguoiDung != null) {</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;NguoiDung&gt;builder().status(200).msg(&quot;Thành công&quot;).data(nguoiDung).build();</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		return ResponseDTO.&lt;NguoiDung&gt;builder().status(400).msg(&quot;Tài khoản không tồn tại.&quot;).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public NguoiDungDTO getByTenDangNhap(String tenDangNhap) {
+<b class="nc">&nbsp;		NguoiDung nguoiDung = nguoiDungRepo.findByTenDangNhap(tenDangNhap);</b>
+<b class="nc">&nbsp;		return modelMapper.map(nguoiDung, NguoiDungDTO.class);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;PageDTO&lt;List&lt;NguoiDungDTO&gt;&gt;&gt; getByHoTen(SearchDTO searchDTO) {
+&nbsp;
+<b class="nc">&nbsp;		Sort sortBy = Sort.by(&quot;hoTen&quot;).ascending();</b>
+&nbsp;
+<b class="nc">&nbsp;		if (StringUtils.hasText(searchDTO.getSortedField())) {</b>
+<b class="nc">&nbsp;			sortBy = Sort.by(searchDTO.getSortedField()).ascending();</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		if (searchDTO.getCurrentPage() == null) {</b>
+<b class="nc">&nbsp;			searchDTO.setCurrentPage(0);</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		if (searchDTO.getSize() == null) {</b>
+<b class="nc">&nbsp;			searchDTO.setSize(20);</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		if (searchDTO.getKeyWord() == null) {</b>
+<b class="nc">&nbsp;			searchDTO.setKeyWord(&quot;&quot;);</b>
+&nbsp;		}
+<b class="nc">&nbsp;		PageRequest pageRequest = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getSize(), sortBy);</b>
+<b class="nc">&nbsp;		Page&lt;NguoiDung&gt; page = nguoiDungRepo.searchByName(&quot;%&quot; + searchDTO.getKeyWord() + &quot;%&quot;, pageRequest);</b>
+&nbsp;
+<b class="nc">&nbsp;		PageDTO&lt;List&lt;NguoiDungDTO&gt;&gt; pageDTO = new PageDTO&lt;&gt;();</b>
+<b class="nc">&nbsp;		pageDTO.setTotalElements(page.getTotalElements());</b>
+<b class="nc">&nbsp;		pageDTO.setTotalPages(page.getTotalPages());</b>
+<b class="nc">&nbsp;		pageDTO.setCurrentPage(page.getNumber());</b>
+&nbsp;
+<b class="nc">&nbsp;		List&lt;NguoiDungDTO&gt; nguoiDungDTOs = page.get().map(nguoidung -&gt; modelMapper.map(nguoidung, NguoiDungDTO.class))</b>
+<b class="nc">&nbsp;				.collect(Collectors.toList());</b>
+&nbsp;
+<b class="nc">&nbsp;		pageDTO.setData(nguoiDungDTOs);</b>
+&nbsp;
+<b class="nc">&nbsp;		return ResponseDTO.&lt;PageDTO&lt;List&lt;NguoiDungDTO&gt;&gt;&gt;builder().status(200).msg(&quot;Thành công&quot;).data(pageDTO).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;NguoiDung&gt; changeMatKhau(NguoiDungDTO nguoiDungDTO) {
+&nbsp;		// Tìm người dùng theo ID
+<b class="fc">&nbsp;		NguoiDung nguoiDung = nguoiDungRepo.findById(nguoiDungDTO.getId()).orElse(null);</b>
+<b class="fc">&nbsp;		if (nguoiDung == null) {</b>
+<b class="fc">&nbsp;			return ResponseDTO.&lt;NguoiDung&gt;builder().status(400).msg(&quot;Tài khoản không tồn tại.&quot;).build();</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// Kiểm tra mật khẩu hiện tại
+<b class="fc">&nbsp;		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();</b>
+<b class="fc">&nbsp;		if (!passwordEncoder.matches(nguoiDungDTO.getMatKhau(), nguoiDung.getMatKhau())) {</b>
+<b class="fc">&nbsp;			return ResponseDTO.&lt;NguoiDung&gt;builder().status(400).msg(&quot;Mật khẩu không chính xác.&quot;).build();</b>
+&nbsp;		} 
+&nbsp;
+&nbsp;		// Mã hóa mật khẩu mới
+<b class="fc">&nbsp;		nguoiDung.setMatKhau(passwordEncoder.encode(nguoiDungDTO.getMatKhauMoi()));</b>
+&nbsp;
+&nbsp;		// Lưu lại thay đổi
+<b class="fc">&nbsp;		nguoiDungRepo.save(nguoiDung);</b>
+&nbsp;
+<b class="fc">&nbsp;		return ResponseDTO.&lt;NguoiDung&gt;builder().status(200).msg(&quot;Đổi mật khẩu thành công.&quot;).data(nguoiDung).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;NguoiDung&gt; forgotMatKhau(String email) {
+&nbsp;
+&nbsp;		try {
+<b class="nc">&nbsp;			NguoiDung nguoiDung = nguoiDungRepo.findByEmail(email);</b>
+<b class="nc">&nbsp;			if (nguoiDung != null) {</b>
+<b class="nc">&nbsp;				String matkhau = RandomStringUtils.random(10, true, true);</b>
+<b class="nc">&nbsp;				nguoiDung.setMatKhau(new BCryptPasswordEncoder().encode(matkhau));</b>
+<b class="nc">&nbsp;				nguoiDungRepo.save(nguoiDung);</b>
+&nbsp;
+<b class="nc">&nbsp;				System.out.println(&quot;Mật Khẩu : &quot; + matkhau);</b>
+&nbsp;
+<b class="nc">&nbsp;				sendEmailForgotMatKhau(email, matkhau);</b>
+&nbsp;			}
+&nbsp;		} catch (Exception e) {
+<b class="nc">&nbsp;			e.printStackTrace();</b>
+<b class="nc">&nbsp;			ResponseDTO.&lt;NguoiDung&gt;builder().status(400).msg(&quot;Lỗi.&quot;).build();</b>
+&nbsp;		}
+<b class="nc">&nbsp;		return ResponseDTO.&lt;NguoiDung&gt;builder().status(200).msg(&quot;Thành công.&quot;).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;NguoiDung&gt; changeAvatar(NguoiDungDTO nguoiDungDTO) {
+&nbsp;		try {
+<b class="nc">&nbsp;			NguoiDung nguoiDung = nguoiDungRepo.findById(nguoiDungDTO.getId()).get();</b>
+&nbsp;
+<b class="nc">&nbsp;			if (nguoiDungDTO.getFile() != null &amp;&amp; !nguoiDungDTO.getFile().isEmpty()) {</b>
+&nbsp;				// Xoá đi ảnh trước đó trong cloudinary
+<b class="nc">&nbsp;				if(nguoiDung.getAvatar() != null) {</b>
+<b class="nc">&nbsp;					uploadImageService.deleteImage(nguoiDung.getAvatar());</b>
+&nbsp;				}
+&nbsp;
+&nbsp;				// Thêm ảnh mới mới vào cloudinary
+<b class="nc">&nbsp;				String name = &quot;NguoiDung_&quot; + nguoiDungDTO.getId();</b>
+<b class="nc">&nbsp;				String avatarUrl = uploadImageService.uploadImage(nguoiDungDTO.getFile(), name);</b>
+<b class="nc">&nbsp;				nguoiDung.setAvatar(avatarUrl);</b>
+&nbsp;			}
+&nbsp;
+<b class="nc">&nbsp;			nguoiDungRepo.save(nguoiDung);</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;NguoiDung&gt;builder().status(200).msg(&quot;Thành công.&quot;).build();</b>
+&nbsp;		} catch (Exception e) {
+<b class="nc">&nbsp;			e.printStackTrace();</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;NguoiDung&gt;builder().status(500).msg(&quot;Đã xảy ra lỗi khi thay đổi hình đại diện.&quot;)</b>
+<b class="nc">&nbsp;					.build();</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public void sendEmailForgotMatKhau(String email, String matKhau) {
+<b class="nc">&nbsp;		String subject = &quot;Reset mật khẩu&quot;;</b>
+<b class="nc">&nbsp;		String body = &quot;Mật khẩu tạm thời của bạn là: &lt;strong&gt;&quot; + matKhau + &quot;&lt;/strong&gt;&quot;;</b>
+<b class="nc">&nbsp;		body += &quot;&lt;br/&gt; &lt;span&gt;Vui lòng đăng nhập và đổi lại mật khẩu của bạn&lt;/span&gt;&quot;;</b>
+&nbsp;
+&nbsp;		try {
+<b class="nc">&nbsp;			emailService.sendEmail(email, subject, body);</b>
+&nbsp;		} catch (Exception e) {
+<b class="nc">&nbsp;			throw new RuntimeException(e);</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:14</div>
+</div>
+</body>
+</html>

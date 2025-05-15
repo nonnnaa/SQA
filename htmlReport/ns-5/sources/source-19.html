@@ -1,0 +1,97 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > TimeAuditable</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.entity</a>
+</div>
+
+<h1>Coverage Summary for Class: TimeAuditable (com.example.hieuthuoc.entity)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">TimeAuditable</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.entity;
+&nbsp;
+&nbsp;import java.util.Date;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;import org.springframework.data.annotation.CreatedDate;
+&nbsp;import org.springframework.data.annotation.LastModifiedDate;
+&nbsp;import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+&nbsp;
+&nbsp;import jakarta.persistence.Column;
+&nbsp;import jakarta.persistence.EntityListeners;
+&nbsp;import jakarta.persistence.MappedSuperclass;
+&nbsp;import jakarta.persistence.Temporal;
+&nbsp;import jakarta.persistence.TemporalType;
+&nbsp;import lombok.Data;
+&nbsp;
+&nbsp;@Data
+&nbsp;@MappedSuperclass
+&nbsp;@EntityListeners(AuditingEntityListener.class)
+&nbsp;public class TimeAuditable {
+&nbsp;	@CreatedDate 
+&nbsp;	@Temporal(TemporalType.TIMESTAMP)
+&nbsp;	@Column(updatable = false)
+&nbsp;	private Date createdAt;
+&nbsp;	
+&nbsp;	@LastModifiedDate
+&nbsp;	private Date updateAt;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:14</div>
+</div>
+</body>
+</html>

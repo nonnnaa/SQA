@@ -1,0 +1,205 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > SecurityConfiguration</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.security</a>
+</div>
+
+<h1>Coverage Summary for Class: SecurityConfiguration (com.example.hieuthuoc.security)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SecurityConfiguration</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (21/21)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">SecurityConfiguration$$SpringCGLIB$$0</td>
+  </tr>
+  <tr>
+    <td class="name">SecurityConfiguration$$SpringCGLIB$$FastClass$$0</td>
+  </tr>
+  <tr>
+    <td class="name">SecurityConfiguration$$SpringCGLIB$$FastClass$$1</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (21/21)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.security;
+&nbsp;
+&nbsp;import java.util.Arrays;
+&nbsp;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.context.annotation.Bean;
+&nbsp;import org.springframework.context.annotation.Configuration;
+&nbsp;import org.springframework.security.authentication.AuthenticationManager;
+&nbsp;import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+&nbsp;import org.springframework.security.config.Customizer;
+&nbsp;import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+&nbsp;import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+&nbsp;import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+&nbsp;import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+&nbsp;import org.springframework.security.config.http.SessionCreationPolicy;
+&nbsp;import org.springframework.security.core.userdetails.UserDetailsService;
+&nbsp;import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+&nbsp;import org.springframework.security.web.SecurityFilterChain;
+&nbsp;import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+&nbsp;import org.springframework.web.cors.CorsConfiguration;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.jwt.JwtFilter;
+&nbsp;
+&nbsp;@Configuration
+&nbsp;@EnableWebSecurity
+<b class="fc">&nbsp;public class SecurityConfiguration {</b>
+&nbsp;	@Autowired
+&nbsp;	private JwtFilter jwtFilter;
+&nbsp;
+&nbsp;	@Bean
+&nbsp;	public BCryptPasswordEncoder passwordEncoder() {
+<b class="fc">&nbsp;		return new BCryptPasswordEncoder();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	// Khi đăng nhâp thì sẽ vào hàm này đâu tiên để kiểm tra
+&nbsp;	@Bean
+&nbsp;	public DaoAuthenticationProvider authenticationProvider(UserDetailsService userSecurityService) {
+<b class="fc">&nbsp;		DaoAuthenticationProvider dap = new DaoAuthenticationProvider();</b>
+<b class="fc">&nbsp;		dap.setUserDetailsService(userSecurityService);</b>
+<b class="fc">&nbsp;		dap.setPasswordEncoder(passwordEncoder());</b>
+<b class="fc">&nbsp;		return dap;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Bean
+&nbsp;	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+&nbsp;
+<b class="fc">&nbsp;		http.authorizeHttpRequests(config -&gt; {</b>
+&nbsp;			
+<b class="fc">&nbsp;			config.requestMatchers(&quot;/**&quot;).permitAll();</b>
+&nbsp;			
+&nbsp;//			for (ApiEndpoint endpoint : ApiRegistry.apiEndpoints) {
+&nbsp;//				if (&quot;PUBLIC&quot;.equals(endpoint.getType())) {
+&nbsp;//					config.requestMatchers(endpoint.getApi()).permitAll();
+&nbsp;//				} else if (&quot;PRIVATE&quot;.equals(endpoint.getType())) {
+&nbsp;//					config.requestMatchers(endpoint.getApi()).hasAuthority(endpoint.getName());
+&nbsp;//				}
+&nbsp;//			}
+&nbsp;//			config.anyRequest().authenticated(); // Các request khác yêu cầu xác thực
+&nbsp;		});
+&nbsp;
+&nbsp;
+&nbsp;		// Cấu hình cors
+<b class="fc">&nbsp;		http.cors(cors -&gt; {</b>
+<b class="fc">&nbsp;			cors.configurationSource(request -&gt; {</b>
+<b class="fc">&nbsp;				CorsConfiguration corsConfig = new CorsConfiguration();</b>
+<b class="fc">&nbsp;				corsConfig.addAllowedOrigin(&quot;*&quot;);</b>
+<b class="fc">&nbsp;				corsConfig.setAllowedMethods(Arrays.asList(&quot;GET&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;DELETE&quot;));</b>
+<b class="fc">&nbsp;				corsConfig.addAllowedHeader(&quot;*&quot;);</b>
+<b class="fc">&nbsp;				return corsConfig;</b>
+&nbsp;			});
+&nbsp;		});
+&nbsp;
+<b class="fc">&nbsp;		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);</b>
+<b class="fc">&nbsp;		http.sessionManagement((session) -&gt; session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));</b>
+<b class="fc">&nbsp;		http.httpBasic(Customizer.withDefaults());</b>
+<b class="fc">&nbsp;		http.csrf(AbstractHttpConfigurer::disable);</b>
+&nbsp;
+<b class="fc">&nbsp;		return http.build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Bean
+&nbsp;	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+<b class="fc">&nbsp;		return config.getAuthenticationManager();</b>
+&nbsp;	}
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:14</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,132 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > KhuyenMaiService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.service</a>
+</div>
+
+<h1>Coverage Summary for Class: KhuyenMaiService (com.example.hieuthuoc.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">KhuyenMaiService</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.service;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.dto.KhuyenMaiDTO;
+&nbsp;import com.example.hieuthuoc.entity.KhuyenMai;
+&nbsp;import com.example.hieuthuoc.repository.KhuyenMaiRepo;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;
+&nbsp;public interface KhuyenMaiService {
+&nbsp;    List&lt;KhuyenMai&gt; getAllKhuyenMais();
+&nbsp;    Optional&lt;KhuyenMai&gt; getKhuyenMaiById(Integer id);
+&nbsp;    KhuyenMai create(KhuyenMaiDTO khuyenMaiDTO);
+&nbsp;    KhuyenMai update(KhuyenMaiDTO khuyenMaiDTO);
+&nbsp;    void delete(Integer id);
+&nbsp;}
+&nbsp;
+&nbsp;@Service
+&nbsp;class KhuyenMaiServiceImpl implements KhuyenMaiService {
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private KhuyenMaiRepo khuyenMaiRepo;
+&nbsp;
+&nbsp;    ModelMapper modelMapper = new ModelMapper();
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;KhuyenMai&gt; getAllKhuyenMais() {
+&nbsp;        return khuyenMaiRepo.findAll();
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Optional&lt;KhuyenMai&gt; getKhuyenMaiById(Integer id) {
+&nbsp;        return khuyenMaiRepo.findById(id);
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    @Transactional
+&nbsp;    public KhuyenMai create(KhuyenMaiDTO khuyenMaiDTO) {
+&nbsp;        KhuyenMai khuyenMai = modelMapper.map(khuyenMaiDTO, KhuyenMai.class);
+&nbsp;        return khuyenMaiRepo.save(khuyenMai);
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    @Transactional
+&nbsp;    public KhuyenMai update(KhuyenMaiDTO khuyenMaiDTO) {
+&nbsp;        KhuyenMai khuyenMai = modelMapper.map(khuyenMaiDTO, KhuyenMai.class);
+&nbsp;        KhuyenMai currentKhuyenMai = khuyenMaiRepo.findById(khuyenMai.getId()).orElse(null);
+&nbsp;        if (currentKhuyenMai != null) {
+&nbsp;            return khuyenMaiRepo.save(khuyenMai);
+&nbsp;        }
+&nbsp;        return null;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    @Transactional
+&nbsp;    public void delete(Integer id) {
+&nbsp;        khuyenMaiRepo.deleteById(id);
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:13</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,429 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ThuocServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.service</a>
+</div>
+
+<h1>Coverage Summary for Class: ThuocServiceImpl (com.example.hieuthuoc.service)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ThuocServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    9.1%
+  </span>
+  <span class="absValue">
+    (1/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/54)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    1.8%
+  </span>
+  <span class="absValue">
+    (2/110)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ThuocServiceImpl$$SpringCGLIB$$0</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    9.1%
+  </span>
+  <span class="absValue">
+    (1/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/54)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    1.8%
+  </span>
+  <span class="absValue">
+    (2/110)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.service;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.data.domain.Page;
+&nbsp;import org.springframework.data.domain.PageRequest;
+&nbsp;import org.springframework.data.domain.Sort;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;import org.springframework.util.StringUtils;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.dto.PageDTO;
+&nbsp;import com.example.hieuthuoc.dto.ResponseDTO;
+&nbsp;import com.example.hieuthuoc.dto.SearchDTO;
+&nbsp;import com.example.hieuthuoc.dto.SearchThuocDTO;
+&nbsp;import com.example.hieuthuoc.dto.ThuocDTO;
+&nbsp;import com.example.hieuthuoc.entity.DoiTuong;
+&nbsp;import com.example.hieuthuoc.entity.LoaiThuoc;
+&nbsp;import com.example.hieuthuoc.entity.NhaSanXuat;
+&nbsp;import com.example.hieuthuoc.entity.ThanhPhanThuoc;
+&nbsp;import com.example.hieuthuoc.entity.Thuoc;
+&nbsp;import com.example.hieuthuoc.repository.ChiTietDonHangRepo;
+&nbsp;import com.example.hieuthuoc.repository.DoiTuongRepo;
+&nbsp;import com.example.hieuthuoc.repository.DoiTuongSdThuocRepo;
+&nbsp;import com.example.hieuthuoc.repository.LoaiThuocRepo;
+&nbsp;import com.example.hieuthuoc.repository.NhaSanXuatRepo;
+&nbsp;import com.example.hieuthuoc.repository.ThanhPhanThuocRepo;
+&nbsp;import com.example.hieuthuoc.repository.ThuocRepo;
+&nbsp;
+&nbsp;public interface ThuocService {
+&nbsp;	ResponseDTO&lt;Thuoc&gt; create(ThuocDTO thuocDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;Thuoc&gt; update(ThuocDTO thuocDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;Void&gt; delete(Integer id);
+&nbsp;
+&nbsp;	ResponseDTO&lt;Thuoc&gt; getById(Integer id);
+&nbsp;
+&nbsp;	ResponseDTO&lt;PageDTO&lt;List&lt;Thuoc&gt;&gt;&gt; search(SearchThuocDTO searchThuocDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;PageDTO&lt;List&lt;Thuoc&gt;&gt;&gt; getThuocBanChay(SearchDTO searchDTO);
+&nbsp;
+&nbsp;}
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;class ThuocServiceImpl implements ThuocService {</b>
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private ThuocRepo thuocRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	LoaiThuocRepo loaiThuocRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	NhaSanXuatRepo nhaSanXuatRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	DoiTuongRepo doiTuongRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	DoiTuongSdThuocRepo doiTuongSdThuocRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	ThanhPhanThuocRepo thanhPhanThuocRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	ChiTietDonHangRepo chiTietDonHangRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	UploadImageService uploadImageService;
+&nbsp;
+<b class="fc">&nbsp;	ModelMapper modelMapper = new ModelMapper();</b>
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;PageDTO&lt;List&lt;Thuoc&gt;&gt;&gt; getThuocBanChay(SearchDTO searchDTO) {
+<b class="nc">&nbsp;		Sort sortBy = Sort.by(&quot;tenThuoc&quot;).ascending();</b>
+&nbsp;
+<b class="nc">&nbsp;		if (StringUtils.hasText(searchDTO.getSortedField())) {</b>
+<b class="nc">&nbsp;			sortBy = Sort.by(searchDTO.getSortedField()).ascending();</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		if (searchDTO.getCurrentPage() == null) {</b>
+<b class="nc">&nbsp;			searchDTO.setCurrentPage(0);</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		if (searchDTO.getSize() == null) {</b>
+<b class="nc">&nbsp;			searchDTO.setSize(20);</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		if (searchDTO.getKeyWord() == null) {</b>
+<b class="nc">&nbsp;			searchDTO.setKeyWord(&quot;&quot;);</b>
+&nbsp;		}
+<b class="nc">&nbsp;		PageRequest pageRequest = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getSize(), sortBy);</b>
+<b class="nc">&nbsp;		Page&lt;Thuoc&gt; page = chiTietDonHangRepo.findAllThuocBanChay(pageRequest);</b>
+&nbsp;
+<b class="nc">&nbsp;		PageDTO&lt;List&lt;Thuoc&gt;&gt; pageDTO = new PageDTO&lt;&gt;();</b>
+<b class="nc">&nbsp;		pageDTO.setTotalElements(page.getTotalElements());</b>
+<b class="nc">&nbsp;		pageDTO.setTotalPages(page.getTotalPages());</b>
+&nbsp;
+<b class="nc">&nbsp;		List&lt;Thuoc&gt; thuocDTOs = page.getContent();</b>
+&nbsp;
+<b class="nc">&nbsp;		pageDTO.setData(thuocDTOs);</b>
+&nbsp;
+<b class="nc">&nbsp;		return ResponseDTO.&lt;PageDTO&lt;List&lt;Thuoc&gt;&gt;&gt;builder().status(200).msg(&quot;Thanh công&quot;).data(pageDTO).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;PageDTO&lt;List&lt;Thuoc&gt;&gt;&gt; search(SearchThuocDTO searchThuocDTO) {
+&nbsp;		
+<b class="nc">&nbsp;		System.out.println(searchThuocDTO);</b>
+&nbsp;		
+<b class="nc">&nbsp;		Sort sortBy = Sort.by(&quot;id&quot;).ascending();</b>
+&nbsp;
+<b class="nc">&nbsp;		if (StringUtils.hasText(searchThuocDTO.getSortedField())) {</b>
+<b class="nc">&nbsp;			sortBy = Sort.by(searchThuocDTO.getSortedField()).ascending();</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		if (searchThuocDTO.getCurrentPage() == null) {</b>
+<b class="nc">&nbsp;			searchThuocDTO.setCurrentPage(0);</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		if (searchThuocDTO.getSize() == null) {</b>
+<b class="nc">&nbsp;			searchThuocDTO.setSize(20);</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		if (searchThuocDTO.getKeyWord() == null) {</b>
+<b class="nc">&nbsp;			searchThuocDTO.setKeyWord(&quot;&quot;);</b>
+&nbsp;		}
+<b class="nc">&nbsp;		PageRequest pageRequest = PageRequest.of(searchThuocDTO.getCurrentPage(), searchThuocDTO.getSize(), sortBy);</b>
+<b class="nc">&nbsp;		Page&lt;Thuoc&gt; page = thuocRepo.search(searchThuocDTO.getKeyWord(), searchThuocDTO.getLoaiThuoc(),</b>
+<b class="nc">&nbsp;				searchThuocDTO.getNhaSanXuat(), searchThuocDTO.getDanhMucThuoc(), searchThuocDTO.getMinGiaBan(),</b>
+<b class="nc">&nbsp;				searchThuocDTO.getMaxGiaBan(), searchThuocDTO.getTenDoiTuong(), searchThuocDTO.getTrangThai(),</b>
+&nbsp;				pageRequest);
+&nbsp;
+<b class="nc">&nbsp;		PageDTO&lt;List&lt;Thuoc&gt;&gt; pageDTO = new PageDTO&lt;&gt;();</b>
+<b class="nc">&nbsp;		pageDTO.setTotalElements(page.getTotalElements());</b>
+<b class="nc">&nbsp;		pageDTO.setTotalPages(page.getTotalPages());</b>
+&nbsp;
+<b class="nc">&nbsp;		List&lt;Thuoc&gt; thuocDTOs = page.getContent();</b>
+&nbsp;
+<b class="nc">&nbsp;		pageDTO.setData(thuocDTOs);</b>
+&nbsp;
+<b class="nc">&nbsp;		return ResponseDTO.&lt;PageDTO&lt;List&lt;Thuoc&gt;&gt;&gt;builder().status(200).msg(&quot;Thanh công&quot;).data(pageDTO).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;Thuoc&gt; getById(Integer id) {
+<b class="nc">&nbsp;		Optional&lt;Thuoc&gt; thuoc = thuocRepo.findById(id);</b>
+<b class="nc">&nbsp;		if (thuoc.isPresent()) {</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;Thuoc&gt;builder().status(200).msg(&quot;Thành công&quot;).data(thuoc.get()).build();</b>
+&nbsp;		}
+<b class="nc">&nbsp;		return ResponseDTO.&lt;Thuoc&gt;builder().status(409).msg(&quot;Không tìm thấy thuốc&quot;).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;Thuoc&gt; create(ThuocDTO thuocDTO) {
+<b class="nc">&nbsp;		Thuoc thuoc = modelMapper.map(thuocDTO, Thuoc.class);</b>
+&nbsp;
+<b class="nc">&nbsp;		if (thuocRepo.existsByMaThuoc(thuoc.getMaThuoc())) {</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;Thuoc&gt;builder().status(409).msg(&quot;Mã thuốc đã tồn tại&quot;).build();</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		if (thuocRepo.existsByTenThuoc(thuoc.getTenThuoc())) {</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;Thuoc&gt;builder().status(409).msg(&quot;Tên thuốc đã tồn tại&quot;).build();</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// Lấy các thực thể liên quan từ cơ sở dữ liệu
+<b class="nc">&nbsp;		LoaiThuoc loaiThuoc = loaiThuocRepo.findById(thuocDTO.getLoaiThuocId())</b>
+<b class="nc">&nbsp;				.orElseThrow(() -&gt; new RuntimeException(&quot;Loại thuốc không tồn tại&quot;));</b>
+<b class="nc">&nbsp;		NhaSanXuat nhaSanXuat = nhaSanXuatRepo.findById(thuocDTO.getNhaSanXuatId())</b>
+<b class="nc">&nbsp;				.orElseThrow(() -&gt; new RuntimeException(&quot;Nhà sản xuất không tồn tại&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;		thuoc.setLoaiThuoc(loaiThuoc);</b>
+<b class="nc">&nbsp;		thuoc.setNhaSanXuat(nhaSanXuat);</b>
+&nbsp;
+&nbsp;		// lưu ảnh vài cloudinary
+&nbsp;//		if (thuocDTO.getFile() != null &amp;&amp; Base64ToMultipartFileConverter.isBase64(thuocDTO.getFile())) {
+&nbsp;//			MultipartFile avatarFile = Base64ToMultipartFileConverter.convert(thuocDTO.getFile());
+&nbsp;//			String name = &quot;Thuoc_&quot; + thuocDTO.getId();
+&nbsp;//			String avatarUrl = uploadImageService.uploadImage(avatarFile, name);
+&nbsp;//			thuoc.setAvatar(avatarUrl);
+&nbsp;//		}
+&nbsp;
+<b class="nc">&nbsp;		if (thuocDTO.getFile() != null &amp;&amp; !thuocDTO.getFile().isEmpty()) {</b>
+<b class="nc">&nbsp;			String name = &quot;Thuoc_&quot; + thuocDTO.getId();</b>
+<b class="nc">&nbsp;			String avatarUrl = uploadImageService.uploadImage(thuocDTO.getFile(), name);</b>
+<b class="nc">&nbsp;			thuoc.setAvatar(avatarUrl);</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		if (!thuocDTO.getThanhPhanThuocs().isEmpty()) {</b>
+<b class="nc">&nbsp;			List&lt;ThanhPhanThuoc&gt; thanhPhanThuocs = thuocDTO.getThanhPhanThuocs().stream().map(t -&gt; {</b>
+<b class="nc">&nbsp;				ThanhPhanThuoc thanhPhanThuoc = modelMapper.map(t, ThanhPhanThuoc.class);</b>
+<b class="nc">&nbsp;				thanhPhanThuoc.setThuoc(thuoc);</b>
+<b class="nc">&nbsp;				return thanhPhanThuoc;</b>
+<b class="nc">&nbsp;			}).collect(Collectors.toList());</b>
+<b class="nc">&nbsp;			thuoc.setThanhPhanThuocs(thanhPhanThuocs);</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// Xử lý danh sách DoiTuong
+<b class="nc">&nbsp;		if (!thuocDTO.getDoiTuongs().isEmpty()) {</b>
+<b class="nc">&nbsp;			List&lt;DoiTuong&gt; doiTuongs = thuocDTO.getDoiTuongs().stream()</b>
+<b class="nc">&nbsp;					.map(d -&gt; doiTuongRepo.findById(d.getId())</b>
+<b class="nc">&nbsp;							.orElseThrow(() -&gt; new RuntimeException(&quot;Đối tượng không tồn tại: ID &quot; + d.getId())))</b>
+<b class="nc">&nbsp;					.collect(Collectors.toList());</b>
+<b class="nc">&nbsp;			thuoc.setDoiTuongs(doiTuongs);</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		return ResponseDTO.&lt;Thuoc&gt;builder().status(200).msg(&quot;Thành công&quot;).data(thuocRepo.save(thuoc)).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;Thuoc&gt; update(ThuocDTO thuocDTO) {
+<b class="nc">&nbsp;		Thuoc thuoc = modelMapper.map(thuocDTO, Thuoc.class);</b>
+<b class="nc">&nbsp;		Thuoc curentThuoc = thuocRepo.findById(thuoc.getId()).orElse(null);</b>
+<b class="nc">&nbsp;		if (curentThuoc != null) {</b>
+&nbsp;
+<b class="nc">&nbsp;			if (thuocDTO.getMaThuoc().equals(curentThuoc.getMaThuoc()) == false</b>
+<b class="nc">&nbsp;					&amp;&amp; thuocRepo.existsByMaThuoc(thuoc.getMaThuoc())) {</b>
+<b class="nc">&nbsp;				return ResponseDTO.&lt;Thuoc&gt;builder().status(409).msg(&quot;Mã thuốc đã tồn tại&quot;).build();</b>
+&nbsp;			}
+&nbsp;
+<b class="nc">&nbsp;			if (thuocDTO.getTenThuoc().equals(curentThuoc.getTenThuoc()) == false</b>
+<b class="nc">&nbsp;					&amp;&amp; thuocRepo.existsByTenThuoc(thuoc.getTenThuoc())) {</b>
+<b class="nc">&nbsp;				return ResponseDTO.&lt;Thuoc&gt;builder().status(409).msg(&quot;Tên thuốc đã tồn tại&quot;).build();</b>
+&nbsp;			}
+&nbsp;
+&nbsp;			// Lấy các thực thể liên quan từ cơ sở dữ liệu
+<b class="nc">&nbsp;			LoaiThuoc loaiThuoc = loaiThuocRepo.findById(thuocDTO.getLoaiThuocId())</b>
+<b class="nc">&nbsp;					.orElseThrow(() -&gt; new RuntimeException(&quot;Loại thuốc không tồn tại&quot;));</b>
+<b class="nc">&nbsp;			NhaSanXuat nhaSanXuat = nhaSanXuatRepo.findById(thuocDTO.getNhaSanXuatId())</b>
+<b class="nc">&nbsp;					.orElseThrow(() -&gt; new RuntimeException(&quot;Nhà sản xuất không tồn tại&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;			thuoc.setLoaiThuoc(loaiThuoc);</b>
+<b class="nc">&nbsp;			thuoc.setNhaSanXuat(nhaSanXuat);</b>
+&nbsp;
+&nbsp;			// Xoá đi ảnh trước đó trong cloudinary
+&nbsp;//			if (thuocDTO.getFile().length() &gt; 0) {
+&nbsp;//				uploadImageService.deleteImage(thuoc.getAvatar());
+&nbsp;//			}
+&nbsp;//
+&nbsp;//			if (Base64ToMultipartFileConverter.isBase64(thuocDTO.getFile())) {
+&nbsp;//				MultipartFile avatarFile = Base64ToMultipartFileConverter.convert(thuocDTO.getFile());
+&nbsp;//				String name = &quot;Thuoc_&quot; + thuocDTO.getId();
+&nbsp;//				String avatarUrl = uploadImageService.uploadImage(avatarFile, name);
+&nbsp;//				thuoc.setAvatar(avatarUrl);
+&nbsp;//			}
+&nbsp;
+<b class="nc">&nbsp;			if (thuocDTO.getFile() != null &amp;&amp; !thuocDTO.getFile().isEmpty()) {</b>
+&nbsp;				// Xoá đi ảnh trước đó trong cloudinary
+<b class="nc">&nbsp;				if (thuoc.getAvatar() != null) {</b>
+<b class="nc">&nbsp;					uploadImageService.deleteImage(thuoc.getAvatar());</b>
+&nbsp;				}
+&nbsp;
+<b class="nc">&nbsp;				String name = &quot;Thuoc_&quot; + thuocDTO.getId();</b>
+<b class="nc">&nbsp;				String avatarUrl = uploadImageService.uploadImage(thuocDTO.getFile(), name);</b>
+<b class="nc">&nbsp;				thuoc.setAvatar(avatarUrl);</b>
+&nbsp;			}
+&nbsp;
+&nbsp;			// Xử lý danh sách Thanh Phần Thuốc
+<b class="nc">&nbsp;			if (thuocDTO.getThanhPhanThuocs() != null &amp;&amp; !thuocDTO.getThanhPhanThuocs().isEmpty()) {</b>
+<b class="nc">&nbsp;				List&lt;ThanhPhanThuoc&gt; thanhPhanThuocs = thuocDTO.getThanhPhanThuocs().stream().map(t -&gt; {</b>
+<b class="nc">&nbsp;					ThanhPhanThuoc thanhPhanThuoc = modelMapper.map(t, ThanhPhanThuoc.class);</b>
+<b class="nc">&nbsp;					thanhPhanThuoc.setThuoc(thuoc);</b>
+<b class="nc">&nbsp;					return thanhPhanThuoc;</b>
+<b class="nc">&nbsp;				}).collect(Collectors.toList());</b>
+<b class="nc">&nbsp;				thuoc.setThanhPhanThuocs(thanhPhanThuocs);</b>
+&nbsp;			}
+&nbsp;
+&nbsp;			// Xử lý danh sách DoiTuong
+<b class="nc">&nbsp;			if (thuocDTO.getDoiTuongs() != null &amp;&amp; !thuocDTO.getDoiTuongs().isEmpty()) {</b>
+<b class="nc">&nbsp;				List&lt;DoiTuong&gt; doiTuongs = thuocDTO.getDoiTuongs().stream()</b>
+<b class="nc">&nbsp;						.map(d -&gt; doiTuongRepo.findById(d.getId())</b>
+<b class="nc">&nbsp;								.orElseThrow(() -&gt; new RuntimeException(&quot;Đối tượng không tồn tại: ID &quot; + d.getId())))</b>
+<b class="nc">&nbsp;						.collect(Collectors.toList());</b>
+<b class="nc">&nbsp;				thuoc.setDoiTuongs(doiTuongs);</b>
+&nbsp;			}
+&nbsp;
+<b class="nc">&nbsp;			return ResponseDTO.&lt;Thuoc&gt;builder().status(200).msg(&quot;Thành công&quot;).data(thuocRepo.save(thuoc)).build();</b>
+&nbsp;		}
+<b class="nc">&nbsp;		return ResponseDTO.&lt;Thuoc&gt;builder().status(404).msg(&quot;Không tìm thấy thuốc&quot;).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;Void&gt; delete(Integer id) {
+<b class="nc">&nbsp;		thuocRepo.deleteById(id);</b>
+<b class="nc">&nbsp;		return ResponseDTO.&lt;Void&gt;builder().status(200).msg(&quot;Thành công&quot;).build();</b>
+&nbsp;	}
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:14</div>
+</div>
+</body>
+</html>

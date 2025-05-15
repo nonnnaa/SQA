@@ -1,0 +1,99 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > TuongTacThuocService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.service</a>
+</div>
+
+<h1>Coverage Summary for Class: TuongTacThuocService (com.example.hieuthuoc.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">TuongTacThuocService</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.service;
+&nbsp;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.dto.ResponseDTO;
+&nbsp;import com.example.hieuthuoc.entity.TuongTacThuoc;
+&nbsp;import com.example.hieuthuoc.repository.TuongTacThuocRepo;
+&nbsp;
+&nbsp;public interface TuongTacThuocService {
+&nbsp;	ResponseDTO&lt;TuongTacThuoc&gt; checkThanhPhan(String hoatChat1, String hoatChat2);
+&nbsp;}
+&nbsp;
+&nbsp;@Service
+&nbsp;class TuongTacThuocImpl implements TuongTacThuocService {
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	TuongTacThuocRepo tuongTacThuocRepo;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;TuongTacThuoc&gt; checkThanhPhan(String hoatChat1, String hoatChat2) {
+&nbsp;
+&nbsp;		TuongTacThuoc tuongTacThuoc = tuongTacThuocRepo.findByHoatChatCombination(hoatChat1, hoatChat2);
+&nbsp;		if (tuongTacThuoc != null) {
+&nbsp;			return ResponseDTO.&lt;TuongTacThuoc&gt;builder().status(200).msg(&quot;Thành công.&quot;).data(tuongTacThuoc).build();
+&nbsp;		}
+&nbsp;		return ResponseDTO.&lt;TuongTacThuoc&gt;builder().status(404).msg(&quot;Không tìm thấy tương tác giữa hai hoạt chất này.&quot;).build();
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:13</div>
+</div>
+</body>
+</html>

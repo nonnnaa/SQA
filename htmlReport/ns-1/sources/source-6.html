@@ -1,0 +1,473 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > DonHangServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.service</a>
+</div>
+
+<h1>Coverage Summary for Class: DonHangServiceImpl (com.example.hieuthuoc.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DonHangServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    72.1%
+  </span>
+  <span class="absValue">
+    (49/68)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    84.2%
+  </span>
+  <span class="absValue">
+    (128/152)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.service;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Calendar;
+&nbsp;import java.util.Date;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.data.domain.Page;
+&nbsp;import org.springframework.data.domain.PageRequest;
+&nbsp;import org.springframework.data.domain.Sort;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;import org.springframework.util.StringUtils;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.dto.ChiTietDonHangDTO;
+&nbsp;import com.example.hieuthuoc.dto.DonHangDTO;
+&nbsp;import com.example.hieuthuoc.dto.PageDTO;
+&nbsp;import com.example.hieuthuoc.dto.ResponseDTO;
+&nbsp;import com.example.hieuthuoc.dto.SearchDTO;
+&nbsp;import com.example.hieuthuoc.entity.ChiTietDonHang;
+&nbsp;import com.example.hieuthuoc.entity.DonHang;
+&nbsp;import com.example.hieuthuoc.entity.DonHang.TrangThaiGiaoHang;
+&nbsp;import com.example.hieuthuoc.entity.DonHang.TrangThaiThanhToan;
+&nbsp;import com.example.hieuthuoc.entity.NguoiDung;
+&nbsp;import com.example.hieuthuoc.entity.ThongBao;
+&nbsp;import com.example.hieuthuoc.entity.ThongBao.LoaiThongBao;
+&nbsp;import com.example.hieuthuoc.entity.Thuoc;
+&nbsp;import com.example.hieuthuoc.entity.TonKho;
+&nbsp;import com.example.hieuthuoc.repository.DonHangRepo;
+&nbsp;import com.example.hieuthuoc.repository.NguoiDungRepo;
+&nbsp;import com.example.hieuthuoc.repository.ThongBaoRepo;
+&nbsp;import com.example.hieuthuoc.repository.ThuocRepo;
+&nbsp;import com.example.hieuthuoc.repository.TonKhoRepo;
+&nbsp;
+&nbsp;public interface DonHangService {
+&nbsp;	ResponseDTO&lt;PageDTO&lt;List&lt;DonHang&gt;&gt;&gt; getByTrangThaiGiaoHang(SearchDTO searchDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;DonHang&gt; getById(Integer id);
+&nbsp;
+&nbsp;	ResponseDTO&lt;DonHang&gt; changTrangThaiGiaoHang(DonHangDTO donHangDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;DonHang&gt; changTrangThaiThanhToan(DonHangDTO donHangDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;DonHang&gt; create(DonHangDTO donHangDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;DonHang&gt; update(DonHangDTO donHangDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;Void&gt; delete(Integer id);
+&nbsp;}
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;class DonHangServiceImpl implements DonHangService {</b>
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private DonHangRepo donHangRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	NguoiDungRepo nguoiDungRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private ThuocRepo thuocRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private ThongBaoRepo thongBaoRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	TonKhoRepo tonKhoRepo;
+&nbsp;
+<b class="fc">&nbsp;	ModelMapper modelMapper = new ModelMapper();</b>
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;PageDTO&lt;List&lt;DonHang&gt;&gt;&gt; getByTrangThaiGiaoHang(SearchDTO searchDTO) {
+<b class="fc">&nbsp;		Sort sortBy = Sort.by(&quot;id&quot;).ascending();</b>
+&nbsp;
+<b class="fc">&nbsp;		if (StringUtils.hasText(searchDTO.getSortedField())) {</b>
+<b class="fc">&nbsp;			sortBy = Sort.by(searchDTO.getSortedField()).ascending();</b>
+&nbsp;		}
+&nbsp;
+<b class="fc">&nbsp;		if (searchDTO.getCurrentPage() == null) {</b>
+<b class="fc">&nbsp;			searchDTO.setCurrentPage(0);</b>
+&nbsp;		}
+&nbsp;
+<b class="fc">&nbsp;		if (searchDTO.getSize() == null) {</b>
+<b class="fc">&nbsp;			searchDTO.setSize(20);</b>
+&nbsp;		}
+&nbsp;
+<b class="fc">&nbsp;		PageRequest pageRequest = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getSize(), sortBy);</b>
+&nbsp;		Page&lt;DonHang&gt; page;
+&nbsp;
+<b class="pc">&nbsp;		if (searchDTO.getKeyWord() == null || searchDTO.getKeyWord().equals(&quot;&quot;)) {</b>
+<b class="fc">&nbsp;			if(searchDTO.getId() &gt; 0) {</b>
+<b class="fc">&nbsp;				page = donHangRepo.findByNguoiDungId(searchDTO.getId(), pageRequest);</b>
+&nbsp;			}else {
+<b class="fc">&nbsp;				page = donHangRepo.findAll(pageRequest);</b>
+&nbsp;			}
+&nbsp;
+&nbsp;		} else {
+&nbsp;
+<b class="fc">&nbsp;			TrangThaiGiaoHang trangThaiGiaoHang = TrangThaiGiaoHang.valueOf(searchDTO.getKeyWord());</b>
+&nbsp;
+<b class="fc">&nbsp;			page = donHangRepo.findByTrangThaiGiaoHang(trangThaiGiaoHang,searchDTO.getId(), pageRequest);</b>
+&nbsp;
+&nbsp;		}
+&nbsp;
+<b class="fc">&nbsp;		PageDTO&lt;List&lt;DonHang&gt;&gt; pageDTO = new PageDTO&lt;&gt;();</b>
+<b class="fc">&nbsp;		pageDTO.setTotalElements(page.getTotalElements());</b>
+<b class="fc">&nbsp;		pageDTO.setTotalPages(page.getTotalPages());</b>
+&nbsp;
+<b class="fc">&nbsp;		List&lt;DonHang&gt; donHang = page.getContent();</b>
+&nbsp;
+<b class="fc">&nbsp;		pageDTO.setData(donHang);</b>
+&nbsp;
+<b class="fc">&nbsp;		return ResponseDTO.&lt;PageDTO&lt;List&lt;DonHang&gt;&gt;&gt;builder().status(200).msg(&quot;ok&quot;).data(pageDTO).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;DonHang&gt; getById(Integer id) {
+<b class="fc">&nbsp;		Optional&lt;DonHang&gt; donhang = donHangRepo.findById(id);</b>
+<b class="fc">&nbsp;		if (donhang.isPresent()) {</b>
+<b class="fc">&nbsp;			return ResponseDTO.&lt;DonHang&gt;builder().status(200).msg(&quot;Thành công&quot;).data(donhang.get()).build();</b>
+&nbsp;		}
+<b class="fc">&nbsp;		return ResponseDTO.&lt;DonHang&gt;builder().status(200).msg(&quot;Không tìm thấy đơn hàng&quot;).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;DonHang&gt; changTrangThaiGiaoHang(DonHangDTO donHangDTO) {
+<b class="fc">&nbsp;		DonHang donHang = donHangRepo.findById(donHangDTO.getId()).orElse(null);</b>
+<b class="fc">&nbsp;		if (donHang != null) {</b>
+<b class="fc">&nbsp;			donHang.setTrangThaiGiaoHang(DonHang.TrangThaiGiaoHang.valueOf(donHangDTO.getTrangThaiGiaoHang()));</b>
+<b class="fc">&nbsp;			DonHang updateDonHang = donHangRepo.save(donHang);</b>
+&nbsp;
+<b class="fc">&nbsp;			TrangThaiGiaoHang trangThai = DonHang.TrangThaiGiaoHang.valueOf(donHangDTO.getTrangThaiGiaoHang());</b>
+<b class="fc">&nbsp;			System.out.println(&quot;Trạng thái giao hàng mới: &quot; + trangThai);</b>
+&nbsp;
+<b class="fc">&nbsp;			if (updateDonHang.getTrangThaiGiaoHang().equals(TrangThaiGiaoHang.DA_GIAO)</b>
+<b class="pc">&nbsp;					|| updateDonHang.getTrangThaiGiaoHang().equals(TrangThaiGiaoHang.DA_HUY)) {</b>
+<b class="pc">&nbsp;				if (updateDonHang.getKhachHang() != null) {</b>
+<b class="fc">&nbsp;					ThongBao thongBao = new ThongBao();</b>
+&nbsp;
+&nbsp;					String tieuDe;
+&nbsp;					String noidung;
+&nbsp;
+<b class="fc">&nbsp;					if (updateDonHang.getTrangThaiGiaoHang().equals(TrangThaiGiaoHang.DA_GIAO)) {</b>
+<b class="fc">&nbsp;						tieuDe = &quot;Đơn hàng đã giao thành công&quot;;</b>
+<b class="fc">&nbsp;						noidung = &quot;Đơn hàng ID = &quot; + updateDonHang.getId() + &quot; đã được giao thành công.&quot;;</b>
+&nbsp;
+&nbsp;						// Cập nhật số lượng thuốc trong kho
+&nbsp;						try {
+<b class="fc">&nbsp;							updateSoLuongKho(updateDonHang.getChiTietDonHangs());</b>
+&nbsp;						} catch (Exception e) {
+<b class="fc">&nbsp;							System.out.println(&quot;Lỗi khi cập nhật số lượng kho: &quot; + e.getMessage());</b>
+<b class="fc">&nbsp;							e.printStackTrace();</b>
+&nbsp;						}
+&nbsp;
+&nbsp;					} else {
+<b class="fc">&nbsp;						tieuDe = &quot;Đơn hàng đã hủy thành công&quot;;</b>
+<b class="fc">&nbsp;						noidung = &quot;Đơn hàng ID = &quot; + updateDonHang.getId() + &quot; đã được hủy thành công.&quot;;</b>
+&nbsp;					}
+&nbsp;
+<b class="fc">&nbsp;					String linkLienKet = &quot;http://localhost:4200/user/donmua-chitiet/&quot; + updateDonHang.getId();</b>
+<b class="fc">&nbsp;					LoaiThongBao loaiThongBao = LoaiThongBao.CA_NHAN;</b>
+&nbsp;
+<b class="fc">&nbsp;					List&lt;NguoiDung&gt; nguoiDungs = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;					nguoiDungs.add(updateDonHang.getKhachHang());</b>
+&nbsp;
+<b class="fc">&nbsp;					thongBao.setTieuDe(tieuDe);</b>
+<b class="fc">&nbsp;					thongBao.setNoiDung(noidung);</b>
+<b class="fc">&nbsp;					thongBao.setLinkLienKet(linkLienKet);</b>
+<b class="fc">&nbsp;					thongBao.setLoaiThongBao(loaiThongBao);</b>
+<b class="fc">&nbsp;					thongBao.setNguoiNhan(nguoiDungs);</b>
+&nbsp;
+<b class="fc">&nbsp;					thongBaoRepo.save(thongBao);</b>
+&nbsp;				}
+&nbsp;			}
+&nbsp;
+<b class="fc">&nbsp;			return ResponseDTO.&lt;DonHang&gt;builder().status(200).msg(&quot;Thành công&quot;).data(updateDonHang).build();</b>
+&nbsp;		}
+<b class="fc">&nbsp;		return ResponseDTO.&lt;DonHang&gt;builder().status(200).msg(&quot;Không tìm thấy đơn hàng&quot;).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;DonHang&gt; changTrangThaiThanhToan(DonHangDTO donHangDTO) {
+<b class="fc">&nbsp;		DonHang donHang = donHangRepo.findById(donHangDTO.getId()).orElse(null);</b>
+<b class="fc">&nbsp;		if (donHang != null) {</b>
+<b class="fc">&nbsp;			donHang.setTrangThaiThanhToan(DonHang.TrangThaiThanhToan.valueOf(donHangDTO.getTrangThaiThanhToan()));</b>
+<b class="fc">&nbsp;			DonHang updateDonHang = donHangRepo.save(donHang);</b>
+<b class="fc">&nbsp;			return ResponseDTO.&lt;DonHang&gt;builder().status(200).msg(&quot;Thành công&quot;).data(updateDonHang).build();</b>
+&nbsp;		}
+<b class="fc">&nbsp;		return ResponseDTO.&lt;DonHang&gt;builder().status(200).msg(&quot;Không tìm thấy đơn hàng&quot;).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;DonHang&gt; create(DonHangDTO donHangDTO) {
+<b class="fc">&nbsp;		DonHang donHang = modelMapper.map(donHangDTO, DonHang.class);</b>
+&nbsp;
+<b class="fc">&nbsp;		if (donHangDTO.getKhachHangId() != null) {</b>
+<b class="fc">&nbsp;			NguoiDung khachHang = nguoiDungRepo.findById(donHangDTO.getKhachHangId()).orElse(null);</b>
+<b class="pc">&nbsp;			if (khachHang != null) {</b>
+<b class="fc">&nbsp;				donHang.setKhachHang(khachHang);</b>
+&nbsp;
+&nbsp;			}
+&nbsp;		}
+&nbsp;
+<b class="fc">&nbsp;		donHang.setPhuongThucThanhToan(DonHang.PhuongThucThanhToan.valueOf(donHangDTO.getPhuongThucThanhToan()));</b>
+&nbsp;
+<b class="pc">&nbsp;		donHang.setTrangThaiGiaoHang(donHangDTO.getTrangThaiGiaoHang() != null</b>
+<b class="nc">&nbsp;				? DonHang.TrangThaiGiaoHang.valueOf(donHangDTO.getTrangThaiGiaoHang())</b>
+<b class="fc">&nbsp;				: TrangThaiGiaoHang.DANG_XU_LY);</b>
+&nbsp;
+<b class="fc">&nbsp;		donHang.setTrangThaiThanhToan(TrangThaiThanhToan.CHUA_THANH_TOAN);</b>
+&nbsp;
+<b class="pc">&nbsp;		if (&quot;CHUYEN_KHOAN&quot;.equalsIgnoreCase(donHangDTO.getPhuongThucThanhToan())) {</b>
+<b class="nc">&nbsp;			donHang.setTrangThaiThanhToan(TrangThaiThanhToan.DA_THANH_TOAN);</b>
+&nbsp;		}
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;		if (donHangDTO.getNguoiDungId() != null) {</b>
+<b class="fc">&nbsp;			NguoiDung nguoiDung = nguoiDungRepo.findById(donHangDTO.getNguoiDungId()).orElse(null);</b>
+<b class="pc">&nbsp;			if (nguoiDung != null) {</b>
+<b class="fc">&nbsp;				donHang.setNguoiDung(nguoiDung);</b>
+&nbsp;			}
+&nbsp;
+<b class="pc">&nbsp;			if (&quot;CHUYEN_KHOAN&quot;.equalsIgnoreCase(donHangDTO.getPhuongThucThanhToan())) {</b>
+<b class="nc">&nbsp;				donHang.setTrangThaiThanhToan(TrangThaiThanhToan.CHUA_THANH_TOAN);</b>
+<b class="nc">&nbsp;				donHang.setTrangThaiGiaoHang(TrangThaiGiaoHang.DA_GIAO);</b>
+<b class="pc">&nbsp;			} else if (&quot;TIEN_MAT&quot;.equalsIgnoreCase(donHangDTO.getPhuongThucThanhToan())) {</b>
+<b class="fc">&nbsp;				donHang.setTrangThaiThanhToan(TrangThaiThanhToan.DA_THANH_TOAN);</b>
+<b class="fc">&nbsp;				donHang.setTrangThaiGiaoHang(TrangThaiGiaoHang.DA_GIAO);</b>
+&nbsp;			} else {
+<b class="nc">&nbsp;				throw new IllegalArgumentException(&quot;Phương thức thanh toán không hợp lệ&quot;);</b>
+&nbsp;			}
+&nbsp;
+&nbsp;		}
+<b class="fc">&nbsp;		if (donHangDTO.getKhachHangId() == null &amp;&amp; donHangDTO.getNguoiDungId() == null) {</b>
+<b class="fc">&nbsp;			return ResponseDTO.&lt;DonHang&gt;builder().status(409).msg(&quot;Không có người tạo đơn&quot;).build();</b>
+&nbsp;		}
+&nbsp;
+<b class="fc">&nbsp;		Double tongTien = 0.0;</b>
+<b class="fc">&nbsp;		List&lt;ChiTietDonHang&gt; chiTietDonHangs = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;		for (ChiTietDonHangDTO chiTietDonHangDTO : donHangDTO.getChiTietDonHangs()) {</b>
+&nbsp;
+<b class="fc">&nbsp;			ChiTietDonHang chiTietDonHang = modelMapper.map(chiTietDonHangDTO, ChiTietDonHang.class);</b>
+&nbsp;
+<b class="fc">&nbsp;			Thuoc thuoc = thuocRepo.findById(chiTietDonHangDTO.getThuocId())</b>
+<b class="fc">&nbsp;					.orElseThrow(() -&gt; new RuntimeException(&quot;Thuốc không tồn tại&quot;));</b>
+&nbsp;
+<b class="fc">&nbsp;			tongTien += chiTietDonHang.getDonGia() * chiTietDonHang.getSoLuong();</b>
+&nbsp;
+<b class="fc">&nbsp;			chiTietDonHang.setThuoc(thuoc);</b>
+<b class="fc">&nbsp;			chiTietDonHang.setDonHang(donHang);</b>
+<b class="fc">&nbsp;			chiTietDonHangs.add(chiTietDonHang);</b>
+&nbsp;
+&nbsp;		}
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;		donHang.setTongTien(tongTien);</b>
+<b class="fc">&nbsp;		donHang.setChiTietDonHangs(chiTietDonHangs);</b>
+&nbsp;
+<b class="fc">&nbsp;		DonHang createDonHang = donHangRepo.save(donHang);</b>
+&nbsp;
+<b class="fc">&nbsp;		if (createDonHang.getKhachHang() != null) {</b>
+<b class="fc">&nbsp;			ThongBao thongBao = new ThongBao();</b>
+<b class="fc">&nbsp;			String tieuDe = &quot;Đặt đơn hàng thành công&quot;;</b>
+<b class="fc">&nbsp;			String noidung = &quot;Đơn hàng ID = &quot; + createDonHang.getId() + &quot; đã được đặt thành công.&quot;;</b>
+<b class="fc">&nbsp;			String linkLienKet = &quot;http://localhost:4200/user/donmua-chitiet/&quot; + createDonHang.getId();</b>
+<b class="fc">&nbsp;			LoaiThongBao loaiThongBao = LoaiThongBao.CA_NHAN;</b>
+&nbsp;
+<b class="fc">&nbsp;			List&lt;NguoiDung&gt; nguoiDungs = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;			nguoiDungs.add(createDonHang.getKhachHang());</b>
+&nbsp;
+<b class="fc">&nbsp;			thongBao.setTieuDe(tieuDe);</b>
+<b class="fc">&nbsp;			thongBao.setNoiDung(noidung);</b>
+<b class="fc">&nbsp;			thongBao.setLinkLienKet(linkLienKet);</b>
+<b class="fc">&nbsp;			thongBao.setLoaiThongBao(loaiThongBao);</b>
+<b class="fc">&nbsp;			thongBao.setNguoiNhan(nguoiDungs);</b>
+&nbsp;
+<b class="fc">&nbsp;			thongBaoRepo.save(thongBao);</b>
+&nbsp;		}
+&nbsp;
+<b class="fc">&nbsp;		return ResponseDTO.&lt;DonHang&gt;builder().status(200).msg(&quot;ok&quot;).data(createDonHang).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;DonHang&gt; update(DonHangDTO donHangDTO) {
+<b class="fc">&nbsp;		DonHang donHang = modelMapper.map(donHangDTO, DonHang.class);</b>
+<b class="fc">&nbsp;		DonHang currentDonHang = donHangRepo.findById(donHang.getId()).orElse(null);</b>
+<b class="fc">&nbsp;		if (currentDonHang != null) {</b>
+&nbsp;
+<b class="pc">&nbsp;			if (donHangDTO.getKhachHangId() != null) {</b>
+<b class="nc">&nbsp;				NguoiDung khachHang = nguoiDungRepo.findById(donHangDTO.getKhachHangId()).orElse(null);</b>
+<b class="nc">&nbsp;				if (khachHang != null) {</b>
+<b class="nc">&nbsp;					donHang.setKhachHang(khachHang);</b>
+&nbsp;				}
+&nbsp;			}
+&nbsp;
+<b class="pc">&nbsp;			if (donHangDTO.getNguoiDungId() != null) {</b>
+<b class="nc">&nbsp;				NguoiDung nguoiDung = nguoiDungRepo.findById(donHangDTO.getNguoiDungId()).orElse(null);</b>
+<b class="nc">&nbsp;				if (nguoiDung != null) {</b>
+<b class="nc">&nbsp;					donHang.setKhachHang(nguoiDung);</b>
+&nbsp;				}
+&nbsp;			}
+<b class="pc">&nbsp;			if (donHangDTO.getKhachHangId() == null &amp;&amp; donHangDTO.getNguoiDungId() == null) {</b>
+<b class="fc">&nbsp;				return ResponseDTO.&lt;DonHang&gt;builder().status(409).msg(&quot;Không có người tạo đơn&quot;).build();</b>
+&nbsp;			}
+&nbsp;
+<b class="nc">&nbsp;			Double tongTien = 0.0;</b>
+<b class="nc">&nbsp;			List&lt;ChiTietDonHang&gt; chiTietDonHangs = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;			for (ChiTietDonHangDTO chiTietDonHangDTO : donHangDTO.getChiTietDonHangs()) {</b>
+&nbsp;
+<b class="nc">&nbsp;				ChiTietDonHang chiTietDonHang = modelMapper.map(chiTietDonHangDTO, ChiTietDonHang.class);</b>
+&nbsp;
+<b class="nc">&nbsp;				Thuoc thuoc = thuocRepo.findById(chiTietDonHangDTO.getThuocId())</b>
+<b class="nc">&nbsp;						.orElseThrow(() -&gt; new RuntimeException(&quot;Thuốc không tồn tại&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;				tongTien += chiTietDonHang.getDonGia() * chiTietDonHang.getSoLuong();</b>
+&nbsp;
+<b class="nc">&nbsp;				chiTietDonHang.setThuoc(thuoc);</b>
+<b class="nc">&nbsp;				chiTietDonHang.setDonHang(donHang);</b>
+<b class="nc">&nbsp;				chiTietDonHangs.add(chiTietDonHang);</b>
+&nbsp;
+&nbsp;			}
+&nbsp;
+<b class="nc">&nbsp;			donHang.setTongTien(tongTien);</b>
+<b class="nc">&nbsp;			donHang.setChiTietDonHangs(chiTietDonHangs);</b>
+&nbsp;
+<b class="nc">&nbsp;			return ResponseDTO.&lt;DonHang&gt;builder().status(200).msg(&quot;Thành công&quot;).data(donHangRepo.save(donHang)).build();</b>
+&nbsp;		}
+<b class="fc">&nbsp;		return ResponseDTO.&lt;DonHang&gt;builder().status(409).msg(&quot;Đơn hàng không tồn tài&quot;).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;Void&gt; delete(Integer id) {
+<b class="fc">&nbsp;		donHangRepo.deleteById(id);</b>
+<b class="fc">&nbsp;		return ResponseDTO.&lt;Void&gt;builder().status(200).msg(&quot;Thành công.&quot;).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	public void updateSoLuongKho(List&lt;ChiTietDonHang&gt; chiTietDonHangs) {
+<b class="fc">&nbsp;		for (ChiTietDonHang chiTietDonHang : chiTietDonHangs) {</b>
+<b class="fc">&nbsp;			Calendar calendar = Calendar.getInstance();</b>
+<b class="fc">&nbsp;			calendar.add(Calendar.MONTH, 3);</b>
+<b class="fc">&nbsp;			Date ngayCanSoSanh = calendar.getTime();</b>
+<b class="fc">&nbsp;			TonKho tonKho = tonKhoRepo.findNearestTonKhoByThuocIdAndHanSuDungBefore(chiTietDonHang.getThuoc().getId(),</b>
+&nbsp;					ngayCanSoSanh);
+<b class="fc">&nbsp;			int soLuong = tonKho.getSoLuong() - chiTietDonHang.getSoLuong();</b>
+<b class="fc">&nbsp;			tonKho.setSoLuong(soLuong);</b>
+<b class="fc">&nbsp;			tonKhoRepo.save(tonKho);</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:13</div>
+</div>
+</body>
+</html>

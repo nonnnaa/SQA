@@ -1,0 +1,189 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ThuocController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: ThuocController (com.example.hieuthuoc.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ThuocController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    14.3%
+  </span>
+  <span class="absValue">
+    (1/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    9.1%
+  </span>
+  <span class="absValue">
+    (1/11)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.controller;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.web.bind.annotation.DeleteMapping;
+&nbsp;import org.springframework.web.bind.annotation.GetMapping;
+&nbsp;import org.springframework.web.bind.annotation.PostMapping;
+&nbsp;import org.springframework.web.bind.annotation.PutMapping;
+&nbsp;import org.springframework.web.bind.annotation.RequestBody;
+&nbsp;import org.springframework.web.bind.annotation.RequestMapping;
+&nbsp;import org.springframework.web.bind.annotation.RequestParam;
+&nbsp;import org.springframework.web.bind.annotation.RequestPart;
+&nbsp;import org.springframework.web.bind.annotation.RestController;
+&nbsp;import org.springframework.web.multipart.MultipartFile;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.dto.PageDTO;
+&nbsp;import com.example.hieuthuoc.dto.ResponseDTO;
+&nbsp;import com.example.hieuthuoc.dto.SearchDTO;
+&nbsp;import com.example.hieuthuoc.dto.SearchThuocDTO;
+&nbsp;import com.example.hieuthuoc.dto.ThuocDTO;
+&nbsp;import com.example.hieuthuoc.entity.Thuoc;
+&nbsp;import com.example.hieuthuoc.service.ThuocService;
+&nbsp;
+&nbsp;import jakarta.validation.Valid;
+&nbsp;
+&nbsp;@RestController
+&nbsp;@RequestMapping(&quot;/thuoc&quot;)
+<b class="fc">&nbsp;public class ThuocController {</b>
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	ThuocService thuocService;
+&nbsp;	
+&nbsp;	@PostMapping(&quot;/get_thuoc_ban_chay&quot;)
+&nbsp;	public ResponseDTO&lt;PageDTO&lt;List&lt;Thuoc&gt;&gt;&gt; getThuocBanChay(@RequestBody @Valid SearchDTO searchDTO)
+&nbsp;			throws Exception {
+<b class="nc">&nbsp;		return thuocService.getThuocBanChay(searchDTO);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@PostMapping(&quot;/search&quot;)
+&nbsp;	public ResponseDTO&lt;PageDTO&lt;List&lt;Thuoc&gt;&gt;&gt; search(@RequestBody @Valid SearchThuocDTO searchThuocDTO)
+&nbsp;			throws Exception {
+<b class="nc">&nbsp;		return thuocService.search(searchThuocDTO);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@GetMapping(&quot;/get&quot;)
+&nbsp;	public ResponseDTO&lt;Thuoc&gt; getById(@RequestParam(&quot;id&quot;) @Valid int id) {
+<b class="nc">&nbsp;		return thuocService.getById(id);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@PostMapping(&quot;/create&quot;)
+&nbsp;	public ResponseDTO&lt;Thuoc&gt; create(@RequestPart @Valid ThuocDTO thuocDTO, @RequestPart(value = &quot;file&quot;, required = false) MultipartFile file)
+&nbsp;			throws Exception {
+<b class="nc">&nbsp;		if(file != null &amp;&amp; !file.isEmpty()) {</b>
+<b class="nc">&nbsp;			thuocDTO.setFile(file);</b>
+&nbsp;		}
+<b class="nc">&nbsp;		return thuocService.create(thuocDTO);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@PutMapping(&quot;/update&quot;)
+&nbsp;	public ResponseDTO&lt;Thuoc&gt; update(@RequestPart @Valid ThuocDTO thuocDTO,  @RequestPart(value = &quot;file&quot;, required = false) MultipartFile file)
+&nbsp;			throws Exception {
+<b class="nc">&nbsp;		if(file != null &amp;&amp; !file.isEmpty()) {</b>
+<b class="nc">&nbsp;			thuocDTO.setFile(file);</b>
+&nbsp;		}
+<b class="nc">&nbsp;		return thuocService.update(thuocDTO);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@DeleteMapping(&quot;/delete&quot;)
+&nbsp;	public ResponseDTO&lt;Void&gt; delete(@RequestParam(&quot;id&quot;) @Valid int id) {
+<b class="nc">&nbsp;		return thuocService.delete(id);</b>
+&nbsp;	}
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:14</div>
+</div>
+</body>
+</html>

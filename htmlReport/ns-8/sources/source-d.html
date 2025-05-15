@@ -1,0 +1,223 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > NhaCungCapServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.service</a>
+</div>
+
+<h1>Coverage Summary for Class: NhaCungCapServiceImpl (com.example.hieuthuoc.service)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NhaCungCapServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    16.7%
+  </span>
+  <span class="absValue">
+    (1/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    8.3%
+  </span>
+  <span class="absValue">
+    (2/24)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">NhaCungCapServiceImpl$$SpringCGLIB$$0</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    16.7%
+  </span>
+  <span class="absValue">
+    (1/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    8.3%
+  </span>
+  <span class="absValue">
+    (2/24)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.service;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.dto.NhaCungCapDTO;
+&nbsp;import com.example.hieuthuoc.dto.ResponseDTO;
+&nbsp;import com.example.hieuthuoc.entity.NhaCungCap;
+&nbsp;import com.example.hieuthuoc.repository.NhaCungCapRepo;
+&nbsp;
+&nbsp;public interface NhaCungCapService {
+&nbsp;	ResponseDTO&lt;List&lt;NhaCungCap&gt;&gt; getAll();
+&nbsp;
+&nbsp;	ResponseDTO&lt;List&lt;NhaCungCap&gt;&gt; searchByTenNhaCungCap(String tenNhaCungcap);
+&nbsp;
+&nbsp;	ResponseDTO&lt;NhaCungCap&gt; create(NhaCungCapDTO nhaCungCapDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;NhaCungCap&gt; update(NhaCungCapDTO nhaCungCapDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;Void&gt; delete(Integer id);
+&nbsp;}
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;class NhaCungCapServiceImpl implements NhaCungCapService {</b>
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private NhaCungCapRepo nhaCungCapRepo;
+&nbsp;
+<b class="fc">&nbsp;	ModelMapper modelMapper = new ModelMapper();</b>
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;List&lt;NhaCungCap&gt;&gt; getAll() {
+<b class="nc">&nbsp;		List&lt;NhaCungCap&gt; nhaCungCaps = nhaCungCapRepo.findAll();</b>
+<b class="nc">&nbsp;		return ResponseDTO.&lt;List&lt;NhaCungCap&gt;&gt;builder().status(200).msg(&quot;Thành công&quot;).data(nhaCungCaps).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;List&lt;NhaCungCap&gt;&gt; searchByTenNhaCungCap(String tenNhaCungcap) {
+<b class="nc">&nbsp;		List&lt;NhaCungCap&gt; nhaCungCaps = nhaCungCapRepo.searchByTenNhaCungCap(tenNhaCungcap);</b>
+<b class="nc">&nbsp;		if (nhaCungCaps != null &amp;&amp; !nhaCungCaps.isEmpty()) {</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;List&lt;NhaCungCap&gt;&gt;builder().status(200).msg(&quot;Thành công&quot;).data(nhaCungCaps).build();</b>
+&nbsp;		}
+<b class="nc">&nbsp;		return ResponseDTO.&lt;List&lt;NhaCungCap&gt;&gt;builder().status(409).msg(&quot;Nhà sản xuất không tồn tại&quot;).build();</b>
+&nbsp;
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;NhaCungCap&gt; create(NhaCungCapDTO nhaCungCapDTO) {
+<b class="nc">&nbsp;		NhaCungCap nhaCungCap = modelMapper.map(nhaCungCapDTO, NhaCungCap.class);</b>
+<b class="nc">&nbsp;		if (nhaCungCapRepo.existsByMaNCC(nhaCungCap.getMaNCC())) {</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;NhaCungCap&gt;builder().status(409).msg(&quot;Nhà cung cấp đã tồn tại&quot;).build();</b>
+&nbsp;		}
+<b class="nc">&nbsp;		return ResponseDTO.&lt;NhaCungCap&gt;builder().status(201).msg(&quot;Thành công&quot;).data(nhaCungCapRepo.save(nhaCungCap))</b>
+<b class="nc">&nbsp;				.build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;NhaCungCap&gt; update(NhaCungCapDTO nhaCungCapDTO) {
+<b class="nc">&nbsp;		NhaCungCap nhaCungCap = modelMapper.map(nhaCungCapDTO, NhaCungCap.class);</b>
+<b class="nc">&nbsp;		Optional&lt;NhaCungCap&gt; currentNhaCungCap = nhaCungCapRepo.findById(nhaCungCap.getId());</b>
+&nbsp;
+<b class="nc">&nbsp;		if (!currentNhaCungCap.isPresent()) {</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;NhaCungCap&gt;builder().status(404).msg(&quot;Không tìm thấy nhà cung cấp&quot;).build();</b>
+&nbsp;		}
+<b class="nc">&nbsp;		if (nhaCungCap.getMaNCC().equals(currentNhaCungCap.get().getMaNCC()) == false</b>
+<b class="nc">&nbsp;				&amp;&amp; nhaCungCapRepo.existsByMaNCC(nhaCungCap.getMaNCC())) {</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;NhaCungCap&gt;builder().status(409).msg(&quot;Mã Nhà cung cấp đã tồn tại&quot;).build();</b>
+&nbsp;		}
+<b class="nc">&nbsp;		NhaCungCap updatedNhaCungCap = nhaCungCapRepo.save(nhaCungCap);</b>
+<b class="nc">&nbsp;		return ResponseDTO.&lt;NhaCungCap&gt;builder().status(200).msg(&quot;Thành công&quot;).data(updatedNhaCungCap).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;Void&gt; delete(Integer id) {
+<b class="nc">&nbsp;		nhaCungCapRepo.deleteById(id);</b>
+<b class="nc">&nbsp;		return ResponseDTO.&lt;Void&gt;builder().status(200).msg(&quot;Thành công&quot;).build();</b>
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:14</div>
+</div>
+</body>
+</html>

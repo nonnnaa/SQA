@@ -1,0 +1,363 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ThuocService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.service</a>
+</div>
+
+<h1>Coverage Summary for Class: ThuocService (com.example.hieuthuoc.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">ThuocService</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.service;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.data.domain.Page;
+&nbsp;import org.springframework.data.domain.PageRequest;
+&nbsp;import org.springframework.data.domain.Sort;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;import org.springframework.util.StringUtils;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.dto.PageDTO;
+&nbsp;import com.example.hieuthuoc.dto.ResponseDTO;
+&nbsp;import com.example.hieuthuoc.dto.SearchDTO;
+&nbsp;import com.example.hieuthuoc.dto.SearchThuocDTO;
+&nbsp;import com.example.hieuthuoc.dto.ThuocDTO;
+&nbsp;import com.example.hieuthuoc.entity.DoiTuong;
+&nbsp;import com.example.hieuthuoc.entity.LoaiThuoc;
+&nbsp;import com.example.hieuthuoc.entity.NhaSanXuat;
+&nbsp;import com.example.hieuthuoc.entity.ThanhPhanThuoc;
+&nbsp;import com.example.hieuthuoc.entity.Thuoc;
+&nbsp;import com.example.hieuthuoc.repository.ChiTietDonHangRepo;
+&nbsp;import com.example.hieuthuoc.repository.DoiTuongRepo;
+&nbsp;import com.example.hieuthuoc.repository.DoiTuongSdThuocRepo;
+&nbsp;import com.example.hieuthuoc.repository.LoaiThuocRepo;
+&nbsp;import com.example.hieuthuoc.repository.NhaSanXuatRepo;
+&nbsp;import com.example.hieuthuoc.repository.ThanhPhanThuocRepo;
+&nbsp;import com.example.hieuthuoc.repository.ThuocRepo;
+&nbsp;
+&nbsp;public interface ThuocService {
+&nbsp;	ResponseDTO&lt;Thuoc&gt; create(ThuocDTO thuocDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;Thuoc&gt; update(ThuocDTO thuocDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;Void&gt; delete(Integer id);
+&nbsp;
+&nbsp;	ResponseDTO&lt;Thuoc&gt; getById(Integer id);
+&nbsp;
+&nbsp;	ResponseDTO&lt;PageDTO&lt;List&lt;Thuoc&gt;&gt;&gt; search(SearchThuocDTO searchThuocDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;PageDTO&lt;List&lt;Thuoc&gt;&gt;&gt; getThuocBanChay(SearchDTO searchDTO);
+&nbsp;
+&nbsp;}
+&nbsp;
+&nbsp;@Service
+&nbsp;class ThuocServiceImpl implements ThuocService {
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private ThuocRepo thuocRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	LoaiThuocRepo loaiThuocRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	NhaSanXuatRepo nhaSanXuatRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	DoiTuongRepo doiTuongRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	DoiTuongSdThuocRepo doiTuongSdThuocRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	ThanhPhanThuocRepo thanhPhanThuocRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	ChiTietDonHangRepo chiTietDonHangRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	UploadImageService uploadImageService;
+&nbsp;
+&nbsp;	ModelMapper modelMapper = new ModelMapper();
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;PageDTO&lt;List&lt;Thuoc&gt;&gt;&gt; getThuocBanChay(SearchDTO searchDTO) {
+&nbsp;		Sort sortBy = Sort.by(&quot;tenThuoc&quot;).ascending();
+&nbsp;
+&nbsp;		if (StringUtils.hasText(searchDTO.getSortedField())) {
+&nbsp;			sortBy = Sort.by(searchDTO.getSortedField()).ascending();
+&nbsp;		}
+&nbsp;
+&nbsp;		if (searchDTO.getCurrentPage() == null) {
+&nbsp;			searchDTO.setCurrentPage(0);
+&nbsp;		}
+&nbsp;
+&nbsp;		if (searchDTO.getSize() == null) {
+&nbsp;			searchDTO.setSize(20);
+&nbsp;		}
+&nbsp;
+&nbsp;		if (searchDTO.getKeyWord() == null) {
+&nbsp;			searchDTO.setKeyWord(&quot;&quot;);
+&nbsp;		}
+&nbsp;		PageRequest pageRequest = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getSize(), sortBy);
+&nbsp;		Page&lt;Thuoc&gt; page = chiTietDonHangRepo.findAllThuocBanChay(pageRequest);
+&nbsp;
+&nbsp;		PageDTO&lt;List&lt;Thuoc&gt;&gt; pageDTO = new PageDTO&lt;&gt;();
+&nbsp;		pageDTO.setTotalElements(page.getTotalElements());
+&nbsp;		pageDTO.setTotalPages(page.getTotalPages());
+&nbsp;
+&nbsp;		List&lt;Thuoc&gt; thuocDTOs = page.getContent();
+&nbsp;
+&nbsp;		pageDTO.setData(thuocDTOs);
+&nbsp;
+&nbsp;		return ResponseDTO.&lt;PageDTO&lt;List&lt;Thuoc&gt;&gt;&gt;builder().status(200).msg(&quot;Thanh công&quot;).data(pageDTO).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;PageDTO&lt;List&lt;Thuoc&gt;&gt;&gt; search(SearchThuocDTO searchThuocDTO) {
+&nbsp;		
+&nbsp;		System.out.println(searchThuocDTO);
+&nbsp;		
+&nbsp;		Sort sortBy = Sort.by(&quot;id&quot;).ascending();
+&nbsp;
+&nbsp;		if (StringUtils.hasText(searchThuocDTO.getSortedField())) {
+&nbsp;			sortBy = Sort.by(searchThuocDTO.getSortedField()).ascending();
+&nbsp;		}
+&nbsp;
+&nbsp;		if (searchThuocDTO.getCurrentPage() == null) {
+&nbsp;			searchThuocDTO.setCurrentPage(0);
+&nbsp;		}
+&nbsp;
+&nbsp;		if (searchThuocDTO.getSize() == null) {
+&nbsp;			searchThuocDTO.setSize(20);
+&nbsp;		}
+&nbsp;
+&nbsp;		if (searchThuocDTO.getKeyWord() == null) {
+&nbsp;			searchThuocDTO.setKeyWord(&quot;&quot;);
+&nbsp;		}
+&nbsp;		PageRequest pageRequest = PageRequest.of(searchThuocDTO.getCurrentPage(), searchThuocDTO.getSize(), sortBy);
+&nbsp;		Page&lt;Thuoc&gt; page = thuocRepo.search(searchThuocDTO.getKeyWord(), searchThuocDTO.getLoaiThuoc(),
+&nbsp;				searchThuocDTO.getNhaSanXuat(), searchThuocDTO.getDanhMucThuoc(), searchThuocDTO.getMinGiaBan(),
+&nbsp;				searchThuocDTO.getMaxGiaBan(), searchThuocDTO.getTenDoiTuong(), searchThuocDTO.getTrangThai(),
+&nbsp;				pageRequest);
+&nbsp;
+&nbsp;		PageDTO&lt;List&lt;Thuoc&gt;&gt; pageDTO = new PageDTO&lt;&gt;();
+&nbsp;		pageDTO.setTotalElements(page.getTotalElements());
+&nbsp;		pageDTO.setTotalPages(page.getTotalPages());
+&nbsp;
+&nbsp;		List&lt;Thuoc&gt; thuocDTOs = page.getContent();
+&nbsp;
+&nbsp;		pageDTO.setData(thuocDTOs);
+&nbsp;
+&nbsp;		return ResponseDTO.&lt;PageDTO&lt;List&lt;Thuoc&gt;&gt;&gt;builder().status(200).msg(&quot;Thanh công&quot;).data(pageDTO).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;Thuoc&gt; getById(Integer id) {
+&nbsp;		Optional&lt;Thuoc&gt; thuoc = thuocRepo.findById(id);
+&nbsp;		if (thuoc.isPresent()) {
+&nbsp;			return ResponseDTO.&lt;Thuoc&gt;builder().status(200).msg(&quot;Thành công&quot;).data(thuoc.get()).build();
+&nbsp;		}
+&nbsp;		return ResponseDTO.&lt;Thuoc&gt;builder().status(409).msg(&quot;Không tìm thấy thuốc&quot;).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;Thuoc&gt; create(ThuocDTO thuocDTO) {
+&nbsp;		Thuoc thuoc = modelMapper.map(thuocDTO, Thuoc.class);
+&nbsp;
+&nbsp;		if (thuocRepo.existsByMaThuoc(thuoc.getMaThuoc())) {
+&nbsp;			return ResponseDTO.&lt;Thuoc&gt;builder().status(409).msg(&quot;Mã thuốc đã tồn tại&quot;).build();
+&nbsp;		}
+&nbsp;
+&nbsp;		if (thuocRepo.existsByTenThuoc(thuoc.getTenThuoc())) {
+&nbsp;			return ResponseDTO.&lt;Thuoc&gt;builder().status(409).msg(&quot;Tên thuốc đã tồn tại&quot;).build();
+&nbsp;		}
+&nbsp;
+&nbsp;		// Lấy các thực thể liên quan từ cơ sở dữ liệu
+&nbsp;		LoaiThuoc loaiThuoc = loaiThuocRepo.findById(thuocDTO.getLoaiThuocId())
+&nbsp;				.orElseThrow(() -&gt; new RuntimeException(&quot;Loại thuốc không tồn tại&quot;));
+&nbsp;		NhaSanXuat nhaSanXuat = nhaSanXuatRepo.findById(thuocDTO.getNhaSanXuatId())
+&nbsp;				.orElseThrow(() -&gt; new RuntimeException(&quot;Nhà sản xuất không tồn tại&quot;));
+&nbsp;
+&nbsp;		thuoc.setLoaiThuoc(loaiThuoc);
+&nbsp;		thuoc.setNhaSanXuat(nhaSanXuat);
+&nbsp;
+&nbsp;		// lưu ảnh vài cloudinary
+&nbsp;//		if (thuocDTO.getFile() != null &amp;&amp; Base64ToMultipartFileConverter.isBase64(thuocDTO.getFile())) {
+&nbsp;//			MultipartFile avatarFile = Base64ToMultipartFileConverter.convert(thuocDTO.getFile());
+&nbsp;//			String name = &quot;Thuoc_&quot; + thuocDTO.getId();
+&nbsp;//			String avatarUrl = uploadImageService.uploadImage(avatarFile, name);
+&nbsp;//			thuoc.setAvatar(avatarUrl);
+&nbsp;//		}
+&nbsp;
+&nbsp;		if (thuocDTO.getFile() != null &amp;&amp; !thuocDTO.getFile().isEmpty()) {
+&nbsp;			String name = &quot;Thuoc_&quot; + thuocDTO.getId();
+&nbsp;			String avatarUrl = uploadImageService.uploadImage(thuocDTO.getFile(), name);
+&nbsp;			thuoc.setAvatar(avatarUrl);
+&nbsp;		}
+&nbsp;
+&nbsp;		if (!thuocDTO.getThanhPhanThuocs().isEmpty()) {
+&nbsp;			List&lt;ThanhPhanThuoc&gt; thanhPhanThuocs = thuocDTO.getThanhPhanThuocs().stream().map(t -&gt; {
+&nbsp;				ThanhPhanThuoc thanhPhanThuoc = modelMapper.map(t, ThanhPhanThuoc.class);
+&nbsp;				thanhPhanThuoc.setThuoc(thuoc);
+&nbsp;				return thanhPhanThuoc;
+&nbsp;			}).collect(Collectors.toList());
+&nbsp;			thuoc.setThanhPhanThuocs(thanhPhanThuocs);
+&nbsp;		}
+&nbsp;
+&nbsp;		// Xử lý danh sách DoiTuong
+&nbsp;		if (!thuocDTO.getDoiTuongs().isEmpty()) {
+&nbsp;			List&lt;DoiTuong&gt; doiTuongs = thuocDTO.getDoiTuongs().stream()
+&nbsp;					.map(d -&gt; doiTuongRepo.findById(d.getId())
+&nbsp;							.orElseThrow(() -&gt; new RuntimeException(&quot;Đối tượng không tồn tại: ID &quot; + d.getId())))
+&nbsp;					.collect(Collectors.toList());
+&nbsp;			thuoc.setDoiTuongs(doiTuongs);
+&nbsp;		}
+&nbsp;
+&nbsp;		return ResponseDTO.&lt;Thuoc&gt;builder().status(200).msg(&quot;Thành công&quot;).data(thuocRepo.save(thuoc)).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;Thuoc&gt; update(ThuocDTO thuocDTO) {
+&nbsp;		Thuoc thuoc = modelMapper.map(thuocDTO, Thuoc.class);
+&nbsp;		Thuoc curentThuoc = thuocRepo.findById(thuoc.getId()).orElse(null);
+&nbsp;		if (curentThuoc != null) {
+&nbsp;
+&nbsp;			if (thuocDTO.getMaThuoc().equals(curentThuoc.getMaThuoc()) == false
+&nbsp;					&amp;&amp; thuocRepo.existsByMaThuoc(thuoc.getMaThuoc())) {
+&nbsp;				return ResponseDTO.&lt;Thuoc&gt;builder().status(409).msg(&quot;Mã thuốc đã tồn tại&quot;).build();
+&nbsp;			}
+&nbsp;
+&nbsp;			if (thuocDTO.getTenThuoc().equals(curentThuoc.getTenThuoc()) == false
+&nbsp;					&amp;&amp; thuocRepo.existsByTenThuoc(thuoc.getTenThuoc())) {
+&nbsp;				return ResponseDTO.&lt;Thuoc&gt;builder().status(409).msg(&quot;Tên thuốc đã tồn tại&quot;).build();
+&nbsp;			}
+&nbsp;
+&nbsp;			// Lấy các thực thể liên quan từ cơ sở dữ liệu
+&nbsp;			LoaiThuoc loaiThuoc = loaiThuocRepo.findById(thuocDTO.getLoaiThuocId())
+&nbsp;					.orElseThrow(() -&gt; new RuntimeException(&quot;Loại thuốc không tồn tại&quot;));
+&nbsp;			NhaSanXuat nhaSanXuat = nhaSanXuatRepo.findById(thuocDTO.getNhaSanXuatId())
+&nbsp;					.orElseThrow(() -&gt; new RuntimeException(&quot;Nhà sản xuất không tồn tại&quot;));
+&nbsp;
+&nbsp;			thuoc.setLoaiThuoc(loaiThuoc);
+&nbsp;			thuoc.setNhaSanXuat(nhaSanXuat);
+&nbsp;
+&nbsp;			// Xoá đi ảnh trước đó trong cloudinary
+&nbsp;//			if (thuocDTO.getFile().length() &gt; 0) {
+&nbsp;//				uploadImageService.deleteImage(thuoc.getAvatar());
+&nbsp;//			}
+&nbsp;//
+&nbsp;//			if (Base64ToMultipartFileConverter.isBase64(thuocDTO.getFile())) {
+&nbsp;//				MultipartFile avatarFile = Base64ToMultipartFileConverter.convert(thuocDTO.getFile());
+&nbsp;//				String name = &quot;Thuoc_&quot; + thuocDTO.getId();
+&nbsp;//				String avatarUrl = uploadImageService.uploadImage(avatarFile, name);
+&nbsp;//				thuoc.setAvatar(avatarUrl);
+&nbsp;//			}
+&nbsp;
+&nbsp;			if (thuocDTO.getFile() != null &amp;&amp; !thuocDTO.getFile().isEmpty()) {
+&nbsp;				// Xoá đi ảnh trước đó trong cloudinary
+&nbsp;				if (thuoc.getAvatar() != null) {
+&nbsp;					uploadImageService.deleteImage(thuoc.getAvatar());
+&nbsp;				}
+&nbsp;
+&nbsp;				String name = &quot;Thuoc_&quot; + thuocDTO.getId();
+&nbsp;				String avatarUrl = uploadImageService.uploadImage(thuocDTO.getFile(), name);
+&nbsp;				thuoc.setAvatar(avatarUrl);
+&nbsp;			}
+&nbsp;
+&nbsp;			// Xử lý danh sách Thanh Phần Thuốc
+&nbsp;			if (thuocDTO.getThanhPhanThuocs() != null &amp;&amp; !thuocDTO.getThanhPhanThuocs().isEmpty()) {
+&nbsp;				List&lt;ThanhPhanThuoc&gt; thanhPhanThuocs = thuocDTO.getThanhPhanThuocs().stream().map(t -&gt; {
+&nbsp;					ThanhPhanThuoc thanhPhanThuoc = modelMapper.map(t, ThanhPhanThuoc.class);
+&nbsp;					thanhPhanThuoc.setThuoc(thuoc);
+&nbsp;					return thanhPhanThuoc;
+&nbsp;				}).collect(Collectors.toList());
+&nbsp;				thuoc.setThanhPhanThuocs(thanhPhanThuocs);
+&nbsp;			}
+&nbsp;
+&nbsp;			// Xử lý danh sách DoiTuong
+&nbsp;			if (thuocDTO.getDoiTuongs() != null &amp;&amp; !thuocDTO.getDoiTuongs().isEmpty()) {
+&nbsp;				List&lt;DoiTuong&gt; doiTuongs = thuocDTO.getDoiTuongs().stream()
+&nbsp;						.map(d -&gt; doiTuongRepo.findById(d.getId())
+&nbsp;								.orElseThrow(() -&gt; new RuntimeException(&quot;Đối tượng không tồn tại: ID &quot; + d.getId())))
+&nbsp;						.collect(Collectors.toList());
+&nbsp;				thuoc.setDoiTuongs(doiTuongs);
+&nbsp;			}
+&nbsp;
+&nbsp;			return ResponseDTO.&lt;Thuoc&gt;builder().status(200).msg(&quot;Thành công&quot;).data(thuocRepo.save(thuoc)).build();
+&nbsp;		}
+&nbsp;		return ResponseDTO.&lt;Thuoc&gt;builder().status(404).msg(&quot;Không tìm thấy thuốc&quot;).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;Void&gt; delete(Integer id) {
+&nbsp;		thuocRepo.deleteById(id);
+&nbsp;		return ResponseDTO.&lt;Void&gt;builder().status(200).msg(&quot;Thành công&quot;).build();
+&nbsp;	}
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:13</div>
+</div>
+</body>
+</html>

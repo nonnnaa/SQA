@@ -1,0 +1,124 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > UploadImageService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.service</a>
+</div>
+
+<h1>Coverage Summary for Class: UploadImageService (com.example.hieuthuoc.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">UploadImageService</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.service;
+&nbsp;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.web.multipart.MultipartFile;
+&nbsp;
+&nbsp;import com.cloudinary.Cloudinary;
+&nbsp;import com.cloudinary.utils.ObjectUtils;
+&nbsp;
+&nbsp;import lombok.RequiredArgsConstructor;
+&nbsp;
+&nbsp;public interface UploadImageService {
+&nbsp;	String uploadImage(MultipartFile multipartFile, String name);
+&nbsp;
+&nbsp;	void deleteImage(String imageUrl);
+&nbsp;}
+&nbsp;
+&nbsp;@Service
+&nbsp;@RequiredArgsConstructor
+&nbsp;class UploadImageImpl implements UploadImageService {
+&nbsp;
+&nbsp;	final Cloudinary cloudinary;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public String uploadImage(MultipartFile multipartFile, String name) {
+&nbsp;		String url = &quot;&quot;;
+&nbsp;		try {
+&nbsp;			url = cloudinary.uploader().upload(multipartFile.getBytes(), Map.of(&quot;public_id&quot;, name)).get(&quot;url&quot;)
+&nbsp;					.toString();
+&nbsp;		} catch (Exception e) {
+&nbsp;			e.printStackTrace();
+&nbsp;		}
+&nbsp;		return url;
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public void deleteImage(String imageUrl) {
+&nbsp;		try {
+&nbsp;			String publicId = getPublicIdImg(imageUrl);
+&nbsp;			cloudinary.uploader().destroy(publicId, ObjectUtils.asMap(&quot;resource_type&quot;, &quot;image&quot;));
+&nbsp;		} catch (Exception e) {
+&nbsp;			System.out.println(&quot;Lỗi khi xoá ảnh&quot;);
+&nbsp;			e.printStackTrace();
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;	private String getPublicIdImg(String imageUrl) {
+&nbsp;		String[] parts = imageUrl.split(&quot;/&quot;);
+&nbsp;		String publicIdWithFormat = parts[parts.length - 1]; // Chỉ lấy phần cuối cùng của URL
+&nbsp;
+&nbsp;		// Tách public_id và định dạng
+&nbsp;		String[] publicIdAndFormat = publicIdWithFormat.split(&quot;\\.&quot;);
+&nbsp;		return publicIdAndFormat[0]; // Lấy public_id
+&nbsp;	}
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:13</div>
+</div>
+</body>
+</html>

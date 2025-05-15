@@ -1,0 +1,215 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GioHangServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.service</a>
+</div>
+
+<h1>Coverage Summary for Class: GioHangServiceImpl (com.example.hieuthuoc.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GioHangServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/27)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.service;
+&nbsp;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.dto.ChiTietGioHangDTO;
+&nbsp;import com.example.hieuthuoc.dto.ResponseDTO;
+&nbsp;import com.example.hieuthuoc.entity.ChiTietGioHang;
+&nbsp;import com.example.hieuthuoc.entity.GioHang;
+&nbsp;import com.example.hieuthuoc.repository.ChiTietGioHangRepo;
+&nbsp;import com.example.hieuthuoc.repository.GioHangRepo;
+&nbsp;import com.example.hieuthuoc.repository.ThuocRepo;
+&nbsp;
+&nbsp;public interface GioHangService {
+&nbsp;	
+&nbsp;	ResponseDTO&lt;GioHang&gt; getByNguoiDungId(int nguoiDungId);
+&nbsp;
+&nbsp;	ResponseDTO&lt;ChiTietGioHang&gt; createThuoc(ChiTietGioHangDTO chiTietGioHangDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;ChiTietGioHang&gt; updateThuoc(ChiTietGioHangDTO chiTietGioHangDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;Void&gt; deleteThuoc(int id);
+&nbsp;}
+&nbsp;
+&nbsp;@Service
+<b class="nc">&nbsp;class GioHangServiceImpl implements GioHangService {</b>
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private GioHangRepo gioHangRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private ChiTietGioHangRepo chiTietGioHangRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private ThuocRepo thuocRepo;
+&nbsp;
+<b class="nc">&nbsp;	private ModelMapper modelMapper = new ModelMapper();</b>
+&nbsp;
+&nbsp;//    Lấy thông tin giỏ hàng của một người dùng dựa trên ID người dùng.
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;GioHang&gt; getByNguoiDungId(int nguoiDungId) {
+<b class="nc">&nbsp;		var gioHangOpt = gioHangRepo.findByKhachHangId(nguoiDungId);</b>
+<b class="nc">&nbsp;		if (gioHangOpt.isEmpty()) {</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;GioHang&gt;builder().status(404)</b>
+<b class="nc">&nbsp;					.msg(&quot;Không tìm thấy giỏ hàng cho người dùng ID: &quot; + nguoiDungId).build();</b>
+&nbsp;		}
+<b class="nc">&nbsp;		GioHang gioHang = gioHangOpt.get();</b>
+&nbsp;
+<b class="nc">&nbsp;		return ResponseDTO.&lt;GioHang&gt;builder().status(200).msg(&quot;Thành công&quot;).data(gioHang).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;//	Thêm sản phẩm vào giỏ hàng.
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;ChiTietGioHang&gt; createThuoc(ChiTietGioHangDTO chiTietGioHangDTO) {
+<b class="nc">&nbsp;		ChiTietGioHang chiTietGioHang = modelMapper.map(chiTietGioHangDTO, ChiTietGioHang.class);</b>
+&nbsp;		// Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
+<b class="nc">&nbsp;		if (chiTietGioHangRepo.existsByGioHangIdAndThuocId(chiTietGioHangDTO.getGioHangId(),</b>
+<b class="nc">&nbsp;				chiTietGioHangDTO.getThuocId())) {</b>
+<b class="nc">&nbsp;			chiTietGioHang = chiTietGioHangRepo.findByThuocId(chiTietGioHangDTO.getThuocId());</b>
+<b class="nc">&nbsp;			chiTietGioHang.setSoLuong(chiTietGioHang.getSoLuong() + chiTietGioHangDTO.getSoLuong());</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		chiTietGioHang.setGioHang(gioHangRepo.findById(chiTietGioHangDTO.getGioHangId()).get());</b>
+<b class="nc">&nbsp;		chiTietGioHang.setThuoc(thuocRepo.findById(chiTietGioHangDTO.getThuocId()).get());</b>
+&nbsp;
+<b class="nc">&nbsp;		chiTietGioHangRepo.save(chiTietGioHang);</b>
+<b class="nc">&nbsp;		return ResponseDTO.&lt;ChiTietGioHang&gt;builder().status(200).msg(&quot;Thành công&quot;).data(chiTietGioHang).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;//	 Cập nhật thông tin sản phẩm trong giỏ hàng.
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;ChiTietGioHang&gt; updateThuoc(ChiTietGioHangDTO chiTietGioHangDTO) {
+<b class="nc">&nbsp;		Optional&lt;ChiTietGioHang&gt; chiTietOpt = chiTietGioHangRepo.findById(chiTietGioHangDTO.getId());</b>
+<b class="nc">&nbsp;		if (chiTietOpt.isEmpty()) {</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;ChiTietGioHang&gt;builder().status(404).msg(&quot;Không tìm thấy sản phẩm trong giỏ hàng&quot;)</b>
+<b class="nc">&nbsp;					.build();</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		ChiTietGioHang chiTietGioHang = chiTietOpt.get();</b>
+<b class="nc">&nbsp;		chiTietGioHang.setSoLuong(chiTietGioHangDTO.getSoLuong());</b>
+<b class="nc">&nbsp;		chiTietGioHangRepo.save(chiTietGioHang);</b>
+&nbsp;
+<b class="nc">&nbsp;		return ResponseDTO.&lt;ChiTietGioHang&gt;builder().status(200).msg(&quot;Thành công&quot;).data(chiTietGioHang).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;//	Xóa sản phẩm khỏi giỏ hàng.
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;Void&gt; deleteThuoc(int id) {
+<b class="nc">&nbsp;		chiTietGioHangRepo.deleteById(id);</b>
+<b class="nc">&nbsp;		return ResponseDTO.&lt;Void&gt;builder().status(200).msg(&quot;Thành công&quot;).build();</b>
+&nbsp;	}
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:13</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,292 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > PhieuNhapService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.service</a>
+</div>
+
+<h1>Coverage Summary for Class: PhieuNhapService (com.example.hieuthuoc.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">PhieuNhapService</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.service;
+&nbsp;
+&nbsp;import java.text.SimpleDateFormat;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Date;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.data.domain.Page;
+&nbsp;import org.springframework.data.domain.PageRequest;
+&nbsp;import org.springframework.data.domain.Sort;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;import org.springframework.util.StringUtils;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.dto.ChiTietPhieuNhapDTO;
+&nbsp;import com.example.hieuthuoc.dto.PageDTO;
+&nbsp;import com.example.hieuthuoc.dto.PhieuNhapDTO;
+&nbsp;import com.example.hieuthuoc.dto.ResponseDTO;
+&nbsp;import com.example.hieuthuoc.dto.SearchDTO;
+&nbsp;import com.example.hieuthuoc.entity.ChiTietPhieuNhap;
+&nbsp;import com.example.hieuthuoc.entity.NguoiDung;
+&nbsp;import com.example.hieuthuoc.entity.NhaCungCap;
+&nbsp;import com.example.hieuthuoc.entity.PhieuNhap;
+&nbsp;import com.example.hieuthuoc.entity.Thuoc;
+&nbsp;import com.example.hieuthuoc.entity.TonKho;
+&nbsp;import com.example.hieuthuoc.repository.NguoiDungRepo;
+&nbsp;import com.example.hieuthuoc.repository.NhaCungCapRepo;
+&nbsp;import com.example.hieuthuoc.repository.PhieuNhapRepo;
+&nbsp;import com.example.hieuthuoc.repository.ThuocRepo;
+&nbsp;import com.example.hieuthuoc.repository.TonKhoRepo;
+&nbsp;
+&nbsp;public interface PhieuNhapService {
+&nbsp;	ResponseDTO&lt;PageDTO&lt;List&lt;PhieuNhap&gt;&gt;&gt; search(SearchDTO searchDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;PhieuNhap&gt; getById(Integer id);
+&nbsp;
+&nbsp;	ResponseDTO&lt;PhieuNhap&gt; create(PhieuNhapDTO phieuNhapDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;PhieuNhap&gt; update(PhieuNhapDTO phieuNhapDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;Void&gt; delete(Integer id);
+&nbsp;}
+&nbsp;
+&nbsp;@Service
+&nbsp;class PhieuNhapServiceImpl implements PhieuNhapService {
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private PhieuNhapRepo phieuNhapRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private NhaCungCapRepo nhaCungCapRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private NguoiDungRepo nguoiDungRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private ThuocRepo thuocRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	TonKhoRepo tonKhoRepo;
+&nbsp;
+&nbsp;	ModelMapper modelMapper = new ModelMapper();
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;PageDTO&lt;List&lt;PhieuNhap&gt;&gt;&gt; search(SearchDTO searchDTO) {
+&nbsp;		Sort sortBy = Sort.by(&quot;createdAt&quot;).descending();
+&nbsp;
+&nbsp;		if (StringUtils.hasText(searchDTO.getSortedField())) {
+&nbsp;			sortBy = Sort.by(searchDTO.getSortedField()).ascending();
+&nbsp;		}
+&nbsp;
+&nbsp;		if (searchDTO.getCurrentPage() == null) {
+&nbsp;			searchDTO.setCurrentPage(0);
+&nbsp;		}
+&nbsp;
+&nbsp;		if (searchDTO.getSize() == null) {
+&nbsp;			searchDTO.setSize(20);
+&nbsp;		}
+&nbsp;
+&nbsp;		PageRequest pageRequest = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getSize(), sortBy);
+&nbsp;		Page&lt;PhieuNhap&gt; page;
+&nbsp;
+&nbsp;		if (searchDTO.getKeyWord() == null || searchDTO.getKeyWord().equals(&quot;&quot;)) {
+&nbsp;			page = phieuNhapRepo.findAll(pageRequest);
+&nbsp;		} else {
+&nbsp;			page = phieuNhapRepo.findByNhaCungCapTen(searchDTO.getKeyWord(), pageRequest);
+&nbsp;		}
+&nbsp;
+&nbsp;		PageDTO&lt;List&lt;PhieuNhap&gt;&gt; pageDTO = new PageDTO&lt;&gt;();
+&nbsp;		pageDTO.setTotalElements(page.getTotalElements());
+&nbsp;		pageDTO.setTotalPages(page.getTotalPages());
+&nbsp;
+&nbsp;		List&lt;PhieuNhap&gt; phieuNhaps = page.getContent();
+&nbsp;
+&nbsp;		pageDTO.setData(phieuNhaps);
+&nbsp;
+&nbsp;		return ResponseDTO.&lt;PageDTO&lt;List&lt;PhieuNhap&gt;&gt;&gt;builder().status(200).msg(&quot;Thanh công&quot;).data(pageDTO).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;PhieuNhap&gt; getById(Integer id) {
+&nbsp;		Optional&lt;PhieuNhap&gt; phieuNhap = phieuNhapRepo.findById(id);
+&nbsp;		if (phieuNhap.isPresent()) {
+&nbsp;			return ResponseDTO.&lt;PhieuNhap&gt;builder().status(200).msg(&quot;Thành công&quot;).data(phieuNhap.get()).build();
+&nbsp;		}
+&nbsp;		return ResponseDTO.&lt;PhieuNhap&gt;builder().status(409).msg(&quot;Không tìm thấy phiếu nhập&quot;).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;PhieuNhap&gt; create(PhieuNhapDTO phieuNhapDTO) {
+&nbsp;		PhieuNhap phieuNhap = modelMapper.map(phieuNhapDTO, PhieuNhap.class);
+&nbsp;
+&nbsp;		if (phieuNhapDTO.getNguoiDungId() != null) {
+&nbsp;			NguoiDung nguoiDung = nguoiDungRepo.findById(phieuNhapDTO.getNguoiDungId()).orElse(null);
+&nbsp;			if (nguoiDung != null) {
+&nbsp;				phieuNhap.setNguoiDung(nguoiDung);
+&nbsp;			}
+&nbsp;		}
+&nbsp;
+&nbsp;		if (phieuNhapDTO.getNhaCungCapId() != null) {
+&nbsp;			NhaCungCap nhaCungCap = nhaCungCapRepo.findById(phieuNhapDTO.getNhaCungCapId()).orElse(null);
+&nbsp;			if (nhaCungCap != null) {
+&nbsp;				phieuNhap.setNhaCungCap(nhaCungCap);
+&nbsp;			}
+&nbsp;		}
+&nbsp;
+&nbsp;		Double tongTien = 0.0;
+&nbsp;		List&lt;ChiTietPhieuNhap&gt; chiTietPhieuNhaps = new ArrayList&lt;&gt;();
+&nbsp;		for (ChiTietPhieuNhapDTO chiTietPhieuNhapDTO : phieuNhapDTO.getChiTietPhieuNhaps()) {
+&nbsp;
+&nbsp;			ChiTietPhieuNhap chiTietPhieuNhap = modelMapper.map(chiTietPhieuNhapDTO, ChiTietPhieuNhap.class);
+&nbsp;
+&nbsp;			Thuoc thuoc = thuocRepo.findById(chiTietPhieuNhapDTO.getThuocId())
+&nbsp;					.orElseThrow(() -&gt; new RuntimeException(&quot;Thuốc không tồn tại&quot;));
+&nbsp;
+&nbsp;			tongTien += chiTietPhieuNhap.getDonGia() * chiTietPhieuNhap.getSoLuong();
+&nbsp;
+&nbsp;			chiTietPhieuNhap.setThuoc(thuoc);
+&nbsp;			chiTietPhieuNhap.setPhieuNhap(phieuNhap);
+&nbsp;			chiTietPhieuNhaps.add(chiTietPhieuNhap);
+&nbsp;
+&nbsp;		}
+&nbsp;		phieuNhap.setTongTien(tongTien);
+&nbsp;		phieuNhap.setChiTietPhieuNhaps(chiTietPhieuNhaps);
+&nbsp;
+&nbsp;		createTonKhoFromPhieuNhap(phieuNhap);
+&nbsp;
+&nbsp;		return ResponseDTO.&lt;PhieuNhap&gt;builder().status(200).msg(&quot;ok&quot;).data(phieuNhapRepo.save(phieuNhap)).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;PhieuNhap&gt; update(PhieuNhapDTO phieuNhapDTO) {
+&nbsp;		PhieuNhap phieuNhap = modelMapper.map(phieuNhapDTO, PhieuNhap.class);
+&nbsp;		PhieuNhap currentPhieuNhap = phieuNhapRepo.findById(phieuNhap.getId()).orElse(null);
+&nbsp;		if (currentPhieuNhap != null) {
+&nbsp;			Double tongTien = 0.0;
+&nbsp;			List&lt;ChiTietPhieuNhap&gt; chiTietPhieuNhaps = new ArrayList&lt;&gt;();
+&nbsp;			for (ChiTietPhieuNhapDTO chiTietPhieuNhapDTO : phieuNhapDTO.getChiTietPhieuNhaps()) {
+&nbsp;
+&nbsp;				ChiTietPhieuNhap chiTietPhieuNhap = modelMapper.map(chiTietPhieuNhapDTO, ChiTietPhieuNhap.class);
+&nbsp;
+&nbsp;				Thuoc thuoc = thuocRepo.findById(chiTietPhieuNhapDTO.getThuocId())
+&nbsp;						.orElseThrow(() -&gt; new RuntimeException(
+&nbsp;								&quot;Thuốc có Id = &quot; + chiTietPhieuNhapDTO.getThuocId() + &quot; không tồn tại&quot;));
+&nbsp;
+&nbsp;				tongTien += chiTietPhieuNhap.getDonGia() * chiTietPhieuNhap.getSoLuong();
+&nbsp;
+&nbsp;				chiTietPhieuNhap.setThuoc(thuoc);
+&nbsp;				chiTietPhieuNhap.setPhieuNhap(phieuNhap);
+&nbsp;				chiTietPhieuNhaps.add(chiTietPhieuNhap);
+&nbsp;
+&nbsp;			}
+&nbsp;			phieuNhap.setTongTien(tongTien);
+&nbsp;			phieuNhap.setChiTietPhieuNhaps(chiTietPhieuNhaps);
+&nbsp;			
+&nbsp;			createTonKhoFromPhieuNhap(phieuNhap);
+&nbsp;
+&nbsp;			return ResponseDTO.&lt;PhieuNhap&gt;builder().status(200).msg(&quot;Thành công&quot;).data(phieuNhapRepo.save(phieuNhap))
+&nbsp;					.build();
+&nbsp;		}
+&nbsp;		return ResponseDTO.&lt;PhieuNhap&gt;builder().status(200).msg(&quot;Không tìm thấy phiếu nhập&quot;).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;Void&gt; delete(Integer id) {
+&nbsp;		phieuNhapRepo.deleteById(id);
+&nbsp;		return ResponseDTO.&lt;Void&gt;builder().status(200).msg(&quot;Thành công&quot;).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	public void createTonKhoFromPhieuNhap(PhieuNhap phieuNhap) {
+&nbsp;		for (ChiTietPhieuNhap chiTiet : phieuNhap.getChiTietPhieuNhaps()) {
+&nbsp;			TonKho tonKho = new TonKho();
+&nbsp;			tonKho.setThuoc(chiTiet.getThuoc());
+&nbsp;			tonKho.setHanSuDung(chiTiet.getHanSuDung());
+&nbsp;			tonKho.setSoLuong(chiTiet.getSoLuong());
+&nbsp;
+&nbsp;			String soLo = generateSoLo(chiTiet.getThuoc().getMaThuoc());
+&nbsp;			tonKho.setSoLo(soLo);
+&nbsp;
+&nbsp;			tonKhoRepo.save(tonKho);
+&nbsp;			
+&nbsp;			Thuoc thuoc = chiTiet.getThuoc();
+&nbsp;			int soLuongTon = thuoc.getSoLuongTon() + chiTiet.getSoLuong();
+&nbsp;			thuoc.setSoLuongTon(soLuongTon);
+&nbsp;			thuocRepo.save(thuoc);
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;	public String generateSoLo(String maThuoc) {
+&nbsp;		// Lấy ngày hiện tại
+&nbsp;		SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyyMMdd&quot;);
+&nbsp;		String currentDate = sdf.format(new Date());
+&nbsp;
+&nbsp;		// Tạo số lô theo định dạng: ThuocId_YYYYMMDD
+&nbsp;		return maThuoc + &quot;_&quot; + currentDate;
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:13</div>
+</div>
+</body>
+</html>

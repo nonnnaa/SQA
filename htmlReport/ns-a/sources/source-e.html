@@ -1,0 +1,106 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ThongBaoRepo</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.repository</a>
+</div>
+
+<h1>Coverage Summary for Class: ThongBaoRepo (com.example.hieuthuoc.repository)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">ThongBaoRepo$MockitoMock$QjOSip6F</td>
+  </tr>
+  <tr>
+    <td class="name">ThongBaoRepo$MockitoMock$QjOSip6F$auxiliary$P3HhZ2R3</td>
+  </tr>
+  <tr>
+    <td class="name">ThongBaoRepo$MockitoMock$QjOSip6F$auxiliary$TjjoLyhv</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.repository;
+&nbsp;
+&nbsp;import org.springframework.data.domain.Page;
+&nbsp;import org.springframework.data.domain.Pageable;
+&nbsp;import org.springframework.data.jpa.repository.JpaRepository;
+&nbsp;import org.springframework.data.jpa.repository.Query;
+&nbsp;import org.springframework.data.repository.query.Param;
+&nbsp;import org.springframework.stereotype.Repository;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.entity.ThongBao;
+&nbsp;import com.example.hieuthuoc.entity.ThongBao.LoaiThongBao;
+&nbsp;
+&nbsp;@Repository
+&nbsp;public interface ThongBaoRepo extends JpaRepository&lt;ThongBao, Integer&gt; {
+&nbsp;
+&nbsp;	@Query(&quot;SELECT tb FROM ThongBao tb &quot; +
+&nbsp;		       &quot;LEFT JOIN tb.nguoiNhan ng &quot; +
+&nbsp;		       &quot;WHERE (ng.id = :nguoiDungId &quot; + // Điều kiện 1: Thông báo cho người dùng cụ thể
+&nbsp;		       &quot;OR tb.loaiThongBao = &#39;HE_THONG&#39; &quot; + // Điều kiện 2: Thông báo loại hệ thống
+&nbsp;		       &quot;OR tb.loaiThongBao = &#39;SU_KIEN&#39; &quot; + // Điều kiện 3: Thông báo loại sự kiện
+&nbsp;		       &quot;OR tb.loaiThongBao = &#39;KHUYEN_MAI&#39;)&quot;) // Điều kiện 4: Thông báo loại khuyến mãi
+&nbsp;		Page&lt;ThongBao&gt; findByNguoiDungId(@Param(&quot;nguoiDungId&quot;) Integer nguoiDungId, Pageable pageable);
+&nbsp;
+&nbsp;	
+&nbsp;	Page&lt;ThongBao&gt; findByLoaiThongBao(LoaiThongBao loaiThongBao, Pageable pageable);
+&nbsp;	
+&nbsp;	Page&lt;ThongBao&gt; findAll(Pageable pageable);
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:14</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,248 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ThongBaoService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.service</a>
+</div>
+
+<h1>Coverage Summary for Class: ThongBaoService (com.example.hieuthuoc.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">ThongBaoService</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.service;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.data.domain.Page;
+&nbsp;import org.springframework.data.domain.PageRequest;
+&nbsp;import org.springframework.data.domain.Sort;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;import org.springframework.util.StringUtils;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.dto.PageDTO;
+&nbsp;import com.example.hieuthuoc.dto.ResponseDTO;
+&nbsp;import com.example.hieuthuoc.dto.SearchDTO;
+&nbsp;import com.example.hieuthuoc.dto.ThongBaoDTO;
+&nbsp;import com.example.hieuthuoc.entity.NguoiDung;
+&nbsp;import com.example.hieuthuoc.entity.ThongBao;
+&nbsp;import com.example.hieuthuoc.entity.ThongBao.LoaiThongBao;
+&nbsp;import com.example.hieuthuoc.repository.NguoiDungRepo;
+&nbsp;import com.example.hieuthuoc.repository.ThongBaoRepo;
+&nbsp;
+&nbsp;public interface ThongBaoService {
+&nbsp;	ResponseDTO&lt;PageDTO&lt;List&lt;ThongBao&gt;&gt;&gt; getByNguoiDungId(SearchDTO searchDTO);
+&nbsp;	
+&nbsp;	ResponseDTO&lt;PageDTO&lt;List&lt;ThongBao&gt;&gt;&gt; getByLoaiThongBao(SearchDTO searchDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;ThongBao&gt; getById(Integer id);
+&nbsp;
+&nbsp;	ResponseDTO&lt;ThongBao&gt; create(ThongBaoDTO thuocDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;ThongBao&gt; update(ThongBaoDTO thuocDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;Void&gt; delete(Integer id);
+&nbsp;}
+&nbsp;
+&nbsp;@Service
+&nbsp;class ThongBaoServiceImpl implements ThongBaoService {
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	ThongBaoRepo thongBaoRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	NguoiDungRepo nguoiDungRepo;
+&nbsp;
+&nbsp;	ModelMapper modelMapper = new ModelMapper();
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;PageDTO&lt;List&lt;ThongBao&gt;&gt;&gt; getByNguoiDungId(SearchDTO searchDTO) {
+&nbsp;		Sort sortBy = Sort.by(&quot;createdAt&quot;).descending();
+&nbsp;
+&nbsp;		if (StringUtils.hasText(searchDTO.getSortedField())) {
+&nbsp;			sortBy = Sort.by(searchDTO.getSortedField()).ascending();
+&nbsp;		}
+&nbsp;
+&nbsp;		if (searchDTO.getCurrentPage() == null) {
+&nbsp;			searchDTO.setCurrentPage(0);
+&nbsp;		}
+&nbsp;
+&nbsp;		if (searchDTO.getSize() == null) {
+&nbsp;			searchDTO.setSize(10);
+&nbsp;		}
+&nbsp;
+&nbsp;		if (searchDTO.getKeyWord() == null) {
+&nbsp;			searchDTO.setKeyWord(&quot;&quot;);
+&nbsp;		}
+&nbsp;
+&nbsp;		PageRequest pageRequest = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getSize(), sortBy);
+&nbsp;		Page&lt;ThongBao&gt; page = thongBaoRepo.findByNguoiDungId(searchDTO.getId(), pageRequest);
+&nbsp;
+&nbsp;		PageDTO&lt;List&lt;ThongBao&gt;&gt; pageDTO = new PageDTO&lt;&gt;();
+&nbsp;		pageDTO.setTotalElements(page.getTotalElements());
+&nbsp;		pageDTO.setTotalPages(page.getTotalPages());
+&nbsp;
+&nbsp;		List&lt;ThongBao&gt; thongBaos = page.getContent();
+&nbsp;		pageDTO.setData(thongBaos);
+&nbsp;
+&nbsp;		return ResponseDTO.&lt;PageDTO&lt;List&lt;ThongBao&gt;&gt;&gt;builder().status(200).msg(&quot;Thanh công&quot;).data(pageDTO).build();
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;PageDTO&lt;List&lt;ThongBao&gt;&gt;&gt; getByLoaiThongBao(SearchDTO searchDTO) {
+&nbsp;		Sort sortBy = Sort.by(&quot;id&quot;).ascending();
+&nbsp;
+&nbsp;		if (StringUtils.hasText(searchDTO.getSortedField())) {
+&nbsp;			sortBy = Sort.by(searchDTO.getSortedField()).ascending();
+&nbsp;		}
+&nbsp;
+&nbsp;		if (searchDTO.getCurrentPage() == null) {
+&nbsp;			searchDTO.setCurrentPage(0);
+&nbsp;		}
+&nbsp;
+&nbsp;		if (searchDTO.getSize() == null) {
+&nbsp;			searchDTO.setSize(10);
+&nbsp;		}
+&nbsp;
+&nbsp;		PageRequest pageRequest = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getSize(), sortBy);
+&nbsp;		Page&lt;ThongBao&gt; page;
+&nbsp;		
+&nbsp;		if (searchDTO.getKeyWord() == null || searchDTO.getKeyWord().equals(&quot;&quot;)) {
+&nbsp;			page = thongBaoRepo.findAll(pageRequest);
+&nbsp;		}else {
+&nbsp;			LoaiThongBao loaiThongBao = LoaiThongBao.valueOf(searchDTO.getKeyWord());
+&nbsp;			page = thongBaoRepo.findByLoaiThongBao(loaiThongBao, pageRequest);
+&nbsp;		}
+&nbsp;
+&nbsp;
+&nbsp;		PageDTO&lt;List&lt;ThongBao&gt;&gt; pageDTO = new PageDTO&lt;&gt;();
+&nbsp;		pageDTO.setTotalElements(page.getTotalElements());
+&nbsp;		pageDTO.setTotalPages(page.getTotalPages());
+&nbsp;
+&nbsp;		List&lt;ThongBao&gt; thongBaos = page.getContent();
+&nbsp;		pageDTO.setData(thongBaos);
+&nbsp;
+&nbsp;		return ResponseDTO.&lt;PageDTO&lt;List&lt;ThongBao&gt;&gt;&gt;builder().status(200).msg(&quot;Thanh công&quot;).data(pageDTO).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;ThongBao&gt; getById(Integer id) {
+&nbsp;		Optional&lt;ThongBao&gt; thongBao = thongBaoRepo.findById(id);
+&nbsp;		if (thongBao.isPresent()) {
+&nbsp;			thongBao.get().setTrangThai(true);
+&nbsp;			thongBaoRepo.save(thongBao.get());
+&nbsp;			return ResponseDTO.&lt;ThongBao&gt;builder().status(200).msg(&quot;Thanh công&quot;).data(thongBao.get()).build();
+&nbsp;		}
+&nbsp;		return ResponseDTO.&lt;ThongBao&gt;builder().status(409).msg(&quot;Không tìm thấy thông báo có Id = &quot; + id).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;ThongBao&gt; create(ThongBaoDTO thongBaoDTO) {
+&nbsp;		ThongBao thongBao = modelMapper.map(thongBaoDTO, ThongBao.class);
+&nbsp;
+&nbsp;		if (thongBaoDTO.getNguoiDungId() != null &amp;&amp; thongBaoDTO.getNguoiDungId().size() &gt; 0) {
+&nbsp;			List&lt;NguoiDung&gt; nguoiDungs = new ArrayList&lt;&gt;();
+&nbsp;			for (int id : thongBaoDTO.getNguoiDungId()) {
+&nbsp;				NguoiDung nguoiDung = nguoiDungRepo.findById(id)
+&nbsp;						.orElseThrow(() -&gt; new RuntimeException(&quot;Người dùng có Id = &quot; + id + &quot; không tồn tại&quot;));
+&nbsp;				nguoiDungs.add(nguoiDung);
+&nbsp;			}
+&nbsp;			thongBao.setNguoiNhan(nguoiDungs);
+&nbsp;		}
+&nbsp;		thongBao.setLoaiThongBao(ThongBao.LoaiThongBao.valueOf(thongBaoDTO.getLoaiThongBao()));
+&nbsp;
+&nbsp;		
+&nbsp;		return ResponseDTO.&lt;ThongBao&gt;builder().status(200).msg(&quot;Thanh công&quot;).data(thongBaoRepo.save(thongBao)).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;ThongBao&gt; update(ThongBaoDTO thongBaoDTO) {
+&nbsp;		ThongBao thongBao = modelMapper.map(thongBaoDTO, ThongBao.class);
+&nbsp;		ThongBao currentThongBao = thongBaoRepo.findById(thongBao.getId()).orElse(null);
+&nbsp;		if (currentThongBao != null) {
+&nbsp;			if (thongBaoDTO.getNguoiDungId() != null &amp;&amp; thongBaoDTO.getNguoiDungId().size() &gt; 0) {
+&nbsp;				List&lt;NguoiDung&gt; nguoiDungs = new ArrayList&lt;&gt;();
+&nbsp;				for (int id : thongBaoDTO.getNguoiDungId()) {
+&nbsp;					NguoiDung nguoiDung = nguoiDungRepo.findById(id)
+&nbsp;							.orElseThrow(() -&gt; new RuntimeException(&quot;Người dùng có Id = &quot; + id + &quot; không tồn tại&quot;));
+&nbsp;					nguoiDungs.add(nguoiDung);
+&nbsp;				}
+&nbsp;				thongBao.setNguoiNhan(nguoiDungs);
+&nbsp;			}
+&nbsp;			thongBao.setLoaiThongBao(ThongBao.LoaiThongBao.valueOf(thongBaoDTO.getLoaiThongBao()));
+&nbsp;			return ResponseDTO.&lt;ThongBao&gt;builder().status(200).msg(&quot;Thanh công&quot;).data(thongBaoRepo.save(thongBao)).build();
+&nbsp;		}
+&nbsp;		return ResponseDTO.&lt;ThongBao&gt;builder().status(200).msg(&quot;Không tìm thấy thông báo&quot;).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;Void&gt; delete(Integer id) {
+&nbsp;		thongBaoRepo.deleteById(id);
+&nbsp;		return ResponseDTO.&lt;Void&gt;builder().status(200).msg(&quot;Thanh công&quot;).build();
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:13</div>
+</div>
+</body>
+</html>

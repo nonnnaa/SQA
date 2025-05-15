@@ -1,0 +1,149 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > DonHangRepo</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.repository</a>
+</div>
+
+<h1>Coverage Summary for Class: DonHangRepo (com.example.hieuthuoc.repository)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">DonHangRepo$MockitoMock$M6k4BoCi</td>
+  </tr>
+  <tr>
+    <td class="name">DonHangRepo$MockitoMock$M6k4BoCi$auxiliary$AveMy6mm</td>
+  </tr>
+  <tr>
+    <td class="name">DonHangRepo$MockitoMock$M6k4BoCi$auxiliary$f5N3ZgKx</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.repository;
+&nbsp;
+&nbsp;import java.util.Date;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;import org.springframework.data.domain.Page;
+&nbsp;import org.springframework.data.domain.Pageable;
+&nbsp;import org.springframework.data.jpa.repository.JpaRepository;
+&nbsp;import org.springframework.data.jpa.repository.Query;
+&nbsp;import org.springframework.data.repository.query.Param;
+&nbsp;import org.springframework.stereotype.Repository;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.dto.DoanhThuDTO;
+&nbsp;import com.example.hieuthuoc.entity.DonHang;
+&nbsp;import com.example.hieuthuoc.entity.DonHang.TrangThaiGiaoHang;
+&nbsp;
+&nbsp;@Repository
+&nbsp;public interface DonHangRepo extends JpaRepository&lt;DonHang, Integer&gt; {
+&nbsp;
+&nbsp;    @Query(&quot;SELECT d FROM DonHang d WHERE d.trangThaiGiaoHang = :trangThaiGiaoHang AND d.khachHang.id = :khachHangId&quot;)
+&nbsp;    Page&lt;DonHang&gt; findByTrangThaiGiaoHang(@Param(&quot;trangThaiGiaoHang&quot;) TrangThaiGiaoHang trangThaiGiaoHang,
+&nbsp;                                          @Param(&quot;khachHangId&quot;) int khachHangId, Pageable pageable);
+&nbsp;
+&nbsp;    Page&lt;DonHang&gt; findAll(Pageable pageable);
+&nbsp;    
+&nbsp;    @Query(&quot;SELECT d FROM DonHang d WHERE d.khachHang.id = :khachHangId&quot;)
+&nbsp;    Page&lt;DonHang&gt; findByNguoiDungId(@Param(&quot;khachHangId&quot;) int khachHangId, Pageable pageable);
+&nbsp;
+&nbsp;	@Query(&quot;SELECT new com.example.hieuthuoc.dto.DoanhThuDTO( &quot; + &quot;HOUR(dh.createdAt), &quot;
+&nbsp;			+ &quot;SUM(CASE WHEN dh.trangThaiGiaoHang != &#39;TRA_HANG&#39; THEN dh.tongTien ELSE 0 END), &quot; + // Tổng doanh thu của
+&nbsp;																									// các đơn hàng đã
+&nbsp;																									// thanh toán và
+&nbsp;																									// chưa trả lại
+&nbsp;			&quot;COUNT(CASE WHEN dh.trangThaiGiaoHang != &#39;TRA_HANG&#39; THEN 1 ELSE NULL END), &quot; + // Tổng số đơn hàng đã thanh
+&nbsp;																							// toán và chưa trả lại
+&nbsp;			&quot;SUM(CASE WHEN dh.trangThaiGiaoHang = &#39;TRA_HANG&#39; THEN 1 ELSE 0 END)) &quot; + // Tổng số đơn hàng trả lại (bao
+&nbsp;																						// gồm cả đã thanh toán và chưa
+&nbsp;																						// thanh toán)
+&nbsp;			&quot;FROM DonHang dh &quot; + &quot;WHERE dh.trangThaiThanhToan = &#39;DA_THANH_TOAN&#39; &quot; + // Lọc các đơn hàng đã thanh toán
+&nbsp;			&quot;AND DATE(dh.createdAt) = :ngay &quot; + // Lọc theo ngày
+&nbsp;			&quot;GROUP BY HOUR(dh.createdAt) &quot; + // Nhóm theo giờ
+&nbsp;			&quot;ORDER BY HOUR(dh.createdAt)&quot;)
+&nbsp;	List&lt;DoanhThuDTO&gt; doanhThuTheoNgay(@Param(&quot;ngay&quot;) Date ngay);
+&nbsp;
+&nbsp;	@Query(&quot;SELECT new com.example.hieuthuoc.dto.DoanhThuDTO( &quot; + &quot;DAY(dh.createdAt), &quot; + // Lọc theo tháng
+&nbsp;			&quot;SUM(CASE WHEN dh.trangThaiGiaoHang != &#39;TRA_HANG&#39; THEN dh.tongTien ELSE 0 END), &quot; + // Tổng doanh thu của
+&nbsp;																								// các đơn hàng đã thanh
+&nbsp;																								// toán và chưa trả lại
+&nbsp;			&quot;COUNT(CASE WHEN dh.trangThaiGiaoHang != &#39;TRA_HANG&#39; THEN 1 ELSE NULL END), &quot; + // Tổng số đơn hàng đã thanh
+&nbsp;																							// toán và chưa trả lại
+&nbsp;			&quot;SUM(CASE WHEN dh.trangThaiGiaoHang = &#39;TRA_HANG&#39; THEN 1 ELSE 0 END)) &quot; + // Tổng số đơn hàng trả lại
+&nbsp;			&quot;FROM DonHang dh &quot; + &quot;WHERE dh.trangThaiThanhToan = &#39;DA_THANH_TOAN&#39; &quot; + // Lọc các đơn hàng đã thanh toán
+&nbsp;			&quot;AND YEAR(dh.createdAt) = :nam &quot; + // Lọc theo năm
+&nbsp;			&quot;AND MONTH(dh.createdAt) = :thang &quot; + // Lọc theo tháng
+&nbsp;			&quot;GROUP BY DAY(dh.createdAt) &quot; + // Nhóm theo tháng
+&nbsp;			&quot;ORDER BY DAY(dh.createdAt)&quot;)
+&nbsp;	List&lt;DoanhThuDTO&gt; doanhThuTheoThang(@Param(&quot;nam&quot;) int nam, @Param(&quot;thang&quot;) int thang);
+&nbsp;
+&nbsp;	@Query(&quot;SELECT new com.example.hieuthuoc.dto.DoanhThuDTO( &quot; + &quot;MONTH(dh.createdAt), &quot; + // Lọc theo năm
+&nbsp;			&quot;SUM(CASE WHEN dh.trangThaiGiaoHang != &#39;TRA_HANG&#39; THEN dh.tongTien ELSE 0 END), &quot; + // Tổng doanh thu của
+&nbsp;																								// các đơn hàng đã thanh
+&nbsp;																								// toán và chưa trả lại
+&nbsp;			&quot;COUNT(CASE WHEN dh.trangThaiGiaoHang != &#39;TRA_HANG&#39; THEN 1 ELSE NULL END), &quot; + // Tổng số đơn hàng đã thanh
+&nbsp;																							// toán và chưa trả lại
+&nbsp;			&quot;SUM(CASE WHEN dh.trangThaiGiaoHang = &#39;TRA_HANG&#39; THEN 1 ELSE 0 END)) &quot; + // Tổng số đơn hàng trả lại
+&nbsp;			&quot;FROM DonHang dh &quot; + &quot;WHERE dh.trangThaiThanhToan = &#39;DA_THANH_TOAN&#39; &quot; + // Lọc các đơn hàng đã thanh toán
+&nbsp;			&quot;AND YEAR(dh.createdAt) = :nam &quot; + // Lọc theo năm
+&nbsp;			&quot;GROUP BY MONTH(dh.createdAt) &quot; + // Nhóm theo năm
+&nbsp;			&quot;ORDER BY MONTH(dh.createdAt)&quot;)
+&nbsp;	List&lt;DoanhThuDTO&gt; doanhThuTheoNam(@Param(&quot;nam&quot;) int nam);
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:14</div>
+</div>
+</body>
+</html>

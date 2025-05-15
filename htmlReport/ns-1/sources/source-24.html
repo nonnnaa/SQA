@@ -1,0 +1,172 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > DanhMucThuocService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.service</a>
+</div>
+
+<h1>Coverage Summary for Class: DanhMucThuocService (com.example.hieuthuoc.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">DanhMucThuocService</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.service;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.cache.annotation.CacheEvict;
+&nbsp;import org.springframework.cache.annotation.CachePut;
+&nbsp;import org.springframework.cache.annotation.Cacheable;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.dto.DanhMucThuocDTO;
+&nbsp;import com.example.hieuthuoc.dto.ResponseDTO;
+&nbsp;import com.example.hieuthuoc.entity.DanhMucThuoc;
+&nbsp;import com.example.hieuthuoc.repository.DanhMucThuocRepo;
+&nbsp;import com.example.hieuthuoc.repository.LoaiThuocRepo;
+&nbsp;
+&nbsp;public interface DanhMucThuocService {
+&nbsp;	ResponseDTO&lt;List&lt;DanhMucThuoc&gt;&gt; getAll();
+&nbsp;
+&nbsp;	ResponseDTO&lt;List&lt;DanhMucThuoc&gt;&gt; getDanhMucAnhLoaiThuoc();
+&nbsp;
+&nbsp;	ResponseDTO&lt;List&lt;DanhMucThuoc&gt;&gt; searchByTenDanhMuc(String tenDanhMuc);
+&nbsp;
+&nbsp;	ResponseDTO&lt;DanhMucThuoc&gt; create(DanhMucThuocDTO danhMucThuocDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;DanhMucThuoc&gt; update(DanhMucThuocDTO danhMucThuocDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;Void&gt; delete(Integer id);
+&nbsp;}
+&nbsp;
+&nbsp;@Service
+&nbsp;class DanhMucThuocServiceImpl implements DanhMucThuocService {
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private DanhMucThuocRepo danhMucThuocRepo;
+&nbsp;
+&nbsp;	private final ModelMapper modelMapper = new ModelMapper();
+&nbsp;
+&nbsp;	@Override
+&nbsp;//	@Cacheable(value = &quot;danhMucThuocCache&quot;, key = &quot;&#39;allDanhMuc&#39;&quot;)
+&nbsp;	public ResponseDTO&lt;List&lt;DanhMucThuoc&gt;&gt; getAll() {
+&nbsp;		List&lt;DanhMucThuoc&gt; danhMucThuocs = danhMucThuocRepo.findAll();
+&nbsp;		return ResponseDTO.&lt;List&lt;DanhMucThuoc&gt;&gt;builder().status(200).msg(&quot;Thành công&quot;).data(danhMucThuocs).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;//	@Cacheable(value = &quot;danhMucThuocCache&quot;, key = &quot;&#39;allDanhMucAndLoaiThuoc&#39;&quot;)
+&nbsp;	public ResponseDTO&lt;List&lt;DanhMucThuoc&gt;&gt; getDanhMucAnhLoaiThuoc() {
+&nbsp;		List&lt;DanhMucThuoc&gt; danhMucThuocs = danhMucThuocRepo.findAllWithLoaiThuocs();
+&nbsp;		return ResponseDTO.&lt;List&lt;DanhMucThuoc&gt;&gt;builder().status(200).msg(&quot;Thành công&quot;).data(danhMucThuocs).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;//	@Cacheable(value = &quot;danhMucThuocCache&quot;, key = &quot;&#39;tenDanhMuc&#39;&quot;)
+&nbsp;	public ResponseDTO&lt;List&lt;DanhMucThuoc&gt;&gt; searchByTenDanhMuc(String tenDanhMuc) {
+&nbsp;		List&lt;DanhMucThuoc&gt; danhMucThuocs = danhMucThuocRepo.searchByTenDanhMuc(tenDanhMuc);
+&nbsp;		if (danhMucThuocs != null &amp;&amp; !danhMucThuocs.isEmpty()) {
+&nbsp;			return ResponseDTO.&lt;List&lt;DanhMucThuoc&gt;&gt;builder().status(200).msg(&quot;Thành công&quot;).data(danhMucThuocs).build();
+&nbsp;		}
+&nbsp;		return ResponseDTO.&lt;List&lt;DanhMucThuoc&gt;&gt;builder().status(409).msg(&quot;Danh mục thuốc không tồn tại&quot;).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;//	@CachePut(value = &quot;danhMucThuocCache&quot;, key = &quot;#result.data.id&quot;)
+&nbsp;	public ResponseDTO&lt;DanhMucThuoc&gt; create(DanhMucThuocDTO danhMucThuocDTO) {
+&nbsp;		DanhMucThuoc danhMucThuoc = modelMapper.map(danhMucThuocDTO, DanhMucThuoc.class);
+&nbsp;		if (danhMucThuocRepo.existsByTenDanhMuc(danhMucThuoc.getTenDanhMuc())) {
+&nbsp;			return ResponseDTO.&lt;DanhMucThuoc&gt;builder().status(409).msg(&quot;Danh mục thuốc đã tồn tại&quot;).build();
+&nbsp;		}
+&nbsp;		DanhMucThuoc savedDanhMucThuoc = danhMucThuocRepo.save(danhMucThuoc);
+&nbsp;		return ResponseDTO.&lt;DanhMucThuoc&gt;builder().status(201).msg(&quot;Tạo danh mục thuốc thành công&quot;)
+&nbsp;				.data(savedDanhMucThuoc).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;//	@CachePut(value = &quot;danhMucThuocCache&quot;, key = &quot;#result.data.id&quot;)
+&nbsp;	public ResponseDTO&lt;DanhMucThuoc&gt; update(DanhMucThuocDTO danhMucThuocDTO) {
+&nbsp;		Optional&lt;DanhMucThuoc&gt; existingDanhMucThuoc = danhMucThuocRepo.findById(danhMucThuocDTO.getId());
+&nbsp;		if (existingDanhMucThuoc.isPresent()) {
+&nbsp;			DanhMucThuoc updatedDanhMucThuoc = modelMapper.map(danhMucThuocDTO, DanhMucThuoc.class);
+&nbsp;			updatedDanhMucThuoc = danhMucThuocRepo.save(updatedDanhMucThuoc);
+&nbsp;			return ResponseDTO.&lt;DanhMucThuoc&gt;builder().status(200).msg(&quot;Cập nhật danh mục thuốc thành công&quot;)
+&nbsp;					.data(updatedDanhMucThuoc).build();
+&nbsp;		}
+&nbsp;		return ResponseDTO.&lt;DanhMucThuoc&gt;builder().status(404).msg(&quot;Không tìm thấy danh mục thuốc&quot;).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	@CacheEvict(value = &quot;danhMucThuocCache&quot;, key = &quot;#id&quot;)
+&nbsp;	public ResponseDTO&lt;Void&gt; delete(Integer id) {
+&nbsp;		if (!danhMucThuocRepo.existsById(id)) {
+&nbsp;			return ResponseDTO.&lt;Void&gt;builder().status(404).msg(&quot;Không tìm thấy danh mục thuốc để xóa&quot;).build();
+&nbsp;		}
+&nbsp;		danhMucThuocRepo.deleteById(id);
+&nbsp;		return ResponseDTO.&lt;Void&gt;builder().status(200).msg(&quot;Xóa danh mục thuốc thành công&quot;).build();
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:13</div>
+</div>
+</body>
+</html>

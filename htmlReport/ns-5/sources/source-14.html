@@ -1,0 +1,128 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ThanhPhanThuoc</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.entity</a>
+</div>
+
+<h1>Coverage Summary for Class: ThanhPhanThuoc (com.example.hieuthuoc.entity)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">ThanhPhanThuoc$HibernateInstantiator$ElYL2Bur</td>
+  </tr>
+  <tr>
+    <td class="name">ThanhPhanThuoc$HibernateInstantiator$eWxzLws1</td>
+  </tr>
+  <tr>
+    <td class="name">ThanhPhanThuoc$HibernateInstantiator$jKHLA8Fx</td>
+  </tr>
+  <tr>
+    <td class="name">ThanhPhanThuoc$HibernateInstantiator$vLSWMjFC</td>
+  </tr>
+  <tr>
+    <td class="name">ThanhPhanThuoc$HibernateProxy$baZQq21x</td>
+  </tr>
+  <tr>
+    <td class="name">ThanhPhanThuoc$HibernateProxy$vHGy1blR</td>
+  </tr>
+  <tr>
+    <td class="name">ThanhPhanThuoc$HibernateProxy$x2Mn8mPZ</td>
+  </tr>
+  <tr>
+    <td class="name">ThanhPhanThuoc$HibernateProxy$zab2eeiv</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.entity;
+&nbsp;
+&nbsp;import com.fasterxml.jackson.annotation.JsonIgnore;
+&nbsp;
+&nbsp;import jakarta.persistence.Entity;
+&nbsp;import jakarta.persistence.GeneratedValue;
+&nbsp;import jakarta.persistence.GenerationType;
+&nbsp;import jakarta.persistence.Id;
+&nbsp;import jakarta.persistence.JoinColumn;
+&nbsp;import jakarta.persistence.ManyToOne;
+&nbsp;import jakarta.persistence.Table;
+&nbsp;import lombok.Data;
+&nbsp;import lombok.EqualsAndHashCode;
+&nbsp;
+&nbsp;@Data
+&nbsp;@Entity
+&nbsp;@Table(name = &quot;thanh_phan_thuoc&quot;)
+&nbsp;@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+&nbsp;public class ThanhPhanThuoc {
+&nbsp;    @Id
+&nbsp;    @GeneratedValue(strategy = GenerationType.IDENTITY)
+&nbsp;    private Integer id;
+&nbsp;
+&nbsp;    @ManyToOne
+&nbsp;    @JsonIgnore
+&nbsp;    @JoinColumn(name = &quot;thuoc_id&quot;)
+&nbsp;    private Thuoc thuoc;
+&nbsp;
+&nbsp;    @EqualsAndHashCode.Include
+&nbsp;    private String tenThanhPhan;
+&nbsp;    private String hamLuong;
+&nbsp;    private String donVi;
+&nbsp;   
+&nbsp;
+&nbsp;    // getters and setters
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:14</div>
+</div>
+</body>
+</html>

@@ -31,7 +31,7 @@ class NhaSanXuatServiceImplTest {
     }
 
     /**
-     * TC01 - Mục tiêu: Lấy tất cả nhà sản xuất thành công
+     * TC74 - Mục tiêu: Lấy tất cả nhà sản xuất thành công
      * Input: không có
      * Expected Output: status = 200, data != null
      * Ghi chú: kiểm tra gọi findAll()
@@ -49,7 +49,7 @@ class NhaSanXuatServiceImplTest {
     }
 
     /**
-     * TC02 - Mục tiêu: Tìm theo tên nhà sản xuất thành công
+     * TC75 - Mục tiêu: Tìm theo tên nhà sản xuất thành công
      * Input: tên nhà sản xuất = ABC
      * Expected Output: status = 200
      * Ghi chú: nhà sản xuất tồn tại
@@ -66,7 +66,7 @@ class NhaSanXuatServiceImplTest {
     }
 
     /**
-     * TC03 - Mục tiêu: Tìm theo tên không có kết quả
+     * TC76 - Mục tiêu: Tìm theo tên không có kết quả
      * Input: tên không khớp
      * Expected Output: status = 409
      * Ghi chú: danh sách rỗng
@@ -81,8 +81,28 @@ class NhaSanXuatServiceImplTest {
         assertNull(response.getData());
     }
 
+
     /**
-     * TC04 - Mục tiêu: Tạo nhà sản xuất mới thành công
+     * TC77 - Mục tiêu: Kiểm tra trường hợp không tìm thấy nhà sản xuất khi danh sách là null.
+     * Input: tenNhaSanXuat = "XYZ"
+     * Expected Output: ResponseDTO status = 409, msg = "Nhà sản xuất không tồn tại", data = null
+     * Ghi chú: Đảm bảo phương thức xử lý đúng khi không có dữ liệu.
+     */
+    @Test
+    void searchByTenNhaSanXuat_ShouldReturnNotFound_WhenNoData() {
+        String tenNhaSanXuat = "XYZ";
+
+        when(nhaSanXuatRepo.searchByTenNhaSanXuat(tenNhaSanXuat)).thenReturn(null);
+
+        ResponseDTO<List<NhaSanXuat>> response = nhaSanXuatService.searchByTenNhaSanXuat(tenNhaSanXuat);
+
+        assertEquals(409, response.getStatus());
+        assertEquals("Nhà sản xuất không tồn tại", response.getMsg());
+        assertNull(response.getData());
+    }
+
+    /**
+     * TC78 - Mục tiêu: Tạo nhà sản xuất mới thành công
      * Input: mã chưa tồn tại
      * Expected Output: status = 201
      * Ghi chú: validate mã NSX mới
@@ -102,7 +122,7 @@ class NhaSanXuatServiceImplTest {
     }
 
     /**
-     * TC05 - Mục tiêu: Tạo thất bại do trùng mã NSX
+     * TC79 - Mục tiêu: Tạo thất bại do trùng mã NSX
      * Input: mã đã tồn tại
      * Expected Output: status = 409
      * Ghi chú: kiểm tra validate trùng mã
@@ -121,7 +141,7 @@ class NhaSanXuatServiceImplTest {
     }
 
     /**
-     * TC06 - Mục tiêu: Cập nhật thành công khi có dữ liệu
+     * TC80 - Mục tiêu: Cập nhật thành công khi có dữ liệu
      * Input: NhaSanXuatDTO.id hợp lệ
      * Expected Output: status = 200
      * Ghi chú: kiểm tra save
@@ -140,7 +160,7 @@ class NhaSanXuatServiceImplTest {
     }
 
     /**
-     * TC07 - Mục tiêu: Cập nhật thất bại nếu không tìm thấy
+     * TC81 - Mục tiêu: Cập nhật thất bại nếu không tìm thấy
      * Input: NhaSanXuatDTO.id không tồn tại
      * Expected Output: status = 404
      * Ghi chú: kiểm tra phản hồi khi dữ liệu không tồn tại
@@ -159,7 +179,7 @@ class NhaSanXuatServiceImplTest {
     }
 
     /**
-     * TC08 - Mục tiêu: Xóa nhà sản xuất thành công
+     * TC82 - Mục tiêu: Xóa nhà sản xuất thành công
      * Input: id = 10
      * Expected Output: status = 200
      * Ghi chú: đơn giản test xóa
@@ -173,4 +193,23 @@ class NhaSanXuatServiceImplTest {
         assertEquals(200, response.getStatus());
         assertEquals("Thành công", response.getMsg());
     }
+    /**
+     * TC83 - Mục tiêu: Xóa nhà sản xuất thất bại khi không tìm thấy nhà sản xuất
+     * Input: id = 99 (nhà sản xuất không tồn tại)
+         * Expected Output: status = 404, msg = "Không tìm thấy nhà sản xuất"
+     * Ghi chú: Kiểm tra trường hợp không tìm thấy nhà sản xuất khi xóa.
+     */
+    @Test
+    void delete_ShouldReturnError_WhenNotFound() {
+        // Giả lập không tìm thấy nhà sản xuất với ID = 99
+        when(nhaSanXuatRepo.findById(99)).thenReturn(Optional.empty());
+
+        // Thực hiện xóa nhà sản xuất
+        ResponseDTO<Void> response = nhaSanXuatService.delete(99);
+
+        // Kiểm tra kết quả trả về
+        assertEquals(404, response.getStatus());
+        assertEquals("Không tìm thấy nhà sản xuất", response.getMsg());
+    }
+
 }

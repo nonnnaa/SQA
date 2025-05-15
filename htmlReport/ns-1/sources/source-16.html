@@ -1,0 +1,160 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > UploadImageImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.service</a>
+</div>
+
+<h1>Coverage Summary for Class: UploadImageImpl (com.example.hieuthuoc.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UploadImageImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/13)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.service;
+&nbsp;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.web.multipart.MultipartFile;
+&nbsp;
+&nbsp;import com.cloudinary.Cloudinary;
+&nbsp;import com.cloudinary.utils.ObjectUtils;
+&nbsp;
+&nbsp;import lombok.RequiredArgsConstructor;
+&nbsp;
+&nbsp;public interface UploadImageService {
+&nbsp;	String uploadImage(MultipartFile multipartFile, String name);
+&nbsp;
+&nbsp;	void deleteImage(String imageUrl);
+&nbsp;}
+&nbsp;
+&nbsp;@Service
+&nbsp;@RequiredArgsConstructor
+&nbsp;class UploadImageImpl implements UploadImageService {
+&nbsp;
+&nbsp;	final Cloudinary cloudinary;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public String uploadImage(MultipartFile multipartFile, String name) {
+<b class="nc">&nbsp;		String url = &quot;&quot;;</b>
+&nbsp;		try {
+<b class="nc">&nbsp;			url = cloudinary.uploader().upload(multipartFile.getBytes(), Map.of(&quot;public_id&quot;, name)).get(&quot;url&quot;)</b>
+<b class="nc">&nbsp;					.toString();</b>
+&nbsp;		} catch (Exception e) {
+<b class="nc">&nbsp;			e.printStackTrace();</b>
+&nbsp;		}
+<b class="nc">&nbsp;		return url;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public void deleteImage(String imageUrl) {
+&nbsp;		try {
+<b class="nc">&nbsp;			String publicId = getPublicIdImg(imageUrl);</b>
+<b class="nc">&nbsp;			cloudinary.uploader().destroy(publicId, ObjectUtils.asMap(&quot;resource_type&quot;, &quot;image&quot;));</b>
+&nbsp;		} catch (Exception e) {
+<b class="nc">&nbsp;			System.out.println(&quot;Lỗi khi xoá ảnh&quot;);</b>
+<b class="nc">&nbsp;			e.printStackTrace();</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;	private String getPublicIdImg(String imageUrl) {
+<b class="nc">&nbsp;		String[] parts = imageUrl.split(&quot;/&quot;);</b>
+<b class="nc">&nbsp;		String publicIdWithFormat = parts[parts.length - 1]; // Chỉ lấy phần cuối cùng của URL</b>
+&nbsp;
+&nbsp;		// Tách public_id và định dạng
+<b class="nc">&nbsp;		String[] publicIdAndFormat = publicIdWithFormat.split(&quot;\\.&quot;);</b>
+<b class="nc">&nbsp;		return publicIdAndFormat[0]; // Lấy public_id</b>
+&nbsp;	}
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:13</div>
+</div>
+</body>
+</html>

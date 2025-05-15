@@ -1,0 +1,159 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > TonKhoService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.service</a>
+</div>
+
+<h1>Coverage Summary for Class: TonKhoService (com.example.hieuthuoc.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">TonKhoService</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.service;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.data.domain.Page;
+&nbsp;import org.springframework.data.domain.PageRequest;
+&nbsp;import org.springframework.data.domain.Sort;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.util.StringUtils;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.dto.PageDTO;
+&nbsp;import com.example.hieuthuoc.dto.ResponseDTO;
+&nbsp;import com.example.hieuthuoc.dto.SearchTonKhoDTO;
+&nbsp;import com.example.hieuthuoc.dto.TonKhoDTO;
+&nbsp;import com.example.hieuthuoc.entity.Thuoc;
+&nbsp;import com.example.hieuthuoc.entity.TonKho;
+&nbsp;import com.example.hieuthuoc.repository.ThuocRepo;
+&nbsp;import com.example.hieuthuoc.repository.TonKhoRepo;
+&nbsp;
+&nbsp;public interface TonKhoService {
+&nbsp;	ResponseDTO&lt;TonKho&gt; update(TonKhoDTO tonKhoDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;PageDTO&lt;List&lt;TonKho&gt;&gt;&gt; search(SearchTonKhoDTO searchTonKhoDTO);
+&nbsp;}
+&nbsp;
+&nbsp;@Service
+&nbsp;class TonKhoServiceImpl implements TonKhoService {
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private TonKhoRepo tonKhoRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	ThuocRepo thuocRepo;
+&nbsp;
+&nbsp;	ModelMapper modelMapper = new ModelMapper();
+&nbsp;
+&nbsp;	// Cập nhật tồn kho
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;TonKho&gt; update(TonKhoDTO tonKhoDTO) {
+&nbsp;		Optional&lt;TonKho&gt; existingTonKho = tonKhoRepo.findById(tonKhoDTO.getId());
+&nbsp;		if (!existingTonKho.isPresent()) {
+&nbsp;			return ResponseDTO.&lt;TonKho&gt;builder().status(404).msg(&quot;Tồn kho không tồn tại.&quot;).build();
+&nbsp;		}
+&nbsp;
+&nbsp;		Thuoc thuoc = thuocRepo.findById(tonKhoDTO.getThuocId()).get();
+&nbsp;		TonKho tonKho = modelMapper.map(tonKhoDTO, TonKho.class); // Cập nhật thông tin tồn kho từ DTO
+&nbsp;
+&nbsp;		tonKho.setThuoc(thuoc);
+&nbsp;
+&nbsp;		tonKhoRepo.save(tonKho);
+&nbsp;
+&nbsp;		return ResponseDTO.&lt;TonKho&gt;builder().status(200).msg(&quot;Thành công.&quot;).data(tonKho).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;PageDTO&lt;List&lt;TonKho&gt;&gt;&gt; search(SearchTonKhoDTO searchTonKhoDTO) {
+&nbsp;		Sort sortBy = Sort.by(&quot;createdAt&quot;).ascending();
+&nbsp;
+&nbsp;		if (StringUtils.hasText(searchTonKhoDTO.getSortedField())) {
+&nbsp;			sortBy = Sort.by(searchTonKhoDTO.getSortedField()).ascending();
+&nbsp;		}
+&nbsp;
+&nbsp;		if (searchTonKhoDTO.getCurrentPage() == null) {
+&nbsp;			searchTonKhoDTO.setCurrentPage(0);
+&nbsp;		}
+&nbsp;
+&nbsp;		if (searchTonKhoDTO.getSize() == null) {
+&nbsp;			searchTonKhoDTO.setSize(20);
+&nbsp;		}
+&nbsp;
+&nbsp;		if (searchTonKhoDTO.getTenThuoc() == null) {
+&nbsp;			searchTonKhoDTO.setTenThuoc(&quot;&quot;);
+&nbsp;		}
+&nbsp;		PageRequest pageRequest = PageRequest.of(searchTonKhoDTO.getCurrentPage(), searchTonKhoDTO.getSize(), sortBy);
+&nbsp;		Page&lt;TonKho&gt; page = tonKhoRepo.search(searchTonKhoDTO.getTenThuoc(), searchTonKhoDTO.getSoLo(),
+&nbsp;				searchTonKhoDTO.getTenNhaSanXuat(), pageRequest);
+&nbsp;
+&nbsp;		PageDTO&lt;List&lt;TonKho&gt;&gt; pageDTO = new PageDTO&lt;&gt;();
+&nbsp;		pageDTO.setTotalElements(page.getTotalElements());
+&nbsp;		pageDTO.setTotalPages(page.getTotalPages());
+&nbsp;
+&nbsp;		List&lt;TonKho&gt; tonKhos = page.getContent();
+&nbsp;
+&nbsp;		pageDTO.setData(tonKhos);
+&nbsp;
+&nbsp;		return ResponseDTO.&lt;PageDTO&lt;List&lt;TonKho&gt;&gt;&gt;builder().status(200).msg(&quot;Thanh công&quot;).data(pageDTO).build();
+&nbsp;	}
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:13</div>
+</div>
+</body>
+</html>

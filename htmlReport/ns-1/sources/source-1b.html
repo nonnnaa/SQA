@@ -1,0 +1,143 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > LichSuHoatDongService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.service</a>
+</div>
+
+<h1>Coverage Summary for Class: LichSuHoatDongService (com.example.hieuthuoc.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">LichSuHoatDongService</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.service;
+&nbsp;
+&nbsp;import java.time.LocalDate;
+&nbsp;import java.time.ZoneId;
+&nbsp;import java.util.Date;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.data.domain.Page;
+&nbsp;import org.springframework.data.domain.PageRequest;
+&nbsp;import org.springframework.data.domain.Sort;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.util.StringUtils;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.dto.PageDTO;
+&nbsp;import com.example.hieuthuoc.dto.ResponseDTO;
+&nbsp;import com.example.hieuthuoc.dto.SearchLichSuHoatDongDTO;
+&nbsp;import com.example.hieuthuoc.entity.LichSuHoatDong;
+&nbsp;import com.example.hieuthuoc.repository.LichSuHoatDongRepo;
+&nbsp;
+&nbsp;public interface LichSuHoatDongService {
+&nbsp;	ResponseDTO&lt;PageDTO&lt;List&lt;LichSuHoatDong&gt;&gt;&gt; search(SearchLichSuHoatDongDTO searchLichSuHoatDongDTO);
+&nbsp;}
+&nbsp;
+&nbsp;@Service
+&nbsp;class LichSuHoatDongServiceImpl implements LichSuHoatDongService {
+&nbsp;	
+&nbsp;	@Autowired
+&nbsp;	LichSuHoatDongRepo lichSuHoatDongRepo;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;PageDTO&lt;List&lt;LichSuHoatDong&gt;&gt;&gt; search(SearchLichSuHoatDongDTO searchLichSuHoatDongDTO) {
+&nbsp;		Sort sortBy = Sort.by(&quot;createdAt&quot;).descending();
+&nbsp;
+&nbsp;		if (StringUtils.hasText(searchLichSuHoatDongDTO.getSortedField())) {
+&nbsp;			sortBy = Sort.by(searchLichSuHoatDongDTO.getSortedField()).ascending();
+&nbsp;		}
+&nbsp;
+&nbsp;		if (searchLichSuHoatDongDTO.getCurrentPage() == null) {
+&nbsp;			searchLichSuHoatDongDTO.setCurrentPage(0);
+&nbsp;		}
+&nbsp;
+&nbsp;		if (searchLichSuHoatDongDTO.getSize() == null) {
+&nbsp;			searchLichSuHoatDongDTO.setSize(20);
+&nbsp;		}
+&nbsp;
+&nbsp;		if (searchLichSuHoatDongDTO.getNgayBatDau() == null) {
+&nbsp;			Date ngayBatDau = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+&nbsp;			System.out.println(ngayBatDau);
+&nbsp;			searchLichSuHoatDongDTO.setNgayBatDau(ngayBatDau);
+&nbsp;		}
+&nbsp;		
+&nbsp;		if (searchLichSuHoatDongDTO.getNgayKetThuc() == null) {
+&nbsp;			Date ngayKetThuc = Date.from(LocalDate.now().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+&nbsp;			System.out.println(ngayKetThuc);
+&nbsp;			searchLichSuHoatDongDTO.setNgayKetThuc(ngayKetThuc);
+&nbsp;		}
+&nbsp;		
+&nbsp;		PageRequest pageRequest = PageRequest.of(searchLichSuHoatDongDTO.getCurrentPage(), searchLichSuHoatDongDTO.getSize(), sortBy);
+&nbsp;		Page&lt;LichSuHoatDong&gt; page = lichSuHoatDongRepo.search(searchLichSuHoatDongDTO.getNgayBatDau(), searchLichSuHoatDongDTO.getNgayKetThuc(), pageRequest);
+&nbsp;
+&nbsp;		PageDTO&lt;List&lt;LichSuHoatDong&gt;&gt; pageDTO = new PageDTO&lt;&gt;();
+&nbsp;		pageDTO.setTotalElements(page.getTotalElements());
+&nbsp;		pageDTO.setTotalPages(page.getTotalPages());
+&nbsp;
+&nbsp;		List&lt;LichSuHoatDong&gt; lichSuHoatDongs = page.getContent();
+&nbsp;
+&nbsp;		pageDTO.setData(lichSuHoatDongs);
+&nbsp;
+&nbsp;		return ResponseDTO.&lt;PageDTO&lt;List&lt;LichSuHoatDong&gt;&gt;&gt;builder().status(200).msg(&quot;Thanh công&quot;).data(pageDTO).build();
+&nbsp;	}
+&nbsp;	
+&nbsp;
+&nbsp;	
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:13</div>
+</div>
+</body>
+</html>

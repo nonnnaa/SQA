@@ -1,0 +1,206 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > NhomQuyenService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.service</a>
+</div>
+
+<h1>Coverage Summary for Class: NhomQuyenService (com.example.hieuthuoc.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">NhomQuyenService</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.service;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.data.domain.Page;
+&nbsp;import org.springframework.data.domain.PageRequest;
+&nbsp;import org.springframework.data.domain.Sort;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;import org.springframework.util.StringUtils;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.dto.NhomQuyenDTO;
+&nbsp;import com.example.hieuthuoc.dto.PageDTO;
+&nbsp;import com.example.hieuthuoc.dto.ResponseDTO;
+&nbsp;import com.example.hieuthuoc.dto.SearchDTO;
+&nbsp;import com.example.hieuthuoc.entity.ChucNang;
+&nbsp;import com.example.hieuthuoc.entity.NhomQuyen;
+&nbsp;import com.example.hieuthuoc.repository.ChucNangRepo;
+&nbsp;import com.example.hieuthuoc.repository.NhomQuyenRepo;
+&nbsp;
+&nbsp;public interface NhomQuyenService {
+&nbsp;
+&nbsp;	ResponseDTO&lt;NhomQuyen&gt; create(NhomQuyenDTO nhomQuyenDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;NhomQuyen&gt; update(NhomQuyenDTO nhomQuyenDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;Void&gt; delete(Integer id);
+&nbsp;
+&nbsp;	ResponseDTO&lt;NhomQuyen&gt; getById(Integer id);
+&nbsp;
+&nbsp;	ResponseDTO&lt;PageDTO&lt;List&lt;NhomQuyen&gt;&gt;&gt; getByTenNhomQuyen(SearchDTO searchDTO);
+&nbsp;}
+&nbsp;
+&nbsp;@Service
+&nbsp;class NhomQuyenServiceImpl implements NhomQuyenService {
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private NhomQuyenRepo nhomQuyenRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private ChucNangRepo chucNangRepo;
+&nbsp;
+&nbsp;	private final ModelMapper modelMapper = new ModelMapper();
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;NhomQuyen&gt; create(NhomQuyenDTO nhomQuyenDTO) {
+&nbsp;		if (nhomQuyenRepo.existsByTenNhomQuyen(nhomQuyenDTO.getTenNhomQuyen())) {
+&nbsp;			return ResponseDTO.&lt;NhomQuyen&gt;builder().status(409).msg(&quot;Nhóm quyền đã tồn tại&quot;).build();
+&nbsp;		}
+&nbsp;		NhomQuyen nhomQuyen = modelMapper.map(nhomQuyenDTO, NhomQuyen.class);
+&nbsp;
+&nbsp;		if (nhomQuyenDTO.getChucNangs() != null &amp;&amp; !nhomQuyenDTO.getChucNangs().isEmpty()) {
+&nbsp;			List&lt;ChucNang&gt; chucNangs = nhomQuyenDTO.getChucNangs().stream()
+&nbsp;					.map(c -&gt; chucNangRepo.findById(c.getId())
+&nbsp;							.orElseThrow(() -&gt; new RuntimeException(&quot;Chức Năng không tồn tại: ID &quot; + c.getId())))
+&nbsp;					.collect(Collectors.toList());
+&nbsp;			nhomQuyen.setChucNangs(chucNangs);
+&nbsp;		}
+&nbsp;
+&nbsp;		NhomQuyen savedNhomQuyen = nhomQuyenRepo.save(nhomQuyen);
+&nbsp;		return ResponseDTO.&lt;NhomQuyen&gt;builder().status(201).msg(&quot;Tạo nhóm quyền thành công&quot;).data(savedNhomQuyen)
+&nbsp;				.build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;NhomQuyen&gt; update(NhomQuyenDTO nhomQuyenDTO) {
+&nbsp;		Optional&lt;NhomQuyen&gt; existingNhomQuyen = nhomQuyenRepo.findById(nhomQuyenDTO.getId());
+&nbsp;		if (existingNhomQuyen.isPresent()) {
+&nbsp;			NhomQuyen nhomQuyen = modelMapper.map(nhomQuyenDTO, NhomQuyen.class);
+&nbsp;			if (!nhomQuyenDTO.getChucNangs().isEmpty()) {
+&nbsp;				List&lt;ChucNang&gt; chucNangs = nhomQuyenDTO.getChucNangs().stream()
+&nbsp;						.map(c -&gt; chucNangRepo.findById(c.getId())
+&nbsp;								.orElseThrow(() -&gt; new RuntimeException(&quot;Chức Năng không tồn tại: ID &quot; + c.getId())))
+&nbsp;						.collect(Collectors.toList());
+&nbsp;				nhomQuyen.setChucNangs(chucNangs);
+&nbsp;			}
+&nbsp;			NhomQuyen updateNhomQuyen = nhomQuyenRepo.save(nhomQuyen);
+&nbsp;			return ResponseDTO.&lt;NhomQuyen&gt;builder().status(200).msg(&quot;Cập nhật nhóm quyền thành công&quot;).data(updateNhomQuyen)
+&nbsp;					.build();
+&nbsp;		}
+&nbsp;		return ResponseDTO.&lt;NhomQuyen&gt;builder().status(409).msg(&quot;Không tìm thấy nhóm quyền&quot;).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;Void&gt; delete(Integer id) {
+&nbsp;		nhomQuyenRepo.deleteById(id);
+&nbsp;		return ResponseDTO.&lt;Void&gt;builder().status(200).msg(&quot;Xóa nhóm quyền thành công&quot;).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;NhomQuyen&gt; getById(Integer id) {
+&nbsp;		Optional&lt;NhomQuyen&gt; nhomQuyen = nhomQuyenRepo.findById(id);
+&nbsp;		if (nhomQuyen.isPresent()) {
+&nbsp;			return ResponseDTO.&lt;NhomQuyen&gt;builder().status(200).msg(&quot;Thành công&quot;).data(nhomQuyen.get()).build();
+&nbsp;		}
+&nbsp;		return ResponseDTO.&lt;NhomQuyen&gt;builder().status(404).msg(&quot;Không tìm thấy nhóm quyền&quot;).build();
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;PageDTO&lt;List&lt;NhomQuyen&gt;&gt;&gt; getByTenNhomQuyen(SearchDTO searchDTO) {
+&nbsp;		Sort sortBy = Sort.by(&quot;tenNhomQuyen&quot;).ascending();
+&nbsp;
+&nbsp;		if (StringUtils.hasText(searchDTO.getSortedField())) {
+&nbsp;			sortBy = Sort.by(searchDTO.getSortedField()).ascending();
+&nbsp;		}
+&nbsp;
+&nbsp;		if (searchDTO.getCurrentPage() == null) {
+&nbsp;			searchDTO.setCurrentPage(0);
+&nbsp;		}
+&nbsp;
+&nbsp;		if (searchDTO.getSize() == null) {
+&nbsp;			searchDTO.setSize(20);
+&nbsp;		}
+&nbsp;
+&nbsp;		if (searchDTO.getKeyWord() == null) {
+&nbsp;			searchDTO.setKeyWord(&quot;&quot;);
+&nbsp;		}
+&nbsp;		PageRequest pageRequest = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getSize(), sortBy);
+&nbsp;		Page&lt;NhomQuyen&gt; page = nhomQuyenRepo.getByTenNhomQuyen(&quot;%&quot; + searchDTO.getKeyWord() + &quot;%&quot;, pageRequest);
+&nbsp;
+&nbsp;		PageDTO&lt;List&lt;NhomQuyen&gt;&gt; pageDTO = new PageDTO&lt;&gt;();
+&nbsp;		pageDTO.setTotalElements(page.getTotalElements());
+&nbsp;		pageDTO.setTotalPages(page.getTotalPages());
+&nbsp;
+&nbsp;		List&lt;NhomQuyen&gt; nhomQuyens = page.getContent();
+&nbsp;
+&nbsp;		pageDTO.setData(nhomQuyens);
+&nbsp;
+&nbsp;		return ResponseDTO.&lt;PageDTO&lt;List&lt;NhomQuyen&gt;&gt;&gt;builder().status(200).msg(&quot;Thanh công&quot;).data(pageDTO).build();
+&nbsp;	}
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:13</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,207 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > TonKhoServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.service</a>
+</div>
+
+<h1>Coverage Summary for Class: TonKhoServiceImpl (com.example.hieuthuoc.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TonKhoServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (1/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    7.1%
+  </span>
+  <span class="absValue">
+    (2/28)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.service;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.data.domain.Page;
+&nbsp;import org.springframework.data.domain.PageRequest;
+&nbsp;import org.springframework.data.domain.Sort;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.util.StringUtils;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.dto.PageDTO;
+&nbsp;import com.example.hieuthuoc.dto.ResponseDTO;
+&nbsp;import com.example.hieuthuoc.dto.SearchTonKhoDTO;
+&nbsp;import com.example.hieuthuoc.dto.TonKhoDTO;
+&nbsp;import com.example.hieuthuoc.entity.Thuoc;
+&nbsp;import com.example.hieuthuoc.entity.TonKho;
+&nbsp;import com.example.hieuthuoc.repository.ThuocRepo;
+&nbsp;import com.example.hieuthuoc.repository.TonKhoRepo;
+&nbsp;
+&nbsp;public interface TonKhoService {
+&nbsp;	ResponseDTO&lt;TonKho&gt; update(TonKhoDTO tonKhoDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;PageDTO&lt;List&lt;TonKho&gt;&gt;&gt; search(SearchTonKhoDTO searchTonKhoDTO);
+&nbsp;}
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;class TonKhoServiceImpl implements TonKhoService {</b>
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private TonKhoRepo tonKhoRepo;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	ThuocRepo thuocRepo;
+&nbsp;
+<b class="fc">&nbsp;	ModelMapper modelMapper = new ModelMapper();</b>
+&nbsp;
+&nbsp;	// Cập nhật tồn kho
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;TonKho&gt; update(TonKhoDTO tonKhoDTO) {
+<b class="nc">&nbsp;		Optional&lt;TonKho&gt; existingTonKho = tonKhoRepo.findById(tonKhoDTO.getId());</b>
+<b class="nc">&nbsp;		if (!existingTonKho.isPresent()) {</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;TonKho&gt;builder().status(404).msg(&quot;Tồn kho không tồn tại.&quot;).build();</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		Thuoc thuoc = thuocRepo.findById(tonKhoDTO.getThuocId()).get();</b>
+<b class="nc">&nbsp;		TonKho tonKho = modelMapper.map(tonKhoDTO, TonKho.class); // Cập nhật thông tin tồn kho từ DTO</b>
+&nbsp;
+<b class="nc">&nbsp;		tonKho.setThuoc(thuoc);</b>
+&nbsp;
+<b class="nc">&nbsp;		tonKhoRepo.save(tonKho);</b>
+&nbsp;
+<b class="nc">&nbsp;		return ResponseDTO.&lt;TonKho&gt;builder().status(200).msg(&quot;Thành công.&quot;).data(tonKho).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;PageDTO&lt;List&lt;TonKho&gt;&gt;&gt; search(SearchTonKhoDTO searchTonKhoDTO) {
+<b class="nc">&nbsp;		Sort sortBy = Sort.by(&quot;createdAt&quot;).ascending();</b>
+&nbsp;
+<b class="nc">&nbsp;		if (StringUtils.hasText(searchTonKhoDTO.getSortedField())) {</b>
+<b class="nc">&nbsp;			sortBy = Sort.by(searchTonKhoDTO.getSortedField()).ascending();</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		if (searchTonKhoDTO.getCurrentPage() == null) {</b>
+<b class="nc">&nbsp;			searchTonKhoDTO.setCurrentPage(0);</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		if (searchTonKhoDTO.getSize() == null) {</b>
+<b class="nc">&nbsp;			searchTonKhoDTO.setSize(20);</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		if (searchTonKhoDTO.getTenThuoc() == null) {</b>
+<b class="nc">&nbsp;			searchTonKhoDTO.setTenThuoc(&quot;&quot;);</b>
+&nbsp;		}
+<b class="nc">&nbsp;		PageRequest pageRequest = PageRequest.of(searchTonKhoDTO.getCurrentPage(), searchTonKhoDTO.getSize(), sortBy);</b>
+<b class="nc">&nbsp;		Page&lt;TonKho&gt; page = tonKhoRepo.search(searchTonKhoDTO.getTenThuoc(), searchTonKhoDTO.getSoLo(),</b>
+<b class="nc">&nbsp;				searchTonKhoDTO.getTenNhaSanXuat(), pageRequest);</b>
+&nbsp;
+<b class="nc">&nbsp;		PageDTO&lt;List&lt;TonKho&gt;&gt; pageDTO = new PageDTO&lt;&gt;();</b>
+<b class="nc">&nbsp;		pageDTO.setTotalElements(page.getTotalElements());</b>
+<b class="nc">&nbsp;		pageDTO.setTotalPages(page.getTotalPages());</b>
+&nbsp;
+<b class="nc">&nbsp;		List&lt;TonKho&gt; tonKhos = page.getContent();</b>
+&nbsp;
+<b class="nc">&nbsp;		pageDTO.setData(tonKhos);</b>
+&nbsp;
+<b class="nc">&nbsp;		return ResponseDTO.&lt;PageDTO&lt;List&lt;TonKho&gt;&gt;&gt;builder().status(200).msg(&quot;Thanh công&quot;).data(pageDTO).build();</b>
+&nbsp;	}
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:14</div>
+</div>
+</body>
+</html>

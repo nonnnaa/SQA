@@ -1,0 +1,250 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > DonHang</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.entity</a>
+</div>
+
+<h1>Coverage Summary for Class: DonHang (com.example.hieuthuoc.entity)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+  <tr>
+    <td class="name">DonHang$HibernateInstantiator$58LNCZBi</td>
+  </tr>
+  <tr>
+    <td class="name">DonHang$HibernateInstantiator$60vAiuo2</td>
+  </tr>
+  <tr>
+    <td class="name">DonHang$HibernateInstantiator$8FSabZf6</td>
+  </tr>
+  <tr>
+    <td class="name">DonHang$HibernateInstantiator$NaBuMjTk</td>
+  </tr>
+  <tr>
+    <td class="name">DonHang$HibernateProxy$4cXW3ssZ</td>
+  </tr>
+  <tr>
+    <td class="name">DonHang$HibernateProxy$cGBA4wuy</td>
+  </tr>
+  <tr>
+    <td class="name">DonHang$HibernateProxy$GWDzctQL</td>
+  </tr>
+  <tr>
+    <td class="name">DonHang$HibernateProxy$QmJbimiJ</td>
+  </tr>
+  <tr>
+    <td class="name">DonHang$PhuongThucThanhToan</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">DonHang$TrangThaiGiaoHang</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">DonHang$TrangThaiThanhToan</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.entity;
+&nbsp;
+&nbsp;import java.util.Date;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+&nbsp;
+&nbsp;import jakarta.persistence.CascadeType;
+&nbsp;import jakarta.persistence.Entity;
+&nbsp;import jakarta.persistence.EntityListeners;
+&nbsp;import jakarta.persistence.EnumType;
+&nbsp;import jakarta.persistence.Enumerated;
+&nbsp;import jakarta.persistence.GeneratedValue;
+&nbsp;import jakarta.persistence.GenerationType;
+&nbsp;import jakarta.persistence.Id;
+&nbsp;import jakarta.persistence.JoinColumn;
+&nbsp;import jakarta.persistence.ManyToOne;
+&nbsp;import jakarta.persistence.OneToMany;
+&nbsp;import jakarta.persistence.Table;
+&nbsp;import lombok.Data;
+&nbsp;import lombok.EqualsAndHashCode;
+&nbsp;
+&nbsp;@Data
+&nbsp;@Entity
+&nbsp;@Table(name = &quot;don_hang&quot;)
+&nbsp;@EntityListeners(AuditingEntityListener.class)
+&nbsp;@EqualsAndHashCode(callSuper = true)
+&nbsp;public class DonHang extends TimeAuditable{
+&nbsp;	@Id
+&nbsp;	@GeneratedValue(strategy = GenerationType.IDENTITY)
+&nbsp;	private Integer id;
+&nbsp;
+&nbsp;	@ManyToOne
+&nbsp;	@JoinColumn(name = &quot;khach_hang_id&quot;)
+&nbsp;	private NguoiDung khachHang;
+&nbsp;
+&nbsp;	@ManyToOne
+&nbsp;	@JoinColumn(name = &quot;nguoi_dung_id&quot;)
+&nbsp;	private NguoiDung nguoiDung;
+&nbsp;
+&nbsp;	private String tenKhachHang;
+&nbsp;	private String soDienThoai;
+&nbsp;	private String diaChi;
+&nbsp;	private String email;
+&nbsp;
+&nbsp;	private Double giamGia;
+&nbsp;	private Double tongTien;
+&nbsp;	
+&nbsp;	private Date ngayGiao;
+&nbsp;	
+&nbsp;	@OneToMany(mappedBy = &quot;donHang&quot;, cascade = CascadeType.ALL, orphanRemoval = true)
+&nbsp;	private List&lt;ChiTietDonHang&gt; chiTietDonHangs;
+&nbsp;	
+&nbsp;	
+&nbsp;    @Enumerated(EnumType.STRING)
+&nbsp;    private TrangThaiGiaoHang trangThaiGiaoHang;
+&nbsp;    
+&nbsp;    @Enumerated(EnumType.STRING)
+&nbsp;    private PhuongThucThanhToan phuongThucThanhToan;
+&nbsp;    
+&nbsp;    @Enumerated(EnumType.STRING)
+&nbsp;    private TrangThaiThanhToan trangThaiThanhToan;
+&nbsp;
+<b class="fc">&nbsp;	public enum TrangThaiGiaoHang {</b>
+<b class="fc">&nbsp;		DANG_XU_LY, DANG_GIAO, DA_GIAO, DA_HUY, TRA_HANG,</b>
+&nbsp;	}
+&nbsp;
+<b class="fc">&nbsp;	public enum PhuongThucThanhToan {</b>
+<b class="fc">&nbsp;		TIEN_MAT, CHUYEN_KHOAN, THE_NGAN_HANG, VI_DIEN_TU,</b>
+&nbsp;	}
+&nbsp;
+<b class="fc">&nbsp;	public enum TrangThaiThanhToan {</b>
+<b class="fc">&nbsp;		CHUA_THANH_TOAN, DA_THANH_TOAN, THANH_TOAN_MOT_PHAN</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:14</div>
+</div>
+</body>
+</html>

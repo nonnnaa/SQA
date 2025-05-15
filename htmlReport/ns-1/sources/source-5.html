@@ -1,0 +1,195 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > DoiTuongServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.hieuthuoc.service</a>
+</div>
+
+<h1>Coverage Summary for Class: DoiTuongServiceImpl (com.example.hieuthuoc.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DoiTuongServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/19)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.hieuthuoc.service;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;
+&nbsp;import com.example.hieuthuoc.dto.DoiTuongDTO;
+&nbsp;import com.example.hieuthuoc.dto.ResponseDTO;
+&nbsp;import com.example.hieuthuoc.entity.DoiTuong;
+&nbsp;import com.example.hieuthuoc.repository.DoiTuongRepo;
+&nbsp;
+&nbsp;public interface DoiTuongService {
+&nbsp;	ResponseDTO&lt;List&lt;DoiTuong&gt;&gt; getAll();
+&nbsp;	
+&nbsp;    ResponseDTO&lt;List&lt;DoiTuong&gt;&gt; searchByTenDoiTuong(String tenDoiTuong);
+&nbsp;
+&nbsp;	ResponseDTO&lt;DoiTuong&gt; create(DoiTuongDTO doiTuongDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;DoiTuong&gt; update(DoiTuongDTO doiTuongDTO);
+&nbsp;
+&nbsp;	ResponseDTO&lt;Void&gt; delete(Integer id);
+&nbsp;}
+&nbsp;
+&nbsp;@Service
+<b class="nc">&nbsp;class DoiTuongServiceImpl implements DoiTuongService {</b>
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private DoiTuongRepo doiTuongRepo;
+&nbsp;
+<b class="nc">&nbsp;	ModelMapper modelMapper = new ModelMapper();</b>
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;List&lt;DoiTuong&gt;&gt; getAll() {
+<b class="nc">&nbsp;		List&lt;DoiTuong&gt; doiTuongs = doiTuongRepo.findAll();</b>
+<b class="nc">&nbsp;		return ResponseDTO.&lt;List&lt;DoiTuong&gt;&gt;builder().status(200).msg(&quot;Thanh công&quot;).data(doiTuongs).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public ResponseDTO&lt;List&lt;DoiTuong&gt;&gt; searchByTenDoiTuong(String tenDoiTuong) {
+<b class="nc">&nbsp;		List&lt;DoiTuong&gt; doiTuongs = doiTuongRepo.searchByTenDoiTuong(tenDoiTuong);</b>
+<b class="nc">&nbsp;		if (doiTuongs != null &amp;&amp; !doiTuongs.isEmpty()) {</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;List&lt;DoiTuong&gt;&gt;builder().status(200).msg(&quot;Thành công&quot;).data(doiTuongs).build();</b>
+&nbsp;		}
+<b class="nc">&nbsp;		return ResponseDTO.&lt;List&lt;DoiTuong&gt;&gt;builder().status(409).msg(&quot;Nhà sản xuất không tồn tại&quot;).build();</b>
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;DoiTuong&gt; create(DoiTuongDTO doiTuongDTO) {
+<b class="nc">&nbsp;		DoiTuong doiTuong = modelMapper.map(doiTuongDTO, DoiTuong.class);</b>
+<b class="nc">&nbsp;		if (doiTuongRepo.existsByTenDoiTuong(doiTuong.getTenDoiTuong())) {</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;DoiTuong&gt;builder().status(409).msg(&quot;Đối tượng đã tồn tại&quot;).build();</b>
+&nbsp;		}
+<b class="nc">&nbsp;		return ResponseDTO.&lt;DoiTuong&gt;builder().status(200).msg(&quot;Thanh công&quot;).data(doiTuongRepo.save(doiTuong)).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;DoiTuong&gt; update(DoiTuongDTO doiTuongDTO) {
+<b class="nc">&nbsp;		DoiTuong doiTuong = modelMapper.map(doiTuongDTO, DoiTuong.class);</b>
+<b class="nc">&nbsp;		DoiTuong currentDoiTuong = doiTuongRepo.findById(doiTuong.getId()).orElse(null);</b>
+<b class="nc">&nbsp;		if (currentDoiTuong != null) {</b>
+<b class="nc">&nbsp;			return ResponseDTO.&lt;DoiTuong&gt;builder().status(200).msg(&quot;Thanh công&quot;).data(doiTuongRepo.save(doiTuong)).build();</b>
+&nbsp;		}
+<b class="nc">&nbsp;		return ResponseDTO.&lt;DoiTuong&gt;builder().status(409).msg(&quot;Đối tượng không tồn tại&quot;).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	@Transactional
+&nbsp;	public ResponseDTO&lt;Void&gt; delete(Integer id) {
+<b class="nc">&nbsp;		doiTuongRepo.deleteById(id);</b>
+<b class="nc">&nbsp;		return ResponseDTO.&lt;Void&gt;builder().status(200).msg(&quot;Thành công&quot;).build();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-04-17 23:13</div>
+</div>
+</body>
+</html>
