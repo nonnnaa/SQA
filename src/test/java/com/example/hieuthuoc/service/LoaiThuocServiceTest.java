@@ -129,6 +129,8 @@ public class LoaiThuocServiceTest {
         assertFalse(ok);
     }
 
+
+
     @Test
     @DisplayName("Test create method successfully creates loai thuoc")
     public void testCreateLoaiThuocServiceSuccess() {

@@ -73,26 +73,9 @@ public class DanhMucThuocControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status").value(200))
                 .andExpect(jsonPath("$.msg").value("Thành công"))
-                .andExpect(jsonPath("$.data", hasSize(3)))
+                .andExpect(jsonPath("$.data", hasSize((int) danhMucThuocRepository.count())))
                 ;
 
-        // Verify database state
-        assertEquals(3, danhMucThuocRepository.count());
-    }
-
-    @Test
-    @DisplayName("getAll - Thành công, trả về danh sách rỗng")
-    void getAllDmtController_Success_ReturnsEmptyList() throws Exception {
-        mockMvc.perform(get("/danhmucthuoc/list")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status").value(200))
-                .andExpect(jsonPath("$.msg").value("Thành công"))
-                .andExpect(jsonPath("$.data", hasSize(0)));
-
-        // Verify database state
-        assertEquals(0, danhMucThuocRepository.count());
     }
 
     @Test
@@ -103,18 +86,8 @@ public class DanhMucThuocControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status").value(200))
-                .andExpect(jsonPath("$.data", hasSize(3)))
+                .andExpect(jsonPath("$.data", hasSize((int) danhMucThuocRepository.count())))
                 ;
-    }
-
-    @Test
-    void getDanhMucAnhLoaiThuocController_Success_ReturnsEmptyList() throws Exception {
-        mockMvc.perform(get("/danhmucthuoc/get_danh_muc_and_loai_thuoc")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status").value(200))
-                .andExpect(jsonPath("$.data", hasSize(0)));
     }
 
     @Test

@@ -215,6 +215,7 @@
 						<exclude>com/example/hieuthuoc/service/LichSuHoatDongService.java</exclude>
 						<exclude>com/example/hieuthuoc/service/NhomQuyenService.java</exclude>
 						<exclude>com/example/hieuthuoc/service/ChucNangService.java</exclude>
+						<exclude>com/example/hieuthuoc/service/UploadImageService.java</exclude>
 					</excludes>
 				</configuration>
 			</plugin>

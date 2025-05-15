@@ -18,9 +18,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
@@ -50,6 +49,12 @@ public class ThuocControllerTest {
 
     @Autowired
     private ThanhPhanThuocRepo thanhPhanThuocRepository;
+
+    @Autowired
+    private DonHangRepo donHangRepo;
+
+    @Autowired
+    private ChiTietDonHangRepo chiTietDonHangRepo;
 
     @Autowired
     private DoiTuongRepo doiTuongRepository;
@@ -122,7 +127,6 @@ public class ThuocControllerTest {
                 .andExpect(jsonPath("$.data.data", hasSize(10)))
                 .andDo(print());
 
-//        assertEquals(23, thuocRepository.count());
     }
 
     @Test
@@ -338,26 +342,6 @@ public class ThuocControllerTest {
         assertTrue(thuocRepository.existsByMaThuoc("IBU001"));
     }
 
-//    @Test
-//    public void testCreateThuocControllerWithInvalidData() throws Exception {
-//        ThuocDTO thuocDTO = new ThuocDTO();
-//
-//
-//        MockMultipartFile thuocDTOFile = new MockMultipartFile(
-//                "thuocDTO",
-//                "",
-//                "application/json",
-//                objectMapper.writeValueAsBytes(thuocDTO));
-//
-//        mockMvc.perform(multipart("/thuoc/create")
-//                        .file(thuocDTOFile))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$.status").value(400))
-//                .andDo(print());
-//
-//        assertEquals(1, thuocRepository.count());
-//    }
-
     @Test
     public void testUpdateThuocControllerWithFile() throws Exception {
         ThuocDTO thuocDTO = new ThuocDTO();
@@ -450,8 +434,6 @@ public class ThuocControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.msg").value("File ảnh cập nhật bị rỗng"));
-
-
     }
 
     @Test
